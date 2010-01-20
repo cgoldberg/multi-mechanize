@@ -31,16 +31,16 @@ RAMPUP = 0  # secs
 
 
 def main():
-    q = multiprocessing.Queue()
-    rw = ResultWriter(q)
-    rw.setDaemon(True)
-    rw.start()
+    queue = multiprocessing.Queue()
+    r = Results(queue)
+    r.setDaemon(True)
+    r.start()
     
     start_time = time.time() 
     
     managers = [] 
     for i in range(PROCESSES):
-        manager = MultiMechanize(q, start_time, i, PROCESS_THREADS, RUN_TIME, RAMPUP)
+        manager = MultiMechanize(queue, start_time, i, PROCESS_THREADS, RUN_TIME, RAMPUP)
         managers.append(manager)
     for manager in managers:
         manager.start()
@@ -50,7 +50,7 @@ def main():
 class MultiMechanize(multiprocessing.Process):
     def __init__(self, queue, start_time, process_num, num_threads=1, run_time=10, rampup=0):
         multiprocessing.Process.__init__(self)
-        self.q = queue
+        self.queue = queue
         self.start_time = start_time
         self.process_num = process_num
         self.num_threads = num_threads
@@ -64,7 +64,7 @@ class MultiMechanize(multiprocessing.Process):
             spacing = float(self.rampup) / float(self.num_threads)
             if i > 0:
                 time.sleep(spacing)
-            agent_thread = MechanizeAgent(self.q, self.start_time, self.run_time)
+            agent_thread = MechanizeAgent(self.queue, self.start_time, self.run_time)
             agent_thread.daemon = True
             thread_refs.append(agent_thread)
             #print 'starting process %i, thread %i' % (self.process_num + 1, i + 1)
@@ -77,7 +77,7 @@ class MultiMechanize(multiprocessing.Process):
 class MechanizeAgent(threading.Thread):
     def __init__(self, queue, start_time, run_time):
         threading.Thread.__init__(self)
-        self.q = queue
+        self.queue = queue
         self.start_time = start_time
         self.run_time = run_time
         
@@ -95,7 +95,8 @@ class MechanizeAgent(threading.Thread):
 
             try:
                 foo = 'wikipedia_search'
-                bytes_received, customer_timers, errors = eval(foo + '.MechTransaction().run()')
+                trans = eval(foo + '.MechTransaction()')
+                bytes_received, custom_timers, errors = trans.run()
                 status = 'PASS'
             except AssertionError:
                 status = 'FAIL'
@@ -105,23 +106,25 @@ class MechanizeAgent(threading.Thread):
             finish = self.default_timer()
             scriptrun_time = finish - start
             elapsed = time.time() - self.start_time 
-            self.q.put((elapsed, scriptrun_time, status, bytes_received))
+            self.queue.put((elapsed, scriptrun_time, status, bytes_received, custom_timers, errors))
             
 
 
-class ResultWriter(threading.Thread):
+class Results(threading.Thread):
     def __init__(self, queue):
         threading.Thread.__init__(self)
         self.queue = queue
+        self.trans_count = 0
     
     def run(self):
         with open('results.csv', 'w') as f:     
             while True:
                 try:
-                    elapsed, scriptrun_time, status, bytes_received = self.queue.get(False)
+                    elapsed, scriptrun_time, status, bytes_received, custom_timers, errors = self.queue.get(False)
+                    self.trans_count += 1
                     f.write('%.3f,%.3f,%s,%i\n' % (elapsed, scriptrun_time, status, bytes_received))
                     f.flush()
-                    print '%.3f,%.3f,%s,%i' % (elapsed, scriptrun_time, status, bytes_received)
+                    print '%i,%.3f,%.3f,%s,%i' % (self.trans_count, elapsed, scriptrun_time, status, bytes_received)
                 except Queue.Empty:
                     time.sleep(.1)
 
