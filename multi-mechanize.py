@@ -9,7 +9,7 @@
 
 
 
-from test_scripts import wikipedia_search
+from test_scripts import wikipedia_simple
 
 
 
@@ -89,19 +89,24 @@ class MechanizeAgent(threading.Thread):
             
     def run(self):
         elapsed = 0
+        error = ''
         while elapsed < self.run_time:
             start = self.default_timer()               
             
 
-            foo = 'wikipedia_search'
+            foo = 'wikipedia_simple'
             trans = eval(foo + '.MechTransaction()')
-            trans.run()
-            status = 'PASS'
+            try:
+                trans.run()
+                status = 'PASS'
+            except Exception, e:
+                status = 'FAIL'
+                error = str(e)
 
             finish = self.default_timer()
             scriptrun_time = finish - start
             elapsed = time.time() - self.start_time 
-            self.queue.put((elapsed, scriptrun_time, status, trans.bytes_received, trans.custom_timers, trans.errors))
+            self.queue.put((elapsed, scriptrun_time, status, trans.bytes_received, trans.custom_timers, error))
             
 
 
@@ -115,7 +120,7 @@ class Results(threading.Thread):
         with open('results.csv', 'w') as f:     
             while True:
                 try:
-                    elapsed, scriptrun_time, status, bytes_received, custom_timers, errors = self.queue.get(False)
+                    elapsed, scriptrun_time, status, bytes_received, custom_timers, error = self.queue.get(False)
                     self.trans_count += 1
                     f.write('%.3f,%.3f,%s,%i\n' % (elapsed, scriptrun_time, status, bytes_received))
                     f.flush()
