@@ -93,20 +93,15 @@ class MechanizeAgent(threading.Thread):
             start = self.default_timer()               
             
 
-            try:
-                foo = 'wikipedia_search'
-                trans = eval(foo + '.MechTransaction()')
-                bytes_received, custom_timers, errors = trans.run()
-                status = 'PASS'
-            except AssertionError:
-                status = 'FAIL'
-                
+            foo = 'wikipedia_search'
+            trans = eval(foo + '.MechTransaction()')
+            trans.run()
+            status = 'PASS'
 
-            
             finish = self.default_timer()
             scriptrun_time = finish - start
             elapsed = time.time() - self.start_time 
-            self.queue.put((elapsed, scriptrun_time, status, bytes_received, custom_timers, errors))
+            self.queue.put((elapsed, scriptrun_time, status, trans.bytes_received, trans.custom_timers, trans.errors))
             
 
 
