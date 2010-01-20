@@ -23,9 +23,9 @@ import time
 
 
 
-PROCESSES = 2
-PROCESS_THREADS = 2
-RUN_TIME = 10  # secs
+PROCESSES = 1
+PROCESS_THREADS = 1
+RUN_TIME = 5  # secs
 RAMPUP = 0  # secs
 
 
@@ -121,7 +121,7 @@ class ResultWriter(threading.Thread):
                     elapsed, scriptrun_time, status, bytes_received = self.queue.get(False)
                     f.write('%.3f,%.3f,%s,%i\n' % (elapsed, scriptrun_time, status, bytes_received))
                     f.flush()
-                    #print '%.3f' % latency
+                    print '%.3f,%.3f,%s,%i' % (elapsed, scriptrun_time, status, bytes_received)
                 except Queue.Empty:
                     time.sleep(.1)
 
