@@ -4,7 +4,6 @@
 
 
 import mechanize
-import urllib2
 
 
 class MechTransaction(object):
@@ -24,8 +23,7 @@ class MechTransaction(object):
             self.bytes_received += (len(resp.info()) + len(resp.get_data()))
             #print resp.info()
             #print resp.get_data()
-            assert (resp.code == 200)
-        except urllib2.URLError, e:
+        except Exception, e:
             self.errors.append(str(e))
         
         try:  
@@ -36,7 +34,8 @@ class MechTransaction(object):
             self.bytes_received += (len(resp.info()) + len(resp.get_data()))
             #print resp.info()
             #print resp.get_data()
-            assert (resp.code == 200)
+            assert (resp.code == 200), 'Bad HTTP Response'
+            assert ('foobar' in resp.get_data()), 'Text Assertion Failed'
         except Exception, e:
             self.errors.append(str(e))
             
