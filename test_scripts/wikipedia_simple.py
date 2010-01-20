@@ -15,14 +15,12 @@ class MechTransaction(object):
         br = mechanize.Browser()
         br.set_handle_robots(False)
         br.addheaders = [('User-agent', 'Mozilla/5.0 Compatible')]
-        
         resp = br.open('http://www.wikipedia.org/')
+        
         self.bytes_received += (len(resp.info()) + len(resp.get_data()))
         assert (resp.code == 200), 'Bad HTTP Response'
         assert ('Wikipedia, the free encyclopedia' in resp.get_data()), 'Text Assertion Failed'
 
-        
-        
         
 if __name__ == '__main__':
     trans = MechTransaction()
