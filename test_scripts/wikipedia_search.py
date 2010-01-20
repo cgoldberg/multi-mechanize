@@ -38,14 +38,12 @@ class MechTransaction(object):
             assert ('foobar' in resp.get_data()), 'Text Assertion Failed'
         except Exception, e:
             self.errors.append(str(e))
-            
-        return (self.bytes_received, self.custom_timers, self.errors)
 
 
 
 if __name__ == '__main__':
     trans = MechTransaction()
-    bytes_received, custom_timers, errors = trans.run()
-    print bytes_received
-    print custom_timers
-    print errors
+    trans.run()
+    print trans.bytes_received
+    print trans.custom_timers
+    print trans.errors
