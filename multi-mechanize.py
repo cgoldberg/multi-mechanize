@@ -8,10 +8,7 @@
 #  requires Python 2.6+
 
 
-
-from test_scripts import wikipedia_simple
-
-
+from test_scripts import *
 
 
 import multiprocessing
@@ -93,9 +90,8 @@ class MechanizeAgent(threading.Thread):
         while elapsed < self.run_time:
             start = self.default_timer()               
             
-
-            foo = 'wikipedia_simple'
-            trans = eval(foo + '.MechTransaction()')
+            script_name = 'wikipedia_simple'
+            trans = eval(script_name + '.MechTransaction()')
             try:
                 trans.run()
                 status = 'PASS'
@@ -124,7 +120,7 @@ class Results(threading.Thread):
                     self.trans_count += 1
                     f.write('%.3f,%.3f,%s,%i\n' % (elapsed, scriptrun_time, status, bytes_received))
                     f.flush()
-                    print '%i,%.3f,%.3f,%s,%i' % (self.trans_count, elapsed, scriptrun_time, status, bytes_received)
+                    print '%i, %.3f, %.3f, %s, %i, %s' % (self.trans_count, elapsed, scriptrun_time, status, bytes_received, repr(custom_timers))
                 except Queue.Empty:
                     time.sleep(.1)
 
