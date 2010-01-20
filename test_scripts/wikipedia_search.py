@@ -45,7 +45,8 @@ class MechTransaction(object):
 
 
 if __name__ == '__main__':
-    bytes_received, custom_timers, errors = mech_plugin()
+    trans = MechTransaction()
+    bytes_received, custom_timers, errors = trans.run()
     print bytes_received
     print custom_timers
     print errors
