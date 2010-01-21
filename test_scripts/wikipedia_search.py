@@ -21,7 +21,9 @@ class MechTransaction(object):
         self.bytes_received += (len(resp.info()) + len(resp.get_data()))
         assert (resp.code == 200), 'Bad HTTP Response'
         assert ('Wikipedia, the free encyclopedia' in resp.get_data()), 'Text Assertion Failed'
-
+        
+        time.sleep(2)
+        
         br.select_form(nr=0)
         br.form['search'] = 'foo'
         resp = br.submit()
@@ -29,6 +31,8 @@ class MechTransaction(object):
         self.bytes_received += (len(resp.info()) + len(resp.get_data()))
         assert (resp.code == 200), 'Bad HTTP Response'
         assert ('foobar' in resp.get_data()), 'Text Assertion Failed'
+        
+        time.sleep(3)
 
 
 
