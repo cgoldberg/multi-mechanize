@@ -118,7 +118,7 @@ class Results(threading.Thread):
                 try:
                     elapsed, scriptrun_time, status, bytes_received, custom_timers, error = self.queue.get(False)
                     self.trans_count += 1
-                    f.write('%.3f,%.3f,%s,%i,%s,%s\n' % (elapsed, scriptrun_time, status, bytes_received, repr(custom_timers), repr(error)))
+                    f.write('%i, %.3f,%.3f,%s,%i,%s,%s\n' % (self.trans_count, elapsed, scriptrun_time, status, bytes_received, repr(custom_timers), repr(error)))
                     f.flush()
                     print '%i, %.3f, %.3f, %s, %i, %s, %s' % (self.trans_count, elapsed, scriptrun_time, status, bytes_received, repr(custom_timers), repr(error))
                 except Queue.Empty:
