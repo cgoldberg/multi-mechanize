@@ -2,7 +2,7 @@
 #  Copyright (c) 2010 Corey Goldberg (corey@goldb.org)
 #  License: GNU GPLv3
 #  
-#  This file is part of MultiMechanize:
+#  This file is part of Multi-Mechanize:
 #       Multi-Process, Multi-Threaded, Web Load Generator, with python-mechanize agents
 #
 #  requires Python 2.6+
@@ -20,9 +20,9 @@ import time
 
 
 
-PROCESSES = 1
-PROCESS_THREADS = 1
-RUN_TIME = 5  # secs
+PROCESSES = 2
+PROCESS_THREADS = 2
+RUN_TIME = 10  # secs
 RAMPUP = 0  # secs
 
 
@@ -90,7 +90,7 @@ class MechanizeAgent(threading.Thread):
         while elapsed < self.run_time:
             start = self.default_timer()               
             
-            script_name = 'wikipedia_simple'
+            script_name = 'example_simple'
             trans = eval(script_name + '.MechTransaction()')
             try:
                 trans.run()
@@ -118,9 +118,9 @@ class Results(threading.Thread):
                 try:
                     elapsed, scriptrun_time, status, bytes_received, custom_timers, error = self.queue.get(False)
                     self.trans_count += 1
-                    f.write('%.3f,%.3f,%s,%i\n' % (elapsed, scriptrun_time, status, bytes_received))
+                    f.write('%.3f,%.3f,%s,%i,%s,%s\n' % (elapsed, scriptrun_time, status, bytes_received, repr(custom_timers), repr(error)))
                     f.flush()
-                    print '%i, %.3f, %.3f, %s, %i, %s' % (self.trans_count, elapsed, scriptrun_time, status, bytes_received, repr(custom_timers))
+                    print '%i, %.3f, %.3f, %s, %i, %s, %s' % (self.trans_count, elapsed, scriptrun_time, status, bytes_received, repr(custom_timers), repr(error))
                 except Queue.Empty:
                     time.sleep(.1)
 
