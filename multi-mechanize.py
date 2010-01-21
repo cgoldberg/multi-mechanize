@@ -20,7 +20,7 @@ from test_scripts import *
 
 PROCESSES = 2
 PROCESS_THREADS = 2
-RUN_TIME = 10  # secs
+RUN_TIME = 5  # secs
 RAMPUP = 0  # secs
 
 
