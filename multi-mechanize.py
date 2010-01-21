@@ -18,10 +18,10 @@ import time
 from test_scripts import *
 
 
-PROCESSES = 2
-PROCESS_THREADS = 2
-RUN_TIME = 5  # secs
-RAMPUP = 0  # secs
+PROCESSES = 1
+PROCESS_THREADS = 1
+RUN_TIME = 30  # secs
+RAMPUP = 10  # secs
 
 
 
