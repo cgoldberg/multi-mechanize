@@ -2,8 +2,7 @@
 #  Copyright (c) 2010 Corey Goldberg (corey@goldb.org)
 #  License: GNU GPLv3
 
-
-import mechanize
+import random
 import time
 
 
@@ -14,19 +13,13 @@ class MechTransaction(object):
         self.custom_timers = {}
     
     def run(self):
-        br = mechanize.Browser()
-        br.set_handle_robots(False)
+        r = random.uniform(1, 2)
+        time.sleep(r)
         
-        start_timer = time.time()
-        resp = br.open('http://www.example.com/')
-        resp.read()
-        latency = time.time() - start_timer
+        self.custom_timers['Example_Timer'] = r
+        self.bytes_received += int(random.uniform(1000, 2000))
         
-        assert (resp.code == 200), 'Bad HTTP Response'
-        self.custom_timers['Example_Homepage'] = latency
-        self.bytes_received += len(resp.get_data())
-
-
+        
 if __name__ == '__main__':
     trans = MechTransaction()
     trans.run()

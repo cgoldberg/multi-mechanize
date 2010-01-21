@@ -4,6 +4,8 @@
 
 
 import mechanize
+import time
+
 
 
 class MechTransaction(object):
@@ -16,24 +18,36 @@ class MechTransaction(object):
         br.set_handle_robots(False)
         br.addheaders = [('User-agent', 'Mozilla/5.0 Compatible')]
         
+        start_timer = time.time()
         resp = br.open('http://www.wikipedia.org/')
         resp.read()
-        self.bytes_received += (len(resp.info()) + len(resp.get_data()))
+        time.time() - start_timer
+        self.custom_timers['Load_Front_Page'] = latency  # store the custom timer
+        
+        self.bytes_received += len(resp.get_data())  # store the amount of data received
+        
+        # verify responses are valid
         assert (resp.code == 200), 'Bad HTTP Response'
         assert ('Wikipedia, the free encyclopedia' in resp.get_data()), 'Text Assertion Failed'
         
-        time.sleep(2)
+        time.sleep(2)  # think-time
         
-        br.select_form(nr=0)
-        br.form['search'] = 'foo'
-        resp = br.submit()
+        br.select_form(nr=0)  # select first (zero-based) form on page
+        br.form['search'] = 'foo'  # set form field
+        
+        start_timer = time.time()
+        resp = br.submit()  # submit the form
         resp.read()
-        self.bytes_received += (len(resp.info()) + len(resp.get_data()))
+        latency = time.time() - start_timer
+        self.custom_timers['Load_Front_Page'] = latency  # store the custom timer
+        
+        self.bytes_received += len(resp.get_data())  # store the amount of data received
+        
+        # verify responses are valid
         assert (resp.code == 200), 'Bad HTTP Response'
         assert ('foobar' in resp.get_data()), 'Text Assertion Failed'
         
-        time.sleep(3)
-
+        time.sleep(3)  # think-time
 
 
 if __name__ == '__main__':
