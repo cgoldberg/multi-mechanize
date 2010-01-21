@@ -1,6 +1,6 @@
 import glob
 
-testcase_dir = './test_scripts/'
+testcase_dir = 'test_scripts\\'
 
 for f in glob.glob(testcase_dir + '*.py'):
     if f != '__init__.py':
