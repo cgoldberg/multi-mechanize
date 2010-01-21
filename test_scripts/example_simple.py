@@ -14,8 +14,6 @@ class MechTransaction(object):
     
     def run(self):
         br = mechanize.Browser()
-        br.set_handle_robots(False)
-        br.addheaders = [('User-agent', 'Mozilla/5.0 Compatible')]
         
         start_timer = time.time()
         resp = br.open('http://www.example.com/')
