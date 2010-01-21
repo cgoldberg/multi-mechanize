@@ -8,9 +8,6 @@
 #  requires Python 2.6+
 
 
-from test_scripts import *
-
-
 import multiprocessing
 import os
 import Queue
@@ -18,6 +15,7 @@ import sys
 import threading
 import time
 
+from test_scripts import *
 
 
 PROCESSES = 2
