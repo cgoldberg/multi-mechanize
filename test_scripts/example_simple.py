@@ -18,6 +18,7 @@ class MechTransaction(object):
         
         start_timer = time.time()
         resp = br.open('http://www.example.com/')
+        resp.read()
         latency = time.time() - start_timer
         
         self.custom_timers['Example_Homepage'] = latency
