@@ -1,10 +1,16 @@
 import glob
+import sys
 
-testcase_dir = 'test_scripts\\'
+TESTCASE_DIR = 'test_scripts'
 
-for f in glob.glob(testcase_dir + '*.py'):
+if sys.platform.startswith('win'):
+    sep = '\\'
+else:
+    sep = '/'
+    
+for f in glob.glob(TESTCASE_DIR + sep + '*.py'):
     if f != '__init__.py':
-        f = f.replace(testcase_dir, '')
+        f = f.replace(TESTCASE_DIR + sep, '')
         f = f.replace('.py', '')
         line = 'import %s' % f
         exec(line)

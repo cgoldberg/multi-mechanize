@@ -24,6 +24,7 @@ class MechTransaction(object):
         self.custom_timers['Example_Homepage'] = latency
         self.bytes_received += (len(resp.info()) + len(resp.get_data()))
 
+        time.sleep(10)
         
 if __name__ == '__main__':
     trans = MechTransaction()
