@@ -19,8 +19,6 @@ class MechTransaction(object):
         resp = br.open('http://www.wikipedia.org/')
         resp.read()
         self.bytes_received += (len(resp.info()) + len(resp.get_data()))
-        #print resp.info()
-        #print resp.get_data()
         assert (resp.code == 200), 'Bad HTTP Response'
         assert ('Wikipedia, the free encyclopedia' in resp.get_data()), 'Text Assertion Failed'
 
@@ -29,8 +27,6 @@ class MechTransaction(object):
         resp = br.submit()
         resp.read()
         self.bytes_received += (len(resp.info()) + len(resp.get_data()))
-        #print resp.info()
-        #print resp.get_data()
         assert (resp.code == 200), 'Bad HTTP Response'
         assert ('foobar' in resp.get_data()), 'Text Assertion Failed'
 
