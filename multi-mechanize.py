@@ -18,8 +18,6 @@ import time
 from test_scripts import *
 
 
-#PROCESSES = 2
-#PROCESS_THREADS = 2
 RUN_TIME = 10  # secs
 RAMPUP = 2  # secs
 
@@ -31,9 +29,12 @@ def main():
     r.daemon = True
     r.start()
     
-    user_group_configs = [] 
-    user_group_configs.append(UserGroupConfig(1, 'user_group-1', 'example_mock.py'))
-    user_group_configs.append(UserGroupConfig(1, 'user_group-2', 'example_simple.py'))
+    user_group_configs = [ 
+        UserGroupConfig(1, 'user_group-1', 'example_mock.py'),
+        UserGroupConfig(1, 'user_group-2', 'example_mock.py'),
+        UserGroupConfig(1, 'user_group-3', 'example_mock.py'),
+        UserGroupConfig(1, 'user_group-4', 'example_mock.py'),
+    ]
     
     user_groups = [] 
     for ug_config in user_group_configs:
@@ -70,7 +71,7 @@ class UserGroup(multiprocessing.Process):
             spacing = float(self.rampup) / float(self.num_threads)
             if i > 0:
                 time.sleep(spacing)
-            agent_thread = MechanizeAgent(self.queue, self.start_time, self.run_time, self.user_group_name, self.script_file)
+            agent_thread = Agent(self.queue, self.start_time, self.run_time, self.user_group_name, self.script_file)
             agent_thread.daemon = True
             threads.append(agent_thread)
             agent_thread.start()            
@@ -79,7 +80,7 @@ class UserGroup(multiprocessing.Process):
         
 
 
-class MechanizeAgent(threading.Thread):
+class Agent(threading.Thread):
     def __init__(self, queue, start_time, run_time, user_group_name, script_file):
         threading.Thread.__init__(self)
         self.queue = queue
@@ -102,6 +103,7 @@ class MechanizeAgent(threading.Thread):
             
             script_name = self.script_file.replace('.py', '')
             trans = eval(script_name + '.Transaction()')
+            
             try:
                 trans.run()
                 status = 'PASS'
