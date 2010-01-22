@@ -18,8 +18,8 @@ import time
 from test_scripts import *
 
 
-PROCESSES = 1
-PROCESS_THREADS = 1
+PROCESSES = 100
+PROCESS_THREADS = 300
 RUN_TIME = 30  # secs
 RAMPUP = 10  # secs
 
@@ -28,7 +28,7 @@ RAMPUP = 10  # secs
 def main():
     queue = multiprocessing.Queue()
     r = Results(queue)
-    r.setDaemon(True)
+    r.daemon = True
     r.start()
     
     start_time = time.time() 
@@ -88,8 +88,8 @@ class MechanizeAgent(threading.Thread):
         while elapsed < self.run_time:
             start = self.default_timer()               
             
-            script_name = 'example_simple'
-            trans = eval(script_name + '.MechTransaction()')
+            script_name = 'example_mock'
+            trans = eval(script_name + '.Transaction()')
             try:
                 trans.run()
                 status = 'PASS'

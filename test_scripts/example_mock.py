@@ -7,7 +7,7 @@ import time
 
 
 
-class MechTransaction(object):
+class Transaction(object):
     def __init__(self):
         self.bytes_received = 0
         self.custom_timers = {}
