@@ -18,10 +18,10 @@ import time
 from test_scripts import *
 
 
-PROCESSES = 2
-PROCESS_THREADS = 2
-RUN_TIME = 30  # secs
-RAMPUP = 10  # secs
+#PROCESSES = 2
+#PROCESS_THREADS = 2
+RUN_TIME = 10  # secs
+RAMPUP = 2  # secs
 
 
 
@@ -31,28 +31,37 @@ def main():
     r.daemon = True
     r.start()
     
-    start_time = time.time() 
-    
-    user_group_configs = [(1, 'user_group-1'), (1, 'user_group-2')]
+    user_group_configs = [] 
+    user_group_configs.append(UserGroupConfig(1, 'user_group-1', 'example_mock.py'))
+    user_group_configs.append(UserGroupConfig(1, 'user_group-2', 'example_simple.py'))
     
     user_groups = [] 
-    for user_group_config in user_group_configs:
-        ug = UserGroup(queue, start_time, user_group_config[1], user_group_config[0], RUN_TIME, RAMPUP)
-        user_groups.append(ug)
-    for user_groups in user_groups:
-        user_groups.start()
-    
-    
+    for ug_config in user_group_configs:
+        ug = UserGroup(queue, ug_config.name, ug_config.num_threads, ug_config.script_file, RUN_TIME, RAMPUP)
+        user_groups.append(ug)    
+    [user_group.start() for user_group in user_groups]
 
+
+    
+    
+class UserGroupConfig(object):
+    def __init__(self, num_threads, name, script_file):
+        self.num_threads = num_threads
+        self.name = name
+        self.script_file = script_file
+    
+    
+    
 class UserGroup(multiprocessing.Process):
-    def __init__(self, queue, start_time, process_num, num_threads=1, run_time=10, rampup=0):
+    def __init__(self, queue, user_group_name, num_threads, script_file, run_time, rampup):
         multiprocessing.Process.__init__(self)
         self.queue = queue
-        self.start_time = start_time
-        self.process_num = process_num
+        self.user_group_name = user_group_name
         self.num_threads = num_threads
+        self.script_file = script_file
         self.run_time = run_time
         self.rampup = rampup
+        self.start_time = time.time()
         
     def run(self):
         self.running = True
@@ -61,10 +70,9 @@ class UserGroup(multiprocessing.Process):
             spacing = float(self.rampup) / float(self.num_threads)
             if i > 0:
                 time.sleep(spacing)
-            agent_thread = MechanizeAgent(self.queue, self.start_time, self.run_time)
+            agent_thread = MechanizeAgent(self.queue, self.start_time, self.run_time, self.user_group_name, self.script_file)
             agent_thread.daemon = True
             threads.append(agent_thread)
-            #print 'starting process %i, thread %i' % (self.process_num + 1, i + 1)
             agent_thread.start()            
         for agent_thread in threads:
             agent_thread.join()
@@ -72,11 +80,13 @@ class UserGroup(multiprocessing.Process):
 
 
 class MechanizeAgent(threading.Thread):
-    def __init__(self, queue, start_time, run_time):
+    def __init__(self, queue, start_time, run_time, user_group_name, script_file):
         threading.Thread.__init__(self)
         self.queue = queue
         self.start_time = start_time
         self.run_time = run_time
+        self.user_group_name = user_group_name
+        self.script_file = script_file
         
         # choose timer to use
         if sys.platform.startswith('win'):
@@ -90,7 +100,7 @@ class MechanizeAgent(threading.Thread):
         while elapsed < self.run_time:
             start = self.default_timer()               
             
-            script_name = 'example_mock'
+            script_name = self.script_file.replace('.py', '')
             trans = eval(script_name + '.Transaction()')
             try:
                 trans.run()
@@ -102,7 +112,7 @@ class MechanizeAgent(threading.Thread):
             finish = self.default_timer()
             scriptrun_time = finish - start
             elapsed = time.time() - self.start_time 
-            self.queue.put((elapsed, scriptrun_time, status, trans.bytes_received, trans.custom_timers, error))
+            self.queue.put((elapsed, self.user_group_name, scriptrun_time, status, trans.bytes_received, trans.custom_timers, error))
             
 
 
@@ -116,11 +126,11 @@ class Results(threading.Thread):
         with open('results.csv', 'w') as f:     
             while True:
                 try:
-                    elapsed, scriptrun_time, status, bytes_received, custom_timers, error = self.queue.get(False)
+                    elapsed, self.user_group_name, scriptrun_time, status, bytes_received, custom_timers, error = self.queue.get(False)
                     self.trans_count += 1
-                    f.write('%i, %.3f,%.3f,%s,%i,%s,%s\n' % (self.trans_count, elapsed, scriptrun_time, status, bytes_received, repr(custom_timers), repr(error)))
+                    f.write('%i %.3f,%s,%.3f,%s,%i,%s,%s\n' % (self.trans_count, elapsed, self.user_group_name, scriptrun_time, status, bytes_received, repr(custom_timers), repr(error)))
                     f.flush()
-                    print '%i, %.3f, %.3f, %s, %i, %s, %s' % (self.trans_count, elapsed, scriptrun_time, status, bytes_received, repr(custom_timers), repr(error))
+                    print '%i, %.3f, %s, %.3f, %s, %i, %s, %s' % (self.trans_count, elapsed, self.user_group_name, scriptrun_time, status, bytes_received, repr(custom_timers), repr(error))
                 except Queue.Empty:
                     time.sleep(.1)
 
