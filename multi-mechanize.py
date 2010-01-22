@@ -54,17 +54,17 @@ class UserGroup(multiprocessing.Process):
         
     def run(self):
         self.running = True
-        thread_refs = []
+        threads = []
         for i in range(self.num_threads):
             spacing = float(self.rampup) / float(self.num_threads)
             if i > 0:
                 time.sleep(spacing)
             agent_thread = MechanizeAgent(self.queue, self.start_time, self.run_time)
             agent_thread.daemon = True
-            thread_refs.append(agent_thread)
+            threads.append(agent_thread)
             #print 'starting process %i, thread %i' % (self.process_num + 1, i + 1)
             agent_thread.start()            
-        for agent_thread in thread_refs:
+        for agent_thread in threads:
             agent_thread.join()
         
 
