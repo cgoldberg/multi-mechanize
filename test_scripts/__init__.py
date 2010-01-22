@@ -14,7 +14,7 @@ else:
 
 dir = TESTCASE_DIR + sep
 
-for f in glob.glob( '%*.py' % dir):
+for f in glob.glob( '%s*.py' % dir):
     if f != '__init__.py':
         f = f.replace(dir, '')
         f = f.replace('.py', '')
