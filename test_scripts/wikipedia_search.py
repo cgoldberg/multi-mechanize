@@ -28,6 +28,7 @@ class Transaction(object):
         resp.read()
         # stop the timer
         latency = time.time() - start_timer
+        
         # store the custom timer
         self.custom_timers['Load_Front_Page'] = latency  
         
@@ -53,6 +54,7 @@ class Transaction(object):
         resp.read()
         # stop the timer
         latency = time.time() - start_timer
+        
         # store the custom timer
         self.custom_timers['Search'] = latency  
         
