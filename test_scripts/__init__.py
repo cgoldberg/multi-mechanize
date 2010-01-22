@@ -5,14 +5,14 @@ import sys
 
 
 
-TESTCASE_DIR = 'test_scripts'
+script_dir = 'test_scripts'
 
 if sys.platform.startswith('win'):
     sep = '\\'
 else:
     sep = '/'
 
-dir = TESTCASE_DIR + sep
+dir = script_dir + sep
 
 for f in glob.glob( '%s*.py' % dir):
     if f != '__init__.py':
