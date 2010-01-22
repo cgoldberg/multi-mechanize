@@ -18,8 +18,8 @@ import time
 from test_scripts import *
 
 
-PROCESSES = 1
-PROCESS_THREADS = 1
+PROCESSES = 2
+PROCESS_THREADS = 2
 RUN_TIME = 30  # secs
 RAMPUP = 10  # secs
 
@@ -33,16 +33,16 @@ def main():
     
     start_time = time.time() 
     
-    managers = [] 
+    user_groups = [] 
     for i in range(PROCESSES):
-        manager = MultiMechanize(queue, start_time, i, PROCESS_THREADS, RUN_TIME, RAMPUP)
-        managers.append(manager)
-    for manager in managers:
-        manager.start()
+        ug = UserGroup(queue, start_time, i, PROCESS_THREADS, RUN_TIME, RAMPUP)
+        user_groups.append(ug)
+    for user_groups in user_groups:
+        user_groups.start()
     
     
 
-class MultiMechanize(multiprocessing.Process):
+class UserGroup(multiprocessing.Process):
     def __init__(self, queue, start_time, process_num, num_threads=1, run_time=10, rampup=0):
         multiprocessing.Process.__init__(self)
         self.queue = queue
