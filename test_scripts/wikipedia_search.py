@@ -50,6 +50,7 @@ class Transaction(object):
         time.sleep(3)  # think-time
 
 
+
 if __name__ == '__main__':
     trans = Transaction()
     trans.run()

@@ -19,7 +19,8 @@ class Transaction(object):
         self.custom_timers['Example_Timer'] = r
         self.bytes_received += int(random.uniform(1000, 2000))
         
-        
+ 
+ 
 if __name__ == '__main__':
     trans = MechTransaction()
     trans.run()
