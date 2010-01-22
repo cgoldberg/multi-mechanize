@@ -21,7 +21,7 @@ class Transaction(object):
         start_timer = time.time()
         resp = br.open('http://www.wikipedia.org/')
         resp.read()
-        time.time() - start_timer
+        latency = time.time() - start_timer
         self.custom_timers['Load_Front_Page'] = latency  # store the custom timer
         
         self.bytes_received += len(resp.get_data())  # store the amount of data received
@@ -39,7 +39,7 @@ class Transaction(object):
         resp = br.submit()  # submit the form
         resp.read()
         latency = time.time() - start_timer
-        self.custom_timers['Load_Front_Page'] = latency  # store the custom timer
+        self.custom_timers['Search'] = latency  # store the custom timer
         
         self.bytes_received += len(resp.get_data())  # store the amount of data received
         
