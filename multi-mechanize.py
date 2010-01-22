@@ -33,9 +33,11 @@ def main():
     
     start_time = time.time() 
     
+    user_group_configs = [(1, 'user_group-1'), (1, 'user_group-2')]
+    
     user_groups = [] 
-    for i in range(PROCESSES):
-        ug = UserGroup(queue, start_time, i, PROCESS_THREADS, RUN_TIME, RAMPUP)
+    for user_group_config in user_group_configs:
+        ug = UserGroup(queue, start_time, user_group_config[1], user_group_config[0], RUN_TIME, RAMPUP)
         user_groups.append(ug)
     for user_groups in user_groups:
         user_groups.start()
