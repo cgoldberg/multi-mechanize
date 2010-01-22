@@ -14,40 +14,57 @@ class Transaction(object):
         self.custom_timers = {}
     
     def run(self):
+        # create a Browser instance
         br = mechanize.Browser()
+        # don't bother with robots.txt
         br.set_handle_robots(False)
+        # add a custom header so wikipedia allows our requests
         br.addheaders = [('User-agent', 'Mozilla/5.0 Compatible')]
         
+        # start the timer
         start_timer = time.time()
+        # submit the request
         resp = br.open('http://www.wikipedia.org/')
         resp.read()
+        # stop the timer
         latency = time.time() - start_timer
-        self.custom_timers['Load_Front_Page'] = latency  # store the custom timer
+        # store the custom timer
+        self.custom_timers['Load_Front_Page'] = latency  
         
-        self.bytes_received += len(resp.get_data())  # store the amount of data received
+        # store the amount of data received
+        self.bytes_received += len(resp.get_data())  
         
         # verify responses are valid
         assert (resp.code == 200), 'Bad HTTP Response'
         assert ('Wikipedia, the free encyclopedia' in resp.get_data()), 'Text Assertion Failed'
         
-        time.sleep(2)  # think-time
+        # think-time
+        time.sleep(2)  
         
-        br.select_form(nr=0)  # select first (zero-based) form on page
-        br.form['search'] = 'foo'  # set form field
+        # select first (zero-based) form on page
+        br.select_form(nr=0)
+        # set form field        
+        br.form['search'] = 'foo'  
         
+        # start the timer
         start_timer = time.time()
-        resp = br.submit()  # submit the form
+        # submit the form
+        resp = br.submit()  
         resp.read()
+        # stop the timer
         latency = time.time() - start_timer
-        self.custom_timers['Search'] = latency  # store the custom timer
+        # store the custom timer
+        self.custom_timers['Search'] = latency  
         
-        self.bytes_received += len(resp.get_data())  # store the amount of data received
+        # store the amount of data received
+        self.bytes_received += len(resp.get_data())  
         
         # verify responses are valid
         assert (resp.code == 200), 'Bad HTTP Response'
         assert ('foobar' in resp.get_data()), 'Text Assertion Failed'
         
-        time.sleep(3)  # think-time
+        # think-time
+        time.sleep(2)  
 
 
 
