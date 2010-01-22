@@ -22,10 +22,11 @@ class Transaction(object):
         resp.read()
         latency = time.time() - start_timer
         
-        assert (resp.code == 200), 'Bad HTTP Response'
         self.custom_timers['Example_Homepage'] = latency
         self.bytes_received += len(resp.get_data())
-
+        
+        assert (resp.code == 200), 'Bad HTTP Response'
+        assert ('Example Web Page' in resp.get_data()), 'Failed Content Verification'
 
 
 if __name__ == '__main__':
