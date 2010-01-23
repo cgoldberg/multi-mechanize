@@ -114,10 +114,10 @@ class Agent(threading.Thread):
         elapsed = 0
         error = ''
         while elapsed < self.run_time:
-            start = self.default_timer()               
+            module_name = self.script_file.replace('.py', '')
+            trans = eval(module_name + '.Transaction()')
             
-            script_name = self.script_file.replace('.py', '')
-            trans = eval(script_name + '.Transaction()')
+            start = self.default_timer()  
             
             try:
                 trans.run()
@@ -127,9 +127,11 @@ class Agent(threading.Thread):
                 error = str(e)
 
             finish = self.default_timer()
+            
             scriptrun_time = finish - start
             elapsed = time.time() - self.start_time 
-            self.queue.put((elapsed, self.user_group_name, scriptrun_time, status, trans.bytes_received, trans.custom_timers, error))
+            fields = (elapsed, self.user_group_name, scriptrun_time, status, trans.bytes_received, trans.custom_timers, error)
+            self.queue.put(fields)
             
 
 
