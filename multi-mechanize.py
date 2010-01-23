@@ -18,33 +18,44 @@ import time
 from test_scripts import *
 
 
-RUN_TIME = 10  # secs
-RAMPUP = 2  # secs
-
 
 
 def main():
+    run_time, rampup, user_group_configs = configure()
+    
+    # this queue is shared between all processes/threads
     queue = multiprocessing.Queue()
     r = Results(queue)
     r.daemon = True
     r.start()
     
-    user_group_configs = [ 
-        UserGroupConfig(1, 'user_group-1', 'example_mock.py'),
-        UserGroupConfig(1, 'user_group-2', 'example_mock.py'),
-        UserGroupConfig(1, 'user_group-3', 'example_mock.py'),
-        UserGroupConfig(1, 'user_group-4', 'example_mock.py'),
-    ]
-    
     user_groups = [] 
     for ug_config in user_group_configs:
-        ug = UserGroup(queue, ug_config.name, ug_config.num_threads, ug_config.script_file, RUN_TIME, RAMPUP)
+        ug = UserGroup(queue, ug_config.name, ug_config.num_threads, ug_config.script_file, run_time, rampup)
         user_groups.append(ug)    
     [user_group.start() for user_group in user_groups]
 
 
+
+def configure():
+    user_group_configs = []
+    config = ConfigParser.ConfigParser()
+    config.read('config.cfg')
+    for section in config.sections():
+        if section == 'global':
+            run_time = int(config.get(section, 'run_time'))
+            rampup = int(config.get(section, 'rampup'))
+        else:
+            threads = int(config.get(section, 'threads'))
+            script = config.get(section, 'script')
+            user_group_name = section
+            ug_config = UserGroupConfig(threads, user_group_name, script)
+            user_group_configs.append(ug_config)
     
-    
+    return (run_time, rampup, user_group_configs)
+        
+
+
 class UserGroupConfig(object):
     def __init__(self, num_threads, name, script_file):
         self.num_threads = num_threads
