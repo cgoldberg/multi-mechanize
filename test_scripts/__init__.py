@@ -1,11 +1,13 @@
 
-
+import ConfigParser
 import glob
 import sys
 
 
 
-script_dir = 'test_scripts'
+config = ConfigParser.ConfigParser()
+config.read('config.cfg')
+script_dir = config.get('global', 'script_directory')
 
 if sys.platform.startswith('win'):
     sep = '\\'
