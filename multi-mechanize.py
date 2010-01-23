@@ -8,6 +8,8 @@
 #  requires Python 2.6+
 
 
+
+import ConfigParser
 import multiprocessing
 import os
 import Queue
@@ -15,10 +17,12 @@ import sys
 import threading
 import time
 
-from test_scripts import *
-
-
-
+config = ConfigParser.ConfigParser()
+config.read('config.cfg')
+script_dir = config.get('global', 'script_directory')
+exec 'from %s import *' % script_dir            
+            
+            
 
 def main():
     run_time, rampup, user_group_configs = configure()
