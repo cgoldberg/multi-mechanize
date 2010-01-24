@@ -3,6 +3,10 @@
 #  License: GNU GPLv3
 #  
 #  This file is part of Multi-Mechanize
+#
+#
+#  this is a mock plugin.  
+#  it does nothing but return random custom_timer and bytes_received data.
 
 
 import random
