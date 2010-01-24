@@ -25,11 +25,11 @@ exec 'from %s import *' % script_dir
             
 
 def main():
-    run_time, rampup, user_group_configs = configure()
+    run_time, rampup, console_logging, user_group_configs = configure()
     
     # this queue is shared between all processes/threads
     queue = multiprocessing.Queue()
-    r = Results(queue)
+    r = Results(queue, console_logging)
     r.daemon = True
     r.start()
     
@@ -41,27 +41,23 @@ def main():
     
     start_time = time.time() 
     
-    print '\n  user_groups:  %i' % len(user_groups)
-    print '  threads: %i\n' % (ug_config.num_threads * len(user_groups))
-    p = ProgressBar(run_time)
-    elapsed = 0
-    while [user_group for user_group in user_groups if user_group.is_alive()] != []:
-        p.update_time(elapsed)
-        if sys.platform.startswith('win'):
-            print p, '\r',
-        else:
-            print p
-            sys.stdout.write(chr(27) + '[A' )
-        time.sleep(1)
-        elapsed = time.time() - start_time
-    print p
-    if not sys.platform.startswith('win'):
-        print
-        
-        
-        
-        
-        
+    if console_logging != 'on':
+        print '\n  user_groups:  %i' % len(user_groups)
+        print '  threads: %i\n' % (ug_config.num_threads * len(user_groups))
+        p = ProgressBar(run_time)
+        elapsed = 0
+        while [user_group for user_group in user_groups if user_group.is_alive()] != []:
+            p.update_time(elapsed)
+            if sys.platform.startswith('win'):
+                print p, '\r',
+            else:
+                print p
+                sys.stdout.write(chr(27) + '[A' )
+            time.sleep(1)
+            elapsed = time.time() - start_time
+        print p
+        if not sys.platform.startswith('win'):
+            print
         
         
 
@@ -73,6 +69,7 @@ def configure():
         if section == 'global':
             run_time = int(config.get(section, 'run_time'))
             rampup = int(config.get(section, 'rampup'))
+            console_logging = config.get(section, 'console_logging')
         else:
             threads = int(config.get(section, 'threads'))
             script = config.get(section, 'script')
@@ -80,7 +77,7 @@ def configure():
             ug_config = UserGroupConfig(threads, user_group_name, script)
             user_group_configs.append(ug_config)
     
-    return (run_time, rampup, user_group_configs)
+    return (run_time, rampup, console_logging, user_group_configs)
         
 
 
@@ -160,9 +157,10 @@ class Agent(threading.Thread):
 
 
 class Results(threading.Thread):
-    def __init__(self, queue):
+    def __init__(self, queue, console_logging):
         threading.Thread.__init__(self)
         self.queue = queue
+        self.console_logging = console_logging
         self.trans_count = 0
     
     def run(self):
@@ -173,7 +171,8 @@ class Results(threading.Thread):
                     self.trans_count += 1
                     f.write('%i,%.3f,%s,%.3f,%s,%i,%s,%s\n' % (self.trans_count, elapsed, self.user_group_name, scriptrun_time, status, bytes_received, repr(custom_timers), repr(error)))
                     f.flush()
-                    #print '%i, %.3f, %s, %.3f, %s, %i, %s, %s' % (self.trans_count, elapsed, self.user_group_name, scriptrun_time, status, bytes_received, repr(custom_timers), repr(error))
+                    if self.console_logging == 'on':
+                        print '%i, %.3f, %s, %.3f, %s, %i, %s, %s' % (self.trans_count, elapsed, self.user_group_name, scriptrun_time, status, bytes_received, repr(custom_timers), repr(error))
                 except Queue.Empty:
                     time.sleep(.1)
 
