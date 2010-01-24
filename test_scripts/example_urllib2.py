@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 #  Copyright (c) 2010 Corey Goldberg (corey@goldb.org)
 #  License: GNU GPLv3
+#  
+#  This file is part of Multi-Mechanize
 
 
 import urllib2
