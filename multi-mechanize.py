@@ -38,8 +38,32 @@ def main():
         ug = UserGroup(queue, ug_config.name, ug_config.num_threads, ug_config.script_file, run_time, rampup)
         user_groups.append(ug)    
     [user_group.start() for user_group in user_groups]
-
-
+    
+    start_time = time.time() 
+    
+    print '\n  user_groups:  %i' % len(user_groups)
+    print '  threads: %i\n' % (ug_config.num_threads * len(user_groups))
+    p = ProgressBar(run_time)
+    elapsed = 0
+    while [user_group for user_group in user_groups if user_group.is_alive()] != []:
+        p.update_time(elapsed)
+        if sys.platform.startswith('win'):
+            print p, '\r',
+        else:
+            print p
+            sys.stdout.write(chr(27) + '[A' )
+        time.sleep(1)
+        elapsed = time.time() - start_time
+    print p
+    if not sys.platform.startswith('win'):
+        print
+        
+        
+        
+        
+        
+        
+        
 
 def configure():
     user_group_configs = []
@@ -149,12 +173,38 @@ class Results(threading.Thread):
                     self.trans_count += 1
                     f.write('%i,%.3f,%s,%.3f,%s,%i,%s,%s\n' % (self.trans_count, elapsed, self.user_group_name, scriptrun_time, status, bytes_received, repr(custom_timers), repr(error)))
                     f.flush()
-                    print '%i, %.3f, %s, %.3f, %s, %i, %s, %s' % (self.trans_count, elapsed, self.user_group_name, scriptrun_time, status, bytes_received, repr(custom_timers), repr(error))
+                    #print '%i, %.3f, %s, %.3f, %s, %i, %s, %s' % (self.trans_count, elapsed, self.user_group_name, scriptrun_time, status, bytes_received, repr(custom_timers), repr(error))
                 except Queue.Empty:
                     time.sleep(.1)
 
 
+
+class ProgressBar:
+    def __init__(self, duration):
+        self.duration = duration
+        self.prog_bar = '[]'
+        self.fill_char = '='
+        self.width = 40
+        self.__update_amount(0)
+    
+    def __update_amount(self, new_amount):
+        percent_done = int(round((new_amount / 100.0) * 100.0))
+        all_full = self.width - 2
+        num_hashes = int(round((percent_done / 100.0) * all_full))
+        self.prog_bar = '[' + self.fill_char * num_hashes + ' ' * (all_full - num_hashes) + ']'
+        pct_place = (len(self.prog_bar) / 2) - len(str(percent_done))
+        pct_string = '%i%%' % percent_done
+        self.prog_bar = self.prog_bar[0:pct_place] + \
+            (pct_string + self.prog_bar[pct_place + len(pct_string):])
         
+    def update_time(self, elapsed_secs):
+        self.__update_amount((elapsed_secs / float(self.duration)) * 100.0)
+        self.prog_bar += '  %ds/%ss' % (elapsed_secs, self.duration)
         
+    def __str__(self):
+        return str(self.prog_bar)
+        
+
+
 if __name__ == '__main__':
     main()
