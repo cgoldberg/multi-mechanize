@@ -177,7 +177,7 @@ class Results(threading.Thread):
 
 
 
-class ProgressBar:
+class ProgressBar(object):
     def __init__(self, duration):
         self.duration = duration
         self.prog_bar = '[]'
