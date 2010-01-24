@@ -17,6 +17,7 @@ def main():
     with open('out.csv', 'w') as f:
         for i, seq in enumerate(chunked_series):
             if len(seq) > 0:
+                print '%i, %i, %.3f' % (i, len(seq), avg(seq))
                 f.write('%i,%i,%.3f\n' % (i, len(seq), avg(seq)))
     
     
