@@ -101,7 +101,6 @@ class UserGroup(multiprocessing.Process):
         self.start_time = time.time()
         
     def run(self):
-        self.running = True
         threads = []
         for i in range(self.num_threads):
             spacing = float(self.rampup) / float(self.num_threads)
