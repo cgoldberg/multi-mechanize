@@ -134,9 +134,13 @@ class Agent(threading.Thread):
         elapsed = 0
         error = ''
         while elapsed < self.run_time:
-            module_name = self.script_file.replace('.py', '')
-            trans = eval(module_name + '.Transaction()')
-            
+            try:
+                module_name = self.script_file.replace('.py', '')
+                trans = eval(module_name + '.Transaction()')
+            except (NameError, AttributeError), e:
+                error += str(e)
+                print 'ERROR: can not find test script: %s.  aborting user group: %s' % (self.script_file, self.user_group_name)
+                return
             start = self.default_timer()  
             
             try:
