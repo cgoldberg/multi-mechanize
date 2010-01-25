@@ -106,7 +106,7 @@ class UserGroup(multiprocessing.Process):
             spacing = float(self.rampup) / float(self.num_threads)
             if i > 0:
                 time.sleep(spacing)
-            agent_thread = Agent(self.queue, self.start_time, self.run_time, self.user_group_name, self.script_file)
+            agent_thread = Agent(i, self.queue, self.start_time, self.run_time, self.user_group_name, self.script_file)
             agent_thread.daemon = True
             threads.append(agent_thread)
             agent_thread.start()            
@@ -116,8 +116,9 @@ class UserGroup(multiprocessing.Process):
 
 
 class Agent(threading.Thread):
-    def __init__(self, queue, start_time, run_time, user_group_name, script_file):
+    def __init__(self, thread_num, queue, start_time, run_time, user_group_name, script_file):
         threading.Thread.__init__(self)
+        self.thread_num = thread_num
         self.queue = queue
         self.start_time = start_time
         self.run_time = run_time
@@ -141,6 +142,9 @@ class Agent(threading.Thread):
                 error += str(e)
                 print 'ERROR: can not find test script: %s.  aborting user group: %s' % (self.script_file, self.user_group_name)
                 return
+            
+            trans.thread_num = self.thread_num
+            
             start = self.default_timer()  
             
             try:
