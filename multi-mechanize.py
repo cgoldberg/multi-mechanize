@@ -34,8 +34,8 @@ def main():
     r.start()
     
     user_groups = [] 
-    for ug_config in user_group_configs:
-        ug = UserGroup(queue, ug_config.name, ug_config.num_threads, ug_config.script_file, run_time, rampup)
+    for i, ug_config in enumerate(user_group_configs):
+        ug = UserGroup(queue, i, ug_config.name, ug_config.num_threads, ug_config.script_file, run_time, rampup)
         user_groups.append(ug)    
     [user_group.start() for user_group in user_groups]
     
@@ -90,9 +90,10 @@ class UserGroupConfig(object):
     
     
 class UserGroup(multiprocessing.Process):
-    def __init__(self, queue, user_group_name, num_threads, script_file, run_time, rampup):
+    def __init__(self, queue, process_num, user_group_name, num_threads, script_file, run_time, rampup):
         multiprocessing.Process.__init__(self)
         self.queue = queue
+        self.process_num = process_num
         self.user_group_name = user_group_name
         self.num_threads = num_threads
         self.script_file = script_file
@@ -106,7 +107,7 @@ class UserGroup(multiprocessing.Process):
             spacing = float(self.rampup) / float(self.num_threads)
             if i > 0:
                 time.sleep(spacing)
-            agent_thread = Agent(i, self.queue, self.start_time, self.run_time, self.user_group_name, self.script_file)
+            agent_thread = Agent(self.queue, self.process_num, i, self.start_time, self.run_time, self.user_group_name, self.script_file)
             agent_thread.daemon = True
             threads.append(agent_thread)
             agent_thread.start()            
@@ -116,10 +117,11 @@ class UserGroup(multiprocessing.Process):
 
 
 class Agent(threading.Thread):
-    def __init__(self, thread_num, queue, start_time, run_time, user_group_name, script_file):
+    def __init__(self, queue, process_num, thread_num, start_time, run_time, user_group_name, script_file):
         threading.Thread.__init__(self)
-        self.thread_num = thread_num
         self.queue = queue
+        self.process_num = process_num
+        self.thread_num = thread_num
         self.start_time = start_time
         self.run_time = run_time
         self.user_group_name = user_group_name
@@ -143,7 +145,9 @@ class Agent(threading.Thread):
                 print 'ERROR: can not find test script: %s.  aborting user group: %s' % (self.script_file, self.user_group_name)
                 return
             
+            # scripts have access to these vars, which can be useful for loading unique data
             trans.thread_num = self.thread_num
+            trans.process_num = self.process_num
             
             start = self.default_timer()  
             
