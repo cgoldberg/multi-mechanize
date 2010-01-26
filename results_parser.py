@@ -19,7 +19,9 @@ def main():
             if len(seq) > 0:
                 print '%i, %i, %.3f' % (i, len(seq), avg(seq))
                 f.write('%i,%i,%.3f\n' % (i, len(seq), avg(seq)))
-    
+            else:
+                print '%i, %i, %.3f' % (i, 0, 0.0)
+                f.write('%i,%i,%.3f\n' % (i, 0, 0.0))
     
 def parse_file(file_name):
     reader = csv.reader(open(file_name, 'rb'))
