@@ -136,19 +136,22 @@ class Agent(threading.Thread):
     def run(self):
         elapsed = 0
         error = ''
+        if self.script_file.lower().endswith('.py'):
+            module_name = self.script_file.replace('.py', '')
+        else:
+            print 'ERROR: scripts must have .py extension. can not run test script: %s.  aborting user group: %s' % (self.script_file, self.user_group_name)
+            return
+        try:
+            trans = eval(module_name + '.Transaction()')
+        except NameError, e:
+            print 'ERROR: can not find test script: %s.  aborting user group: %s' % (self.script_file, self.user_group_name)
+            return
+                
+        # scripts have access to these vars, which can be useful for loading unique data
+        trans.thread_num = self.thread_num
+        trans.process_num = self.process_num
+            
         while elapsed < self.run_time:
-            try:
-                module_name = self.script_file.replace('.py', '')
-                trans = eval(module_name + '.Transaction()')
-            except (NameError, AttributeError), e:
-                error += str(e)
-                print 'ERROR: can not find test script: %s.  aborting user group: %s' % (self.script_file, self.user_group_name)
-                return
-            
-            # scripts have access to these vars, which can be useful for loading unique data
-            trans.thread_num = self.thread_num
-            trans.process_num = self.process_num
-            
             start = self.default_timer()  
             
             try:
