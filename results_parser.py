@@ -23,6 +23,7 @@ def main():
                 print '%i, %i, %.3f' % (i, 0, 0.0)
                 f.write('%i,%i,%.3f\n' % (i, 0, 0.0))
     
+    
 def parse_file(file_name):
     reader = csv.reader(open(file_name, 'rb'))
     resp_times = [(float(line[1]), float(line[3])) for line in reader]
