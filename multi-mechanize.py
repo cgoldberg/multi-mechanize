@@ -146,7 +146,10 @@ class Agent(threading.Thread):
         except NameError, e:
             print 'ERROR: can not find test script: %s.  aborting user group: %s' % (self.script_file, self.user_group_name)
             return
-                
+        
+        trans.bytes_received = 0
+        trans.custom_timers = {}
+        
         # scripts have access to these vars, which can be useful for loading unique data
         trans.thread_num = self.thread_num
         trans.process_num = self.process_num
