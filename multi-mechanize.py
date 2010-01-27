@@ -165,7 +165,7 @@ class Agent(threading.Thread):
             
             scriptrun_time = finish - start
             elapsed = time.time() - self.start_time 
-            fields = (elapsed, self.user_group_name, scriptrun_time, status, trans.bytes_received, trans.custom_timers, error)
+            fields = (elapsed, self.user_group_name, scriptrun_time, status, trans.bytes_received, error, trans.custom_timers)
             self.queue.put(fields)
             
 
@@ -181,12 +181,12 @@ class Results(threading.Thread):
         with open('results.csv', 'w') as f:     
             while True:
                 try:
-                    elapsed, self.user_group_name, scriptrun_time, status, bytes_received, custom_timers, error = self.queue.get(False)
+                    elapsed, self.user_group_name, scriptrun_time, status, bytes_received, error, custom_timers = self.queue.get(False)
                     self.trans_count += 1
-                    f.write('%i,%.3f,%s,%.3f,%s,%i,%s,%s\n' % (self.trans_count, elapsed, self.user_group_name, scriptrun_time, status, bytes_received, repr(custom_timers), repr(error)))
+                    f.write('%i,%.3f,%s,%.3f,%s,%i,%s,%s\n' % (self.trans_count, elapsed, self.user_group_name, scriptrun_time, status, bytes_received, repr(error), repr(custom_timers)))
                     f.flush()
                     if self.console_logging == 'on':
-                        print '%i, %.3f, %s, %.3f, %s, %i, %s, %s' % (self.trans_count, elapsed, self.user_group_name, scriptrun_time, status, bytes_received, repr(custom_timers), repr(error))
+                        print '%i, %.3f, %s, %.3f, %s, %i, %s, %s' % (self.trans_count, elapsed, self.user_group_name, scriptrun_time, status, bytes_received, repr(error), repr(custom_timers))
                 except Queue.Empty:
                     time.sleep(.1)
 
