@@ -12,7 +12,6 @@ import time
 
 class Transaction(object):
     def __init__(self):
-        self.bytes_received = 0
         self.custom_timers = {}
     
     def run(self):
@@ -32,10 +31,7 @@ class Transaction(object):
         latency = time.time() - start_timer
         
         # store the custom timer
-        self.custom_timers['Load_Front_Page'] = latency  
-        
-        # store the amount of data received
-        self.bytes_received += len(resp.get_data())  
+        self.custom_timers['Load_Front_Page'] = latency   
         
         # verify responses are valid
         assert (resp.code == 200), 'Bad HTTP Response'
@@ -60,9 +56,6 @@ class Transaction(object):
         # store the custom timer
         self.custom_timers['Search'] = latency  
         
-        # store the amount of data received
-        self.bytes_received += len(resp.get_data())  
-        
         # verify responses are valid
         assert (resp.code == 200), 'Bad HTTP Response'
         assert ('foobar' in resp.get_data()), 'Text Assertion Failed'
@@ -75,5 +68,4 @@ class Transaction(object):
 if __name__ == '__main__':
     trans = Transaction()
     trans.run()
-    print trans.bytes_received
     print trans.custom_timers

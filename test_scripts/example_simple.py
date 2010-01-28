@@ -12,7 +12,6 @@ import time
 
 class Transaction(object):
     def __init__(self):
-        self.bytes_received = 0
         self.custom_timers = {}
     
     def run(self):
@@ -25,7 +24,6 @@ class Transaction(object):
         latency = time.time() - start_timer
         
         self.custom_timers['Example_Homepage'] = latency
-        self.bytes_received += len(resp.get_data())
         
         assert (resp.code == 200), 'Bad HTTP Response'
         assert ('Example Web Page' in resp.get_data()), 'Failed Content Verification'
@@ -34,5 +32,4 @@ class Transaction(object):
 if __name__ == '__main__':
     trans = Transaction()
     trans.run()
-    print trans.bytes_received
     print trans.custom_timers
