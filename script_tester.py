@@ -22,7 +22,7 @@ def main():
     else:
         sep = '/'
         
-    for file in glob.glob('%s/*.py' % script_dir):
+    for file in sorted(glob.glob('%s/*.py' % script_dir)):
         module_name = file.replace('.py', '').split(sep)[-1]
         if module_name != '__init__':
             print 'testing: %s' % file
