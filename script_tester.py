@@ -7,6 +7,7 @@
 
 import ConfigParser
 import glob
+import sys
 
 config = ConfigParser.ConfigParser()
 config.read('config.cfg')
@@ -16,8 +17,13 @@ exec 'from %s import *' % script_dir
 
 
 def main():
+    if sys.platform.startswith('win'):
+        sep = '\\'
+    else:
+        sep = '/'
+        
     for file in glob.glob('%s/*.py' % script_dir):
-        module_name = file.replace('.py', '').split('\\')[-1]
+        module_name = file.replace('.py', '').split(sep)[-1]
         if module_name != '__init__':
             print 'testing: %s' % file
             print '  creating Transaction() object'
