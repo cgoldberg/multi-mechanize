@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #  Copyright (c) 2010 Corey Goldberg (corey@goldb.org)
-#  License: GNU LGPLv3
+#  License: GNU LGPLv3 - distributed under the terms of the GNU Lesser General Public License version 3
 #  
 #  This file is part of Multi-Mechanize:
 #       Multi-Process, Multi-Threaded, Web Load Generator, with python-mechanize agents
