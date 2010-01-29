@@ -5,7 +5,7 @@
 #  This file is part of Multi-Mechanize
 
 
-
+import time
 from collections import defaultdict
 
 
@@ -13,10 +13,31 @@ from collections import defaultdict
 def main():
     results = Results('results.csv')
     
+    print 'test start: %s' % results.start_datetime
+    print 'test finish: %s' % results.finish_datetime
+    print ''
     print 'total transactions: %i' % results.total_transactions
-    print 'errors: %i' % results.total_errors
+    print 'error transactions: %i' % results.total_errors
     print ''
     
+    
+    
+    # aggregate transaction times
+    trans_timer_points = []  # [elapsed, timervalue]
+    for resp_stats in results.resp_stats_list:
+        t = (resp_stats.elapsed_time, resp_stats.trans_time)
+        trans_timer_points.append(t)
+    #print trans_timer_points
+    
+    throughputs = []  # [intervalnumber, numberofrequests]
+    splat_series = split_series(trans_timer_points, 1)
+    for i, bucket in enumerate(splat_series):
+        t = (i, len(bucket))
+        throughputs.append(t)
+    #print throughputs
+                
+                
+               
     # user group times
     for user_group_name in sorted(results.uniq_user_group_names):
         ug_timer_vals = []
@@ -45,9 +66,7 @@ def main():
         print '95pct: %.3f' % percentile(custom_timer_vals, 95)
         print 'max: %.3f' % max(custom_timer_vals)
         print ''
-        
-   
-    
+
 
 
 class Results(object):
@@ -59,6 +78,12 @@ class Results(object):
         self.uniq_user_group_names = set()
         
         self.resp_stats_list = self.__parse_file()
+        
+        self.epoch_start = self.resp_stats_list[0].epoch_secs
+        self.epoch_finish = self.resp_stats_list[-1].epoch_secs
+        self.start_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_start))
+        self.finish_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_finish))
+        
         
         
     def __parse_file(self):
@@ -93,7 +118,7 @@ class Results(object):
             for timer, val in zip(timers, vals):
                 custom_timers[timer] = val
             
-            r = ResponseStats(request_num, elapsed_time, user_group_name, trans_time, status, bytes_received, error, custom_timers)
+            r = ResponseStats(request_num, elapsed_time, epoch_secs, user_group_name, trans_time, status, bytes_received, error, custom_timers)
             resp_stats_list.append(r)
             
             if error != "''":
@@ -103,10 +128,12 @@ class Results(object):
         return resp_stats_list    
    
 
+
 class ResponseStats(object):
-    def __init__(self, request_num, elapsed_time, user_group_name, trans_time, status, bytes_received, error, custom_timers):
+    def __init__(self, request_num, elapsed_time, epoch_secs, user_group_name, trans_time, status, bytes_received, error, custom_timers):
         self.request_num = request_num
         self.elapsed_time = elapsed_time
+        self.epoch_secs = epoch_secs
         self.user_group_name = user_group_name
         self.trans_time = trans_time
         self.status = status
@@ -115,23 +142,28 @@ class ResponseStats(object):
         self.custom_timers = custom_timers
         
 
-#def split_series(points, interval):
-#    offset = points[0][0]
-#    maxval = int((points[-1][0] - offset) // interval)
-#    vals = defaultdict(list)
-#    for key, value in points:
-#        vals[(key - offset) // interval].append(value)
-#    series = [vals[i] for i in xrange(maxval + 1)]
-#    return series
+
+def split_series(points, interval):
+    offset = points[0][0]
+    maxval = int((points[-1][0] - offset) // interval)
+    vals = defaultdict(list)
+    for key, value in points:
+        vals[(key - offset) // interval].append(value)
+    series = [vals[i] for i in xrange(maxval + 1)]
+    return series
+
 
 
 def avg(seq):
     return float(sum(seq) / len(seq)) 
 
+
+
 def percentile(seq, percentile):
     i = int(len(seq) * (percentile / 100.0))
     seq.sort()
     return seq[i]
+
 
 
 if __name__ == '__main__':
