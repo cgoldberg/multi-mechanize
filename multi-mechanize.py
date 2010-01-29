@@ -39,7 +39,8 @@ def main():
     for i, ug_config in enumerate(user_group_configs):
         ug = UserGroup(queue, i, ug_config.name, ug_config.num_threads, ug_config.script_file, run_time, rampup)
         user_groups.append(ug)    
-    [user_group.start() for user_group in user_groups]
+    for user_group in user_groups:
+        user_group.start()
     
     start_time = time.time() 
     
@@ -217,6 +218,8 @@ class ProgressBar(object):
     
     def __update_amount(self, new_amount):
         percent_done = int(round((new_amount / 100.0) * 100.0))
+        if percent_done > 100:
+            percent_done = 100
         all_full = self.width - 2
         num_hashes = int(round((percent_done / 100.0) * all_full))
         self.prog_bar = '[' + self.fill_char * num_hashes + ' ' * (all_full - num_hashes) + ']'
