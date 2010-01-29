@@ -7,6 +7,7 @@
 
 import time
 from collections import defaultdict
+import graph
 
 
 
@@ -21,22 +22,22 @@ def main():
     print ''
     
     
-    
-    # aggregate transaction times
     trans_timer_points = []  # [elapsed, timervalue]
     for resp_stats in results.resp_stats_list:
         t = (resp_stats.elapsed_time, resp_stats.trans_time)
         trans_timer_points.append(t)
+    graph.resp_graph(trans_timer_points)
     #print trans_timer_points
     
-    throughputs = []  # [intervalnumber, numberofrequests]
-    splat_series = split_series(trans_timer_points, 1)
+    throughput_points = {}  # {intervalnumber: numberofrequests}
+    interval_secs = 5.0  # smooth throughputs
+    splat_series = split_series(trans_timer_points, interval_secs)
     for i, bucket in enumerate(splat_series):
-        t = (i, len(bucket))
-        throughputs.append(t)
-    #print throughputs
+        throughput_points[int((i + 1) * interval_secs)] = (len(bucket) / interval_secs)
+    graph.tp_graph(throughput_points)
+    #print throughput_points
                 
-                
+                 
                
     # user group times
     for user_group_name in sorted(results.uniq_user_group_names):
