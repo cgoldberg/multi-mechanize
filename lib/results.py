@@ -11,8 +11,8 @@ import graph
 
 
 
-def main():
-    results = Results('results.csv')
+def output_results(results_dir, results_file):
+    results = Results(results_dir + results_file)
     
     print 'test start: %s' % results.start_datetime
     print 'test finish: %s' % results.finish_datetime
@@ -26,18 +26,17 @@ def main():
     for resp_stats in results.resp_stats_list:
         t = (resp_stats.elapsed_time, resp_stats.trans_time)
         trans_timer_points.append(t)
-    graph.resp_graph(trans_timer_points)
+    graph.resp_graph(trans_timer_points, results_dir)
     #print trans_timer_points
     
     throughput_points = {}  # {intervalnumber: numberofrequests}
-    interval_secs = 5.0  # smooth throughputs
+    interval_secs = 5.0  # smooth throughput
     splat_series = split_series(trans_timer_points, interval_secs)
     for i, bucket in enumerate(splat_series):
         throughput_points[int((i + 1) * interval_secs)] = (len(bucket) / interval_secs)
-    graph.tp_graph(throughput_points)
+    graph.tp_graph(throughput_points, results_dir)
     #print throughput_points
                 
-                 
                
     # user group times
     for user_group_name in sorted(results.uniq_user_group_names):
@@ -168,4 +167,4 @@ def percentile(seq, percentile):
 
 
 if __name__ == '__main__':
-    main()
+    output_results('./', 'results.csv')

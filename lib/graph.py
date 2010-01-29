@@ -27,7 +27,7 @@ def resp_graph(nested_resp_list, dir='./'):
     x_seq = [item[0] for item in nested_resp_list] 
     y_seq = [item[1] for item in nested_resp_list] 
     ax.plot(x_seq, y_seq, 
-        color='blue', linestyle='-', linewidth=1.0, marker='o', 
+        color='blue', linestyle='-', linewidth=0.2, marker='o', 
         markeredgecolor='blue', markerfacecolor='yellow', markersize=2.0)
     savefig(dir + 'response_time_graph.png') 
     
@@ -51,7 +51,7 @@ def tp_graph(throughputs_dict, dir='./'):
     x_seq = keys
     y_seq = values
     ax.plot(x_seq, y_seq, 
-        color='red', linestyle='-', linewidth=1.0, marker='o', 
+        color='red', linestyle='-', linewidth=0.75, marker='o', 
         markeredgecolor='red', markerfacecolor='yellow', markersize=2.0)
     savefig(dir + 'throughput_graph.png') 
     
