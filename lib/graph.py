@@ -24,6 +24,7 @@ def resp_graph(nested_resp_list, dir='./'):
     xticks(size='x-small')
     yticks(size='x-small')
     axis(xmin=0)
+    axis(ymin=0)
     x_seq = [item[0] for item in nested_resp_list] 
     y_seq = [item[1] for item in nested_resp_list] 
     ax.plot(x_seq, y_seq, 
@@ -43,6 +44,7 @@ def tp_graph(throughputs_dict, dir='./'):
     xticks(size='x-small')
     yticks(size='x-small')
     axis(xmin=0)
+    axis(ymin=0)
     keys = throughputs_dict.keys()
     keys.sort()
     values = []
