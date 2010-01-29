@@ -16,12 +16,13 @@ import Queue
 import sys
 import threading
 import time
+import lib.results as results
 
 config = ConfigParser.ConfigParser()
 config.read('config.cfg')
 script_dir = config.get('global', 'script_directory')
 exec 'from %s import *' % script_dir            
-            
+
             
 
 def main():
@@ -41,10 +42,13 @@ def main():
         user_groups.append(ug)    
     for user_group in user_groups:
         user_group.start()
-    
+        
     start_time = time.time() 
     
-    if console_logging != 'on':
+    if console_logging == 'on':
+        for user_group in user_groups:
+            user_group.join()
+    else:
         print '\n  user_groups:  %i' % len(user_groups)
         print '  threads: %i\n' % (ug_config.num_threads * len(user_groups))
         p = ProgressBar(run_time)
@@ -61,9 +65,13 @@ def main():
         print p
         if not sys.platform.startswith('win'):
             print
-        
-        
 
+    # all agents are done running at this point
+    time.sleep(.1) # make sure the writer queue is flushed
+    print 'analyzing results...'
+    results.output_results(output_dir, 'results.csv')
+    
+    
 def configure():
     user_group_configs = []
     config = ConfigParser.ConfigParser()
@@ -204,7 +212,7 @@ class ResultsWriter(threading.Thread):
                     if self.console_logging == 'on':
                         print '%i, %.3f, %i, %s, %.3f, %s, %i, %s, %s' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, status, bytes_received, repr(error), repr(custom_timers))
                 except Queue.Empty:
-                    time.sleep(.1)
+                    time.sleep(.05)
 
 
 
