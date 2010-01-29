@@ -23,13 +23,11 @@ def resp_graph(nested_resp_list, dir='./'):
     ax.grid(True, color='#666666')
     xticks(size='x-small')
     yticks(size='x-small')
-    axis(xmin=0)
-    axis(ymin=0)
     x_seq = [item[0] for item in nested_resp_list] 
     y_seq = [item[1] for item in nested_resp_list] 
     ax.plot(x_seq, y_seq, 
-        color='blue', linestyle='-', linewidth=0.2, marker='o', 
-        markeredgecolor='blue', markerfacecolor='yellow', markersize=2.0)
+        color='blue', linestyle='-', linewidth=0.0, marker='o', 
+        markeredgecolor='blue', markerfacecolor='blue', markersize=2.0)
     savefig(dir + 'response_time_graph.png') 
     
     
@@ -43,16 +41,9 @@ def tp_graph(throughputs_dict, dir='./'):
     ax.grid(True, color='#666666')
     xticks(size='x-small')
     yticks(size='x-small')
-    axis(xmin=0)
-    axis(ymin=0)
-    keys = throughputs_dict.keys()
-    keys.sort()
-    values = []
-    for key in keys:
-        values.append(throughputs_dict[key])
-    x_seq = keys
-    y_seq = values
-    ax.plot(x_seq, y_seq, 
+    keys = sorted(throughputs_dict.keys())
+    vals = [throughputs_dict[key] for key in keys]
+    ax.plot(keys, vals, 
         color='red', linestyle='-', linewidth=0.75, marker='o', 
         markeredgecolor='red', markerfacecolor='yellow', markersize=2.0)
     savefig(dir + 'throughput_graph.png') 
