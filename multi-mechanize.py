@@ -27,11 +27,13 @@ exec 'from %s import *' % script_dir
 def main():
     run_time, rampup, console_logging, user_group_configs = configure()
     
+    output_dir = time.strftime('results/results_%Y.%m.%d_%H.%M.%S/', time.localtime()) 
+    
     # this queue is shared between all processes/threads
     queue = multiprocessing.Queue()
-    r = Results(queue, console_logging)
-    r.daemon = True
-    r.start()
+    rw = ResultsWriter(queue, output_dir, console_logging)
+    rw.daemon = True
+    rw.start()
     
     user_groups = [] 
     for i, ug_config in enumerate(user_group_configs):
@@ -168,28 +170,38 @@ class Agent(threading.Thread):
             
             scriptrun_time = finish - start
             elapsed = time.time() - self.start_time 
-            fields = (elapsed, self.user_group_name, scriptrun_time, status, trans.bytes_received, error, trans.custom_timers)
+
+            epoch = time.mktime(time.localtime())
+            
+            fields = (elapsed, epoch, self.user_group_name, scriptrun_time, status, trans.bytes_received, error, trans.custom_timers)
             self.queue.put(fields)
             
 
 
-class Results(threading.Thread):
-    def __init__(self, queue, console_logging):
+class ResultsWriter(threading.Thread):
+    def __init__(self, queue, output_dir, console_logging):
         threading.Thread.__init__(self)
         self.queue = queue
         self.console_logging = console_logging
+        self.output_dir = output_dir
         self.trans_count = 0
+
+        try:
+            os.makedirs(self.output_dir, 0755)
+        except OSError:
+            sys.stderr.write('ERROR: Can not create output directory\n')
+            sys.exit(1)    
     
     def run(self):
-        with open('results.csv', 'w') as f:     
+        with open(self.output_dir + 'results.csv', 'w') as f:     
             while True:
                 try:
-                    elapsed, self.user_group_name, scriptrun_time, status, bytes_received, error, custom_timers = self.queue.get(False)
+                    elapsed, epoch, self.user_group_name, scriptrun_time, status, bytes_received, error, custom_timers = self.queue.get(False)
                     self.trans_count += 1
-                    f.write('%i,%.3f,%s,%.3f,%s,%i,%s,%s\n' % (self.trans_count, elapsed, self.user_group_name, scriptrun_time, status, bytes_received, repr(error), repr(custom_timers)))
+                    f.write('%i,%.3f,%i,%s,%.3f,%s,%i,%s,%s\n' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, status, bytes_received, repr(error), repr(custom_timers)))
                     f.flush()
                     if self.console_logging == 'on':
-                        print '%i, %.3f, %s, %.3f, %s, %i, %s, %s' % (self.trans_count, elapsed, self.user_group_name, scriptrun_time, status, bytes_received, repr(error), repr(custom_timers))
+                        print '%i, %.3f, %i, %s, %.3f, %s, %i, %s, %s' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, status, bytes_received, repr(error), repr(custom_timers))
                 except Queue.Empty:
                     time.sleep(.1)
 
