@@ -26,7 +26,7 @@ def output_results(results_dir, results_file):
     for resp_stats in results.resp_stats_list:
         t = (resp_stats.elapsed_time, resp_stats.trans_time)
         trans_timer_points.append(t)
-    graph.resp_graph(trans_timer_points, results_dir)
+    graph.resp_graph(trans_timer_points, 'All_Transactions_response_times.png', results_dir)
     #print trans_timer_points
     
     throughput_points = {}  # {intervalnumber: numberofrequests}
@@ -36,8 +36,36 @@ def output_results(results_dir, results_file):
         throughput_points[int((i + 1) * interval_secs)] = (len(bucket) / interval_secs)
     graph.tp_graph(throughput_points, results_dir)
     #print throughput_points
-                
-               
+             
+
+
+
+
+    
+
+
+
+
+    # custom timers
+    for timer_name in sorted(results.uniq_timer_names):
+        custom_timer_vals = []
+        custom_timer_points = []
+        for resp_stats in results.resp_stats_list:
+            val = resp_stats.custom_timers[timer_name]
+            custom_timer_points.append((resp_stats.elapsed_time, val)) 
+            custom_timer_vals.append(val)
+        graph.resp_graph(custom_timer_points, timer_name + '_response_times.png', results_dir)
+        print timer_name
+        print 'min: %.3f' % min(custom_timer_vals)
+        print 'avg: %.3f' % avg(custom_timer_vals)
+        print '80pct: %.3f' % percentile(custom_timer_vals, 80)
+        print '90pct: %.3f' % percentile(custom_timer_vals, 90)
+        print '95pct: %.3f' % percentile(custom_timer_vals, 95)
+        print 'max: %.3f' % max(custom_timer_vals)
+        print ''
+        
+        
+        
     # user group times
     for user_group_name in sorted(results.uniq_user_group_names):
         ug_timer_vals = []
@@ -53,19 +81,6 @@ def output_results(results_dir, results_file):
         print 'max: %.3f' % max(ug_timer_vals)
         print ''        
             
-    # custom timers
-    for timer_name in sorted(results.uniq_timer_names):
-        custom_timer_vals = []
-        for resp_stats in results.resp_stats_list:
-            custom_timer_vals.append(resp_stats.custom_timers[timer_name])
-        print timer_name
-        print 'min: %.3f' % min(custom_timer_vals)
-        print 'avg: %.3f' % avg(custom_timer_vals)
-        print '80pct: %.3f' % percentile(custom_timer_vals, 80)
-        print '90pct: %.3f' % percentile(custom_timer_vals, 90)
-        print '95pct: %.3f' % percentile(custom_timer_vals, 95)
-        print 'max: %.3f' % max(custom_timer_vals)
-        print ''
 
 
 

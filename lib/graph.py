@@ -15,7 +15,7 @@ except ImportError, e:
 
 
 # response time graph
-def resp_graph(nested_resp_list, dir='./'):
+def resp_graph(nested_resp_list, image_name, dir='./'):
     fig = figure(figsize=(8, 3.3))  # image dimensions  
     ax = fig.add_subplot(111)
     ax.set_xlabel('Elapsed Time In Test (secs)', size='x-small')
@@ -29,7 +29,7 @@ def resp_graph(nested_resp_list, dir='./'):
         color='blue', linestyle='-', linewidth=0.0, marker='o', 
         markeredgecolor='blue', markerfacecolor='blue', markersize=2.0)
     ax.plot(0, 0, linewidth=0.0, markersize=0.0)
-    savefig(dir + 'response_time_graph.png') 
+    savefig(dir + image_name) 
     
     
 
