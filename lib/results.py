@@ -22,6 +22,7 @@ def output_results(results_dir, results_file):
     print ''
     
     
+    # all transactions - response times
     trans_timer_points = []  # [elapsed, timervalue]
     for resp_stats in results.resp_stats_list:
         t = (resp_stats.elapsed_time, resp_stats.trans_time)
@@ -29,6 +30,7 @@ def output_results(results_dir, results_file):
     graph.resp_graph(trans_timer_points, 'All_Transactions_response_times.png', results_dir)
     #print trans_timer_points
     
+    # all transactions - throughput
     throughput_points = {}  # {intervalnumber: numberofrequests}
     interval_secs = 5.0  # smooth throughput
     splat_series = split_series(trans_timer_points, interval_secs)
@@ -63,6 +65,9 @@ def output_results(results_dir, results_file):
         print '95pct: %.3f' % percentile(custom_timer_vals, 95)
         print 'max: %.3f' % max(custom_timer_vals)
         print ''
+        
+        
+        
         
         
         
