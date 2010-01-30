@@ -17,6 +17,7 @@ import sys
 import threading
 import time
 import lib.results as results
+import lib.progress_bar as progress_bar
 
 config = ConfigParser.ConfigParser()
 config.read('config.cfg')
@@ -45,13 +46,13 @@ def main():
         
     start_time = time.time() 
     
-    if console_logging == 'on':
+    if console_logging:
         for user_group in user_groups:
             user_group.join()
     else:
         print '\n  user_groups:  %i' % len(user_groups)
         print '  threads: %i\n' % (ug_config.num_threads * len(user_groups))
-        p = ProgressBar(run_time)
+        p = progress_bar.ProgressBar(run_time)
         elapsed = 0
         while [user_group for user_group in user_groups if user_group.is_alive()] != []:
             p.update_time(elapsed)
@@ -78,11 +79,11 @@ def configure():
     config.read('config.cfg')
     for section in config.sections():
         if section == 'global':
-            run_time = int(config.get(section, 'run_time'))
-            rampup = int(config.get(section, 'rampup'))
-            console_logging = config.get(section, 'console_logging')
+            run_time = config.getint(section, 'run_time')
+            rampup = config.getint(section, 'rampup')
+            console_logging = config.getboolean(section, 'console_logging')
         else:
-            threads = int(config.get(section, 'threads'))
+            threads = config.getint(section, 'threads')
             script = config.get(section, 'script')
             user_group_name = section
             ug_config = UserGroupConfig(threads, user_group_name, script)
@@ -209,39 +210,11 @@ class ResultsWriter(threading.Thread):
                     self.trans_count += 1
                     f.write('%i,%.3f,%i,%s,%.3f,%s,%i,%s,%s\n' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, status, bytes_received, repr(error), repr(custom_timers)))
                     f.flush()
-                    if self.console_logging == 'on':
+                    if self.console_logging:
                         print '%i, %.3f, %i, %s, %.3f, %s, %i, %s, %s' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, status, bytes_received, repr(error), repr(custom_timers))
                 except Queue.Empty:
                     time.sleep(.05)
 
-
-
-class ProgressBar(object):
-    def __init__(self, duration):
-        self.duration = duration
-        self.prog_bar = '[]'
-        self.fill_char = '='
-        self.width = 40
-        self.__update_amount(0)
-    
-    def __update_amount(self, new_amount):
-        percent_done = int(round((new_amount / 100.0) * 100.0))
-        if percent_done > 100:
-            percent_done = 100
-        all_full = self.width - 2
-        num_hashes = int(round((percent_done / 100.0) * all_full))
-        self.prog_bar = '[' + self.fill_char * num_hashes + ' ' * (all_full - num_hashes) + ']'
-        pct_place = (len(self.prog_bar) / 2) - len(str(percent_done))
-        pct_string = '%i%%' % percent_done
-        self.prog_bar = self.prog_bar[0:pct_place] + \
-            (pct_string + self.prog_bar[pct_place + len(pct_string):])
-        
-    def update_time(self, elapsed_secs):
-        self.__update_amount((elapsed_secs / float(self.duration)) * 100.0)
-        self.prog_bar += '  %ds/%ss' % (elapsed_secs, self.duration)
-        
-    def __str__(self):
-        return str(self.prog_bar)
         
 
 
