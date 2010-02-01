@@ -28,7 +28,7 @@ def resp_graph(nested_resp_list, image_name, dir='./'):
     ax.plot(x_seq, y_seq, 
         color='blue', linestyle='-', linewidth=0.0, marker='o', 
         markeredgecolor='blue', markerfacecolor='blue', markersize=2.0)
-    ax.plot(0.0, 0.0, linewidth=0.0, markersize=0.0)
+    ax.plot([0.0,], [0.0,], linewidth=0.0, markersize=0.0)
     savefig(dir + image_name) 
     
     
@@ -47,6 +47,6 @@ def tp_graph(throughputs_dict, dir='./'):
     ax.plot(keys, vals, 
         color='red', linestyle='-', linewidth=0.75, marker='o', 
         markeredgecolor='red', markerfacecolor='yellow', markersize=2.0)
-    ax.plot(0.0, 0.0, linewidth=0.0, markersize=0.0)
+    ax.plot([0.0,], [0.0,], linewidth=0.0, markersize=0.0)
     savefig(dir + 'throughput_graph.png') 
     
