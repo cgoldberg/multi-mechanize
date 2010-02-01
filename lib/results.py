@@ -27,17 +27,19 @@ def output_results(results_dir, results_file):
     for resp_stats in results.resp_stats_list:
         t = (resp_stats.elapsed_time, resp_stats.trans_time)
         trans_timer_points.append(t)
-    graph.resp_graph(trans_timer_points, 'All_Transactions_response_times.png', results_dir)
     #print trans_timer_points
+    graph.resp_graph(trans_timer_points, 'All_Transactions_response_times.png', results_dir)
     
+
     # all transactions - throughput
     throughput_points = {}  # {intervalnumber: numberofrequests}
     interval_secs = 5.0  # smooth throughput
     splat_series = split_series(trans_timer_points, interval_secs)
     for i, bucket in enumerate(splat_series):
         throughput_points[int((i + 1) * interval_secs)] = (len(bucket) / interval_secs)
-    graph.tp_graph(throughput_points, results_dir)
     #print throughput_points
+    graph.tp_graph(throughput_points, results_dir)
+    
              
 
 
@@ -117,14 +119,12 @@ class Results(object):
             epoch_secs = int(fields[2])
             user_group_name = fields[3]
             trans_time = float(fields[4])
-            status = fields[5]
-            bytes_received = int(fields[6])
-            error = fields[7]
+            error = fields[5]
             
             self.uniq_user_group_names.add(user_group_name)
             
             custom_timers = {}
-            timers_string = ''.join(fields[8:]).replace('{', '').replace('}', '')
+            timers_string = ''.join(fields[6:]).replace('{', '').replace('}', '')
             splat = timers_string.split("'")[1:]
             timers = []
             vals = []
@@ -138,7 +138,7 @@ class Results(object):
             for timer, val in zip(timers, vals):
                 custom_timers[timer] = val
             
-            r = ResponseStats(request_num, elapsed_time, epoch_secs, user_group_name, trans_time, status, bytes_received, error, custom_timers)
+            r = ResponseStats(request_num, elapsed_time, epoch_secs, user_group_name, trans_time, error, custom_timers)
             resp_stats_list.append(r)
             
             if error != "''":
@@ -150,14 +150,12 @@ class Results(object):
 
 
 class ResponseStats(object):
-    def __init__(self, request_num, elapsed_time, epoch_secs, user_group_name, trans_time, status, bytes_received, error, custom_timers):
+    def __init__(self, request_num, elapsed_time, epoch_secs, user_group_name, trans_time, error, custom_timers):
         self.request_num = request_num
         self.elapsed_time = elapsed_time
         self.epoch_secs = epoch_secs
         self.user_group_name = user_group_name
         self.trans_time = trans_time
-        self.status = status
-        self.bytes_received = bytes_received
         self.error = error
         self.custom_timers = custom_timers
         
