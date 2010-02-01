@@ -42,9 +42,9 @@ def tp_graph(throughputs_dict, dir='./'):
     ax.grid(True, color='#666666')
     xticks(size='x-small')
     yticks(size='x-small')
-    keys = sorted(throughputs_dict.keys())
-    vals = [throughputs_dict[key] for key in keys]
-    ax.plot(keys, vals, 
+    x_seq = sorted(throughputs_dict.keys())
+    y_seq = [throughputs_dict[x] for x in x_seq]
+    ax.plot(x_seq, y_seq, 
         color='red', linestyle='-', linewidth=0.75, marker='o', 
         markeredgecolor='red', markerfacecolor='yellow', markersize=2.0)
     ax.plot([0.0,], [0.0,], linewidth=0.0, markersize=0.0)
