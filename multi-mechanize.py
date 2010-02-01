@@ -159,7 +159,6 @@ class Agent(threading.Thread):
             print 'ERROR: can not find test script: %s.  aborting user group: %s' % (self.script_file, self.user_group_name)
             return
         
-        trans.bytes_received = 0
         trans.custom_timers = {}
         
         # scripts have access to these vars, which can be useful for loading unique data
@@ -171,9 +170,7 @@ class Agent(threading.Thread):
             
             try:
                 trans.run()
-                status = 'PASS'
             except Exception, e:
-                status = 'FAIL'
                 error = str(e)
 
             finish = self.default_timer()
@@ -183,7 +180,7 @@ class Agent(threading.Thread):
 
             epoch = time.mktime(time.localtime())
             
-            fields = (elapsed, epoch, self.user_group_name, scriptrun_time, status, trans.bytes_received, error, trans.custom_timers)
+            fields = (elapsed, epoch, self.user_group_name, scriptrun_time, error, trans.custom_timers)
             self.queue.put(fields)
             
 
@@ -206,12 +203,12 @@ class ResultsWriter(threading.Thread):
         with open(self.output_dir + 'results.csv', 'w') as f:     
             while True:
                 try:
-                    elapsed, epoch, self.user_group_name, scriptrun_time, status, bytes_received, error, custom_timers = self.queue.get(False)
+                    elapsed, epoch, self.user_group_name, scriptrun_time, error, custom_timers = self.queue.get(False)
                     self.trans_count += 1
-                    f.write('%i,%.3f,%i,%s,%.3f,%s,%i,%s,%s\n' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, status, bytes_received, repr(error), repr(custom_timers)))
+                    f.write('%i,%.3f,%i,%s,%.3f,%s,%s\n' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, repr(error), repr(custom_timers)))
                     f.flush()
                     if self.console_logging:
-                        print '%i, %.3f, %i, %s, %.3f, %s, %i, %s, %s' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, status, bytes_received, repr(error), repr(custom_timers))
+                        print '%i, %.3f, %i, %s, %.3f, %s, %s' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, repr(error), repr(custom_timers))
                 except Queue.Empty:
                     time.sleep(.05)
 
