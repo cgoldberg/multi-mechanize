@@ -27,26 +27,16 @@ def output_results(results_dir, results_file):
     for resp_stats in results.resp_stats_list:
         t = (resp_stats.elapsed_time, resp_stats.trans_time)
         trans_timer_points.append(t)
-    #print trans_timer_points
     graph.resp_graph(trans_timer_points, 'All_Transactions_response_times.png', results_dir)
     
-
     # all transactions - throughput
     throughput_points = {}  # {intervalnumber: numberofrequests}
-    interval_secs = 5.0  # smooth throughput
+    interval_secs = 5.0
     splat_series = split_series(trans_timer_points, interval_secs)
     for i, bucket in enumerate(splat_series):
         throughput_points[int((i + 1) * interval_secs)] = (len(bucket) / interval_secs)
-    #print throughput_points
-    graph.tp_graph(throughput_points, results_dir)
-    
+    graph.tp_graph(throughput_points, 'All_Transactions_throughput.png', results_dir)
              
-
-
-
-
-    
-
 
 
 
@@ -59,6 +49,14 @@ def output_results(results_dir, results_file):
             custom_timer_points.append((resp_stats.elapsed_time, val)) 
             custom_timer_vals.append(val)
         graph.resp_graph(custom_timer_points, timer_name + '_response_times.png', results_dir)
+        
+        throughput_points = {}  # {intervalnumber: numberofrequests}
+        interval_secs = 5.0
+        splat_series = split_series(custom_timer_points, interval_secs)
+        for i, bucket in enumerate(splat_series):
+            throughput_points[int((i + 1) * interval_secs)] = (len(bucket) / interval_secs)
+        graph.tp_graph(throughput_points, timer_name + '_throughput.png', results_dir)
+
         print timer_name
         print 'min: %.3f' % min(custom_timer_vals)
         print 'avg: %.3f' % avg(custom_timer_vals)
@@ -67,8 +65,6 @@ def output_results(results_dir, results_file):
         print '95pct: %.3f' % percentile(custom_timer_vals, 95)
         print 'max: %.3f' % max(custom_timer_vals)
         print ''
-        
-        
         
         
         

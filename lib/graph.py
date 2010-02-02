@@ -34,7 +34,7 @@ def resp_graph(nested_resp_list, image_name, dir='./'):
     
 
 # throughput graph
-def tp_graph(throughputs_dict, dir='./'):
+def tp_graph(throughputs_dict, image_name, dir='./'):
     fig = figure(figsize=(8, 3.3))  # image dimensions  
     ax = fig.add_subplot(111)
     ax.set_xlabel('Elapsed Time In Test (secs)', size='x-small')
@@ -48,5 +48,5 @@ def tp_graph(throughputs_dict, dir='./'):
         color='red', linestyle='-', linewidth=0.75, marker='o', 
         markeredgecolor='red', markerfacecolor='yellow', markersize=2.0)
     ax.plot([0.0,], [0.0,], linewidth=0.0, markersize=0.0)
-    savefig(dir + 'throughput_graph.png') 
+    savefig(dir + image_name) 
     
