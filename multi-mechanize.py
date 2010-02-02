@@ -17,7 +17,7 @@ import sys
 import threading
 import time
 import lib.results as results
-import lib.progress_bar as progress_bar
+import lib.progressbar as progressbar
 
 config = ConfigParser.ConfigParser()
 config.read('config.cfg')
@@ -52,7 +52,7 @@ def main():
     else:
         print '\n  user_groups:  %i' % len(user_groups)
         print '  threads: %i\n' % (ug_config.num_threads * len(user_groups))
-        p = progress_bar.ProgressBar(run_time)
+        p = progressbar.ProgressBar(run_time)
         elapsed = 0
         while [user_group for user_group in user_groups if user_group.is_alive()] != []:
             p.update_time(elapsed)
