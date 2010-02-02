@@ -68,7 +68,7 @@ def main():
             print
 
     # all agents are done running at this point
-    time.sleep(.1) # make sure the writer queue is flushed
+    time.sleep(.2) # make sure the writer queue is flushed
     print 'analyzing results...'
     results.output_results(output_dir, 'results.csv')
     
