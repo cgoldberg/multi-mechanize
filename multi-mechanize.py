@@ -57,7 +57,7 @@ def main():
         while [user_group for user_group in user_groups if user_group.is_alive()] != []:
             p.update_time(elapsed)
             if sys.platform.startswith('win'):
-                print p, '\r',
+                print '%s   transactions: %i  timers: %i\r' % (p, rw.trans_count, rw.timer_count),
             else:
                 print p
                 sys.stdout.write(chr(27) + '[A' )
@@ -192,6 +192,7 @@ class ResultsWriter(threading.Thread):
         self.console_logging = console_logging
         self.output_dir = output_dir
         self.trans_count = 0
+        self.timer_count = 0
 
         try:
             os.makedirs(self.output_dir, 0755)
@@ -205,6 +206,7 @@ class ResultsWriter(threading.Thread):
                 try:
                     elapsed, epoch, self.user_group_name, scriptrun_time, error, custom_timers = self.queue.get(False)
                     self.trans_count += 1
+                    self.timer_count += len(custom_timers)
                     f.write('%i,%.3f,%i,%s,%.3f,%s,%s\n' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, repr(error), repr(custom_timers)))
                     f.flush()
                     if self.console_logging:
