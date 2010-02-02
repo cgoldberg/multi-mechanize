@@ -59,7 +59,7 @@ def main():
             if sys.platform.startswith('win'):
                 print '%s   transactions: %i  timers: %i\r' % (p, rw.trans_count, rw.timer_count),
             else:
-                print p
+                print '%s   transactions: %i  timers: %i' % (p, rw.trans_count, rw.timer_count)
                 sys.stdout.write(chr(27) + '[A' )
             time.sleep(1)
             elapsed = time.time() - start_time
