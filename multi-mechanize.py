@@ -57,9 +57,9 @@ def main():
         while [user_group for user_group in user_groups if user_group.is_alive()] != []:
             p.update_time(elapsed)
             if sys.platform.startswith('win'):
-                print '%s   transactions: %i  timers: %i\r' % (p, rw.trans_count, rw.timer_count),
+                print '%s   transactions: %i  timers: %i  errors: %i\r' % (p, rw.trans_count, rw.timer_count, rw.error_count),
             else:
-                print '%s   transactions: %i  timers: %i' % (p, rw.trans_count, rw.timer_count)
+                print '%s   transactions: %i  timers: %i  errors: %i' % (p, rw.trans_count, rw.timer_count, rw.error_count)
                 sys.stdout.write(chr(27) + '[A' )
             time.sleep(1)
             elapsed = time.time() - start_time
@@ -69,7 +69,7 @@ def main():
 
     # all agents are done running at this point
     time.sleep(.2) # make sure the writer queue is flushed
-    print 'analyzing results...'
+    print '\n\nanalyzing results...'
     results.output_results(output_dir, 'results.csv')
     
     
@@ -193,7 +193,8 @@ class ResultsWriter(threading.Thread):
         self.output_dir = output_dir
         self.trans_count = 0
         self.timer_count = 0
-
+        self.error_count = 0
+        
         try:
             os.makedirs(self.output_dir, 0755)
         except OSError:
@@ -207,6 +208,8 @@ class ResultsWriter(threading.Thread):
                     elapsed, epoch, self.user_group_name, scriptrun_time, error, custom_timers = self.queue.get(False)
                     self.trans_count += 1
                     self.timer_count += len(custom_timers)
+                    if error != '':
+                        self.error_count += 1
                     f.write('%i,%.3f,%i,%s,%.3f,%s,%s\n' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, repr(error), repr(custom_timers)))
                     f.flush()
                     if self.console_logging:
