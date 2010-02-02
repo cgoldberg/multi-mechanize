@@ -8,10 +8,12 @@
 import time
 from collections import defaultdict
 import graph
-
+import reportwriter
 
 
 def output_results(results_dir, results_file):
+    report = reportwriter.Report(results_dir)
+    
     results = Results(results_dir + results_file)
     
     print 'test start: %s' % results.start_datetime
@@ -28,6 +30,7 @@ def output_results(results_dir, results_file):
         t = (resp_stats.elapsed_time, resp_stats.trans_time)
         trans_timer_points.append(t)
     graph.resp_graph(trans_timer_points, 'All_Transactions_response_times.png', results_dir)
+    report.write_line('<img src="All_Transactions_response_times.png"></img>')
     
     # all transactions - throughput
     throughput_points = {}  # {intervalnumber: numberofrequests}
@@ -36,8 +39,7 @@ def output_results(results_dir, results_file):
     for i, bucket in enumerate(splat_series):
         throughput_points[int((i + 1) * interval_secs)] = (len(bucket) / interval_secs)
     graph.tp_graph(throughput_points, 'All_Transactions_throughput.png', results_dir)
-             
-
+    report.write_line('<img src="All_Transactions_throughput.png"></img>')         
 
 
     # custom timers
@@ -49,6 +51,7 @@ def output_results(results_dir, results_file):
             custom_timer_points.append((resp_stats.elapsed_time, val)) 
             custom_timer_vals.append(val)
         graph.resp_graph(custom_timer_points, timer_name + '_response_times.png', results_dir)
+        report.write_line('<img src="%s_response_times.png"></img>' % timer_name)
         
         throughput_points = {}  # {intervalnumber: numberofrequests}
         interval_secs = 5.0
@@ -56,7 +59,8 @@ def output_results(results_dir, results_file):
         for i, bucket in enumerate(splat_series):
             throughput_points[int((i + 1) * interval_secs)] = (len(bucket) / interval_secs)
         graph.tp_graph(throughput_points, timer_name + '_throughput.png', results_dir)
-
+        report.write_line('<img src="%s_throughput.png"></img>' % timer_name)         
+        
         print timer_name
         print 'min: %.3f' % min(custom_timer_vals)
         print 'avg: %.3f' % avg(custom_timer_vals)
@@ -65,8 +69,6 @@ def output_results(results_dir, results_file):
         print '95pct: %.3f' % percentile(custom_timer_vals, 95)
         print 'max: %.3f' % max(custom_timer_vals)
         print ''
-        
-        
         
         
     # user group times
