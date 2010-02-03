@@ -31,9 +31,11 @@ def output_results(results_dir, results_file):
     
     # all transactions - response times
     trans_timer_points = []  # [elapsed, timervalue]
+    trans_timer_vals = []
     for resp_stats in results.resp_stats_list:
         t = (resp_stats.elapsed_time, resp_stats.trans_time)
         trans_timer_points.append(t)
+        trans_timer_vals.append(resp_stats.trans_time)
     graph.resp_graph(trans_timer_points, 'All_Transactions_response_times.png', results_dir)
     
     # all transactions - throughput
@@ -43,9 +45,17 @@ def output_results(results_dir, results_file):
     for i, bucket in enumerate(splat_series):
         throughput_points[int((i + 1) * interval_secs)] = (len(bucket) / interval_secs)
     graph.tp_graph(throughput_points, 'All_Transactions_throughput.png', results_dir)
-           
+    
+    report.write_line('<hr />')    
     report.write_line('<h3>All Transactions</h3>')
-    report.write_line('<hr />')
+    
+    report.write_line('min: %.3f<br />' % min(trans_timer_vals))
+    report.write_line('avg: %.3f<br />' % avg(trans_timer_vals))
+    report.write_line('80pct: %.3f<br />' % percentile(trans_timer_vals, 80))
+    report.write_line('90pct: %.3f<br />' % percentile(trans_timer_vals, 90))
+    report.write_line('95pct: %.3f<br />' % percentile(trans_timer_vals, 95))
+    report.write_line('max: %.3f<br />' % max(trans_timer_vals))
+        
     report.write_line('<img src="All_Transactions_response_times.png"></img>')   
     report.write_line('<img src="All_Transactions_throughput.png"></img>')  
         
@@ -66,16 +76,18 @@ def output_results(results_dir, results_file):
             throughput_points[int((i + 1) * interval_secs)] = (len(bucket) / interval_secs)
         graph.tp_graph(throughput_points, timer_name + '_throughput.png', results_dir)
         
-        report.write_line('<h3>Custom Timer: %s</h3>' % timer_name)
         report.write_line('<hr />')
+        report.write_line('<h3>Custom Timer: %s</h3>' % timer_name)
+        
+        report.write_line('min: %.3f<br />' % min(custom_timer_vals))
+        report.write_line('avg: %.3f<br />' % avg(custom_timer_vals))
+        report.write_line('80pct: %.3f<br />' % percentile(custom_timer_vals, 80))
+        report.write_line('90pct: %.3f<br />' % percentile(custom_timer_vals, 90))
+        report.write_line('95pct: %.3f<br />' % percentile(custom_timer_vals, 95))
+        report.write_line('max: %.3f<br />' % max(custom_timer_vals))
+        
         report.write_line('<img src="%s_response_times.png"></img>' % timer_name)
         report.write_line('<img src="%s_throughput.png"></img>' % timer_name) 
-        
-        
-        
-        
-        
-        
         
         print timer_name
         print 'min: %.3f' % min(custom_timer_vals)
@@ -87,23 +99,23 @@ def output_results(results_dir, results_file):
         print ''
         
         
-    # user group times
-    for user_group_name in sorted(results.uniq_user_group_names):
-        ug_timer_vals = []
-        for resp_stats in results.resp_stats_list:
-            if resp_stats.user_group_name == user_group_name: 
-                ug_timer_vals.append(resp_stats.trans_time)
-        print user_group_name
-        print 'min: %.3f' % min(ug_timer_vals)
-        print 'avg: %.3f' % avg(ug_timer_vals)
-        print '80pct: %.3f' % percentile(ug_timer_vals, 80)
-        print '90pct: %.3f' % percentile(ug_timer_vals, 90)
-        print '95pct: %.3f' % percentile(ug_timer_vals, 95)
-        print 'max: %.3f' % max(ug_timer_vals)
-        print ''        
-            
+    ## user group times
+    #for user_group_name in sorted(results.uniq_user_group_names):
+    #    ug_timer_vals = []
+    #    for resp_stats in results.resp_stats_list:
+    #        if resp_stats.user_group_name == user_group_name: 
+    #            ug_timer_vals.append(resp_stats.trans_time)
+    #    print user_group_name
+    #    print 'min: %.3f' % min(ug_timer_vals)
+    #    print 'avg: %.3f' % avg(ug_timer_vals)
+    #    print '80pct: %.3f' % percentile(ug_timer_vals, 80)
+    #    print '90pct: %.3f' % percentile(ug_timer_vals, 90)
+    #    print '95pct: %.3f' % percentile(ug_timer_vals, 95)
+    #    print 'max: %.3f' % max(ug_timer_vals)
+    #    print ''        
     
     report.write_closing_html()
+
 
 
 class Results(object):
