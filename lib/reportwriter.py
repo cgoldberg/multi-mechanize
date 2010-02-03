@@ -34,7 +34,7 @@ class Report(object):
             color: #000000;
             font-family: Trebuchet MS, Verdana, sans-serif;
             font-size: 11px;
-            padding: 10px;
+            padding: 5px;
         }
         h1 {
             font-size: 16px;

@@ -16,6 +16,8 @@ def output_results(results_dir, results_file):
     
     results = Results(results_dir + results_file)
     
+    report.write_line('<h1>Performance Results Report</h1>')
+    
     print 'total transactions: %i' % results.total_transactions
     print 'error transactions: %i' % results.total_errors
     print ''
@@ -43,8 +45,8 @@ def output_results(results_dir, results_file):
     
     avg_resptime_points = {}  # {intervalnumber: avg_resptime}
     percentile_80_resptime_points = {}  # {intervalnumber: 80pct_resptime}
-    percentile_90_resptime_points = {}  # {intervalnumber: 80pct_resptime}
-    interval_secs = 10.0
+    percentile_90_resptime_points = {}  # {intervalnumber: 90pct_resptime}
+    interval_secs = 5.0
     splat_series = split_series(trans_timer_points, interval_secs)
     for i, bucket in enumerate(splat_series):
         avg_resptime_points[int((i + 1) * interval_secs)] = avg(bucket)
@@ -64,7 +66,7 @@ def output_results(results_dir, results_file):
     graph.tp_graph(throughput_points, 'All_Transactions_throughput.png', results_dir)
     
     report.write_line('<hr />')    
-    report.write_line('<h3>All Transactions</h3>')
+    report.write_line('<h2>All Transactions</h2>')
     
     report.write_line('min: %.3f<br />' % min(trans_timer_vals))
     report.write_line('avg: %.3f<br />' % avg(trans_timer_vals))
@@ -72,7 +74,8 @@ def output_results(results_dir, results_file):
     report.write_line('90pct: %.3f<br />' % percentile(trans_timer_vals, 90))
     report.write_line('95pct: %.3f<br />' % percentile(trans_timer_vals, 95))
     report.write_line('max: %.3f<br />' % max(trans_timer_vals))
-        
+    
+    report.write_line('<img src="All_Transactions_response_times_intervals.png"></img>')     
     report.write_line('<img src="All_Transactions_response_times.png"></img>')   
     report.write_line('<img src="All_Transactions_throughput.png"></img>')  
         
@@ -94,7 +97,7 @@ def output_results(results_dir, results_file):
         graph.tp_graph(throughput_points, timer_name + '_throughput.png', results_dir)
         
         report.write_line('<hr />')
-        report.write_line('<h3>Custom Timer: %s</h3>' % timer_name)
+        report.write_line('<h2>Custom Timer: %s</h2>' % timer_name)
         
         report.write_line('count: %i<br />' % len(custom_timer_vals))
         report.write_line('min: %.3f<br />' % min(custom_timer_vals))
