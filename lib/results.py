@@ -16,13 +16,18 @@ def output_results(results_dir, results_file):
     
     results = Results(results_dir + results_file)
     
-    print 'test start: %s' % results.start_datetime
-    print 'test finish: %s' % results.finish_datetime
-    print ''
     print 'total transactions: %i' % results.total_transactions
     print 'error transactions: %i' % results.total_errors
     print ''
+    print 'test start: %s' % results.start_datetime
+    print 'test finish: %s' % results.finish_datetime
+    print ''
     
+    report.write_line('total transactions: %s<br />' % results.total_transactions)
+    report.write_line('error transactions: %s<br /><br />' % results.total_errors)
+    report.write_line('test start: %s<br />' % results.start_datetime)
+    report.write_line('test finish: %s<br />' % results.finish_datetime)
+
     
     # all transactions - response times
     trans_timer_points = []  # [elapsed, timervalue]
@@ -30,7 +35,6 @@ def output_results(results_dir, results_file):
         t = (resp_stats.elapsed_time, resp_stats.trans_time)
         trans_timer_points.append(t)
     graph.resp_graph(trans_timer_points, 'All_Transactions_response_times.png', results_dir)
-    report.write_line('<img src="All_Transactions_response_times.png"></img>')
     
     # all transactions - throughput
     throughput_points = {}  # {intervalnumber: numberofrequests}
@@ -39,9 +43,12 @@ def output_results(results_dir, results_file):
     for i, bucket in enumerate(splat_series):
         throughput_points[int((i + 1) * interval_secs)] = (len(bucket) / interval_secs)
     graph.tp_graph(throughput_points, 'All_Transactions_throughput.png', results_dir)
-    report.write_line('<img src="All_Transactions_throughput.png"></img>')         
-
-
+           
+    report.write_line('<h3>All Transactions</h3>')
+    report.write_line('<hr />')
+    report.write_line('<img src="All_Transactions_response_times.png"></img>')   
+    report.write_line('<img src="All_Transactions_throughput.png"></img>')  
+        
     # custom timers
     for timer_name in sorted(results.uniq_timer_names):
         custom_timer_vals = []
@@ -51,7 +58,6 @@ def output_results(results_dir, results_file):
             custom_timer_points.append((resp_stats.elapsed_time, val)) 
             custom_timer_vals.append(val)
         graph.resp_graph(custom_timer_points, timer_name + '_response_times.png', results_dir)
-        report.write_line('<img src="%s_response_times.png"></img>' % timer_name)
         
         throughput_points = {}  # {intervalnumber: numberofrequests}
         interval_secs = 5.0
@@ -59,7 +65,17 @@ def output_results(results_dir, results_file):
         for i, bucket in enumerate(splat_series):
             throughput_points[int((i + 1) * interval_secs)] = (len(bucket) / interval_secs)
         graph.tp_graph(throughput_points, timer_name + '_throughput.png', results_dir)
-        report.write_line('<img src="%s_throughput.png"></img>' % timer_name)         
+        
+        report.write_line('<h3>Custom Timer: %s</h3>' % timer_name)
+        report.write_line('<hr />')
+        report.write_line('<img src="%s_response_times.png"></img>' % timer_name)
+        report.write_line('<img src="%s_throughput.png"></img>' % timer_name) 
+        
+        
+        
+        
+        
+        
         
         print timer_name
         print 'min: %.3f' % min(custom_timer_vals)
@@ -86,7 +102,8 @@ def output_results(results_dir, results_file):
         print 'max: %.3f' % max(ug_timer_vals)
         print ''        
             
-
+    
+    report.write_closing_html()
 
 
 class Results(object):

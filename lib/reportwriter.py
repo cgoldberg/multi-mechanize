@@ -90,8 +90,6 @@ class Report(object):
     def write_closing_html(self):
         with open(self.fn, 'a') as f:
             f.write("""\
-<p><br /></p>
-<hr />
 </body>
 </html>
 """)
