@@ -36,7 +36,34 @@ def output_results(results_dir, results_file):
         t = (resp_stats.elapsed_time, resp_stats.trans_time)
         trans_timer_points.append(t)
         trans_timer_vals.append(resp_stats.trans_time)
-    graph.resp_graph(trans_timer_points, 'All_Transactions_response_times.png', results_dir)
+    graph.resp_graph_raw(trans_timer_points, 'All_Transactions_response_times.png', results_dir)
+    
+    
+    
+    
+    
+    
+    
+    avg_resptime_points = {}  # {intervalnumber: avg_resptime}
+    percentile_80_resptime_points = {}  # {intervalnumber: 80pct_resptime}
+    percentile_90_resptime_points = {}  # {intervalnumber: 80pct_resptime}
+    interval_secs = 5.0
+    splat_series = split_series(trans_timer_points, interval_secs)
+    for i, bucket in enumerate(splat_series):
+        avg_resptime_points[int((i + 1) * interval_secs)] = avg(bucket)
+        percentile_80_resptime_points[int((i + 1) * interval_secs)] = percentile(bucket, 80)
+        percentile_90_resptime_points[int((i + 1) * interval_secs)] = percentile(bucket, 90)
+    graph.resp_graph(avg_resptime_points, percentile_80_resptime_points, percentile_90_resptime_points, 'All_Transactions_response_times_intervals.png', results_dir)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     # all transactions - throughput
     throughput_points = {}  # {intervalnumber: numberofrequests}
@@ -67,7 +94,7 @@ def output_results(results_dir, results_file):
             val = resp_stats.custom_timers[timer_name]
             custom_timer_points.append((resp_stats.elapsed_time, val)) 
             custom_timer_vals.append(val)
-        graph.resp_graph(custom_timer_points, timer_name + '_response_times.png', results_dir)
+        graph.resp_graph_raw(custom_timer_points, timer_name + '_response_times.png', results_dir)
         
         throughput_points = {}  # {intervalnumber: numberofrequests}
         interval_secs = 5.0
