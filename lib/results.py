@@ -79,6 +79,7 @@ def output_results(results_dir, results_file):
         report.write_line('<hr />')
         report.write_line('<h3>Custom Timer: %s</h3>' % timer_name)
         
+        report.write_line('count: %i<br />' % len(custom_timer_vals))
         report.write_line('min: %.3f<br />' % min(custom_timer_vals))
         report.write_line('avg: %.3f<br />' % avg(custom_timer_vals))
         report.write_line('80pct: %.3f<br />' % percentile(custom_timer_vals, 80))
