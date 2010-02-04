@@ -44,14 +44,16 @@ class Report(object):
             padding-top: 2px;
         }
         h2 {
-            font-size: 12px;
+            font-size: 13px;
             background: #C0C0C0;
             padding-left: 5px;
             margin-top: 2em;
             margin-bottom: .75em;
         }
         h3 {
-            font-size: 11px;
+            font-size: 12px;
+            background: #EEEEEE;
+            padding-left: 5px;
             margin-bottom: 0.5em;
         }
         h4 {
@@ -63,23 +65,25 @@ class Report(object):
             padding: 0;
         }
         table {
-            margin-left: 30px;
+            margin-left: 10px;
         }
         td {
             text-align: right;
             color: #000000;
             background: #FFFFFF;
             padding-left: 10px;
-            padding-right: 8px;
+            padding-right: 10px;
             padding-bottom: 0px;
         }
         th {
             text-align: center;
-            font-size: 12px;
-            padding-right: 30px;
-            padding-left: 30px;
+            padding-right: 10px;
+            padding-left: 10px;
             color: #000000;
-            background: #C0C0C0;
+            background: #FFFFFF;
+        }
+        div.summary {
+            padding-left: 40px;
         }
     </style>
 </head>
