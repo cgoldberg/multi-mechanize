@@ -46,7 +46,7 @@ def output_results(results_dir, results_file):
     avg_resptime_points = {}  # {intervalnumber: avg_resptime}
     percentile_80_resptime_points = {}  # {intervalnumber: 80pct_resptime}
     percentile_90_resptime_points = {}  # {intervalnumber: 90pct_resptime}
-    interval_secs = 5.0
+    interval_secs = 10.0
     splat_series = split_series(trans_timer_points, interval_secs)
     for i, bucket in enumerate(splat_series):
         avg_resptime_points[int((i + 1) * interval_secs)] = avg(bucket)
