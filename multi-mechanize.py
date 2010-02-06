@@ -158,6 +158,9 @@ class Agent(threading.Thread):
         except NameError, e:
             print 'ERROR: can not find test script: %s.  aborting user group: %s' % (self.script_file, self.user_group_name)
             return
+        except Exception, e:
+            print 'ERROR: failed initializing Transaction: %s.  aborting user group: %s' % (self.script_file, self.user_group_name)
+            return
         
         trans.custom_timers = {}
         
