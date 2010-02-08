@@ -27,7 +27,7 @@ exec 'from %s import *' % script_dir
             
 
 def main():
-    run_time, rampup, console_logging, user_group_configs = configure()
+    run_time, rampup, console_logging, results_ts_interval, user_group_configs = configure()
     
     output_dir = time.strftime('results/results_%Y.%m.%d_%H.%M.%S/', time.localtime()) 
     
@@ -70,7 +70,7 @@ def main():
     # all agents are done running at this point
     time.sleep(.2) # make sure the writer queue is flushed
     print '\n\nanalyzing results...\n'
-    results.output_results(output_dir, 'results.csv')
+    results.output_results(output_dir, 'results.csv', results_ts_interval)
     
     
 def configure():
@@ -82,6 +82,7 @@ def configure():
             run_time = config.getint(section, 'run_time')
             rampup = config.getint(section, 'rampup')
             console_logging = config.getboolean(section, 'console_logging')
+            results_ts_interval = config.getint(section, 'results_ts_interval')
         else:
             threads = config.getint(section, 'threads')
             script = config.get(section, 'script')
@@ -89,7 +90,7 @@ def configure():
             ug_config = UserGroupConfig(threads, user_group_name, script)
             user_group_configs.append(ug_config)
     
-    return (run_time, rampup, console_logging, user_group_configs)
+    return (run_time, rampup, console_logging, results_ts_interval, user_group_configs)
         
 
 
