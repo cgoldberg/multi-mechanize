@@ -16,10 +16,10 @@ import reportwriter
 
 
 
-def output_results(results_dir, results_file, ts_interval):
+def output_results(results_dir, results_file, run_time, ts_interval):
     report = reportwriter.Report(results_dir)
     
-    results = Results(results_dir + results_file)
+    results = Results(results_dir + results_file, run_time)
     
     report.write_line('<h1>Performance Results Report</h1>')
     
@@ -187,15 +187,6 @@ def output_results(results_dir, results_file, ts_interval):
         report.write_line('<img src="%s_response_times.png"></img>' % timer_name)
         report.write_line('<img src="%s_throughput.png"></img>' % timer_name) 
         
-        print timer_name
-        print 'min: %.3f' % min(custom_timer_vals)
-        print 'avg: %.3f' % avg(custom_timer_vals)
-        print '80pct: %.3f' % percentile(custom_timer_vals, 80)
-        print '90pct: %.3f' % percentile(custom_timer_vals, 90)
-        print '95pct: %.3f' % percentile(custom_timer_vals, 95)
-        print 'max: %.3f' % max(custom_timer_vals)
-        print ''
-        
         
     ## user group times
     #for user_group_name in sorted(results.uniq_user_group_names):
@@ -217,8 +208,9 @@ def output_results(results_dir, results_file, ts_interval):
 
 
 class Results(object):
-    def __init__(self, results_file_name):
+    def __init__(self, results_file_name, run_time):
         self.results_file_name = results_file_name
+        self.run_time = run_time
         self.total_transactions = 0
         self.total_errors = 0
         self.uniq_timer_names = set()
@@ -264,10 +256,13 @@ class Results(object):
                 custom_timers[timer] = val
             
             r = ResponseStats(request_num, elapsed_time, epoch_secs, user_group_name, trans_time, error, custom_timers)
-            resp_stats_list.append(r)
+            
+            if elapsed_time < self.run_time:  # drop all times that appear after the last request was sent (incomplete interval)
+                resp_stats_list.append(r)
             
             if error != "''":
                 self.total_errors += 1
+                
             self.total_transactions += 1
             
         return resp_stats_list    
@@ -309,5 +304,6 @@ def percentile(seq, percentile):
 
 
 
+
 if __name__ == '__main__':
-    output_results('./', 'results.csv', 10)
+    output_results('./', 'results.csv', 30, 10)
