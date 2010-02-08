@@ -11,7 +11,12 @@ import graph
 import reportwriter
 
 
-def output_results(results_dir, results_file):
+
+
+
+
+
+def output_results(results_dir, results_file, ts_interval):
     report = reportwriter.Report(results_dir)
     
     results = Results(results_dir + results_file)
@@ -63,7 +68,7 @@ def output_results(results_dir, results_file):
     avg_resptime_points = {}  # {intervalnumber: avg_resptime}
     percentile_80_resptime_points = {}  # {intervalnumber: 80pct_resptime}
     percentile_90_resptime_points = {}  # {intervalnumber: 90pct_resptime}
-    interval_secs = 10.0
+    interval_secs = ts_interval
     splat_series = split_series(trans_timer_points, interval_secs)
     report.write_line('<h3>Interval Details</h3>')
     report.write_line('<table>')
@@ -267,4 +272,4 @@ def percentile(seq, percentile):
 
 
 if __name__ == '__main__':
-    output_results('./', 'results.csv')
+    output_results('./', 'results.csv', 10)
