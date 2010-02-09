@@ -23,7 +23,8 @@ class Transaction(object):
         latency = time.time() - start_timer
         
         self.custom_timers['Example_Homepage'] = latency
-
+        
+        assert (resp.status == 200), 'Bad HTTP Response'
         assert ('Example Web Page' in content), 'Failed Content Verification'
 
 
