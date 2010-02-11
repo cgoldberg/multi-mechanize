@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#
 #  Copyright (c) 2010 Corey Goldberg (corey@goldb.org)
 #  License: GNU LGPLv3 - distributed under the terms of the GNU Lesser General Public License version 3
 #  
