@@ -58,7 +58,8 @@ class Report(object):
         }
         h4 {
             font-size: 11px;
-            margin-bottom: 0.5em;
+            padding-left: 20px;
+            margin-bottom: 0;
         }
         p {
             margin: 0;
@@ -83,7 +84,7 @@ class Report(object):
             background: #FFFFFF;
         }
         div.summary {
-            padding-left: 40px;
+            padding-left: 20px;
         }
     </style>
 </head>

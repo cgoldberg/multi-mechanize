@@ -30,11 +30,15 @@ def output_results(results_dir, results_file, run_time, ts_interval):
     print 'test finish: %s' % results.finish_datetime
     print ''
     
-    report.write_line('total transactions: %s<br />' % results.total_transactions)
-    report.write_line('error transactions: %s<br /><br />' % results.total_errors)
+    report.write_line('<div class="summary">')
+    report.write_line('transactions: %s<br />' % results.total_transactions)
+    report.write_line('errors: %s<br />' % results.total_errors)
+    report.write_line('duration: %s secs<br /><br />' % run_time)
     report.write_line('test start: %s<br />' % results.start_datetime)
-    report.write_line('test finish: %s<br />' % results.finish_datetime)
-
+    report.write_line('test finish: %s<br /><br />' % results.finish_datetime)
+    report.write_line('time-series interval: %s secs<br />' % ts_interval)
+    report.write_line('</div>')
+    
     report.write_line('<h2>All Transactions</h2>')
     
     
@@ -47,21 +51,19 @@ def output_results(results_dir, results_file, run_time, ts_interval):
         trans_timer_vals.append(resp_stats.trans_time)
     graph.resp_graph_raw(trans_timer_points, 'All_Transactions_response_times.png', results_dir)
     
-    
-    
-    report.write_line('<h3>Response Time Summary</h3>')
-    report.write_line('<div class="summary">')
-    report.write_line('count: %i<br />' % results.total_transactions)
-    report.write_line('min: %.3f<br />' % min(trans_timer_vals))
-    report.write_line('avg: %.3f<br />' % avg(trans_timer_vals))
-    report.write_line('80pct: %.3f<br />' % percentile(trans_timer_vals, 80))
-    report.write_line('90pct: %.3f<br />' % percentile(trans_timer_vals, 90))
-    report.write_line('95pct: %.3f<br />' % percentile(trans_timer_vals, 95))
-    report.write_line('max: %.3f<br />' % max(trans_timer_vals))
-    report.write_line('</div>')
-    
-    
-    
+    report.write_line('<h3>Response Time Summary (secs)</h3>')
+    report.write_line('<table>')
+    report.write_line('<tr><th>count</th><th>min</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>max</th></tr>') 
+    report.write_line('<tr><td>%i</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>'  % (
+        results.total_transactions, 
+        min(trans_timer_vals), 
+        avg(trans_timer_vals), 
+        percentile(trans_timer_vals, 80), 
+        percentile(trans_timer_vals, 90), 
+        percentile(trans_timer_vals, 95), 
+        max(trans_timer_vals)
+    ))
+    report.write_line('</table>')
     
     
     # all transactions - interval details
@@ -70,7 +72,7 @@ def output_results(results_dir, results_file, run_time, ts_interval):
     percentile_90_resptime_points = {}  # {intervalnumber: 90pct_resptime}
     interval_secs = ts_interval
     splat_series = split_series(trans_timer_points, interval_secs)
-    report.write_line('<h3>Interval Details</h3>')
+    report.write_line('<h3>Interval Details (secs)</h3>')
     report.write_line('<table>')
     report.write_line('<tr><th>interval</th><th>count</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th></tr>') 
     for i, bucket in enumerate(splat_series):
@@ -93,8 +95,11 @@ def output_results(results_dir, results_file, run_time, ts_interval):
     
     
     report.write_line('<h3>Graphs</h3>')
+    report.write_line('<h4>Response Time: %s sec time-series</h4>' % ts_interval)
     report.write_line('<img src="All_Transactions_response_times_intervals.png"></img>')     
-    report.write_line('<img src="All_Transactions_response_times.png"></img>')   
+    report.write_line('<h4>Response Time: raw data (all points)</h4>')
+    report.write_line('<img src="All_Transactions_response_times.png"></img>') 
+    report.write_line('<h4>Throughput: 5 sec time-series</h4>')
     report.write_line('<img src="All_Transactions_throughput.png"></img>')  
     
     
@@ -138,19 +143,22 @@ def output_results(results_dir, results_file, run_time, ts_interval):
         report.write_line('<hr />')
         report.write_line('<h2>Custom Timer: %s</h2>' % timer_name)
         
-        report.write_line('<h3>Response Time Summary</h3>')
-        report.write_line('<div class="summary">')
-        report.write_line('count: %i<br />' % len(custom_timer_vals))
-        report.write_line('min: %.3f<br />' % min(custom_timer_vals))
-        report.write_line('avg: %.3f<br />' % avg(custom_timer_vals))
-        report.write_line('80pct: %.3f<br />' % percentile(custom_timer_vals, 80))
-        report.write_line('90pct: %.3f<br />' % percentile(custom_timer_vals, 90))
-        report.write_line('95pct: %.3f<br />' % percentile(custom_timer_vals, 95))
-        report.write_line('max: %.3f<br />' % max(custom_timer_vals))
-        report.write_line('</div>')
-
+        report.write_line('<h3>Response Time Summary (secs)</h3>')
         
-        
+ 
+        report.write_line('<table>')
+        report.write_line('<tr><th>count</th><th>min</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>max</th></tr>') 
+        report.write_line('<tr><td>%i</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>'  % (
+            len(custom_timer_vals), 
+            min(custom_timer_vals), 
+            avg(custom_timer_vals), 
+            percentile(custom_timer_vals, 80), 
+            percentile(custom_timer_vals, 90), 
+            percentile(custom_timer_vals, 95), 
+            max(custom_timer_vals)
+        ))
+        report.write_line('</table>')
+    
         
         # custom timers - interval details
         avg_resptime_points = {}  # {intervalnumber: avg_resptime}
@@ -158,7 +166,7 @@ def output_results(results_dir, results_file, run_time, ts_interval):
         percentile_90_resptime_points = {}  # {intervalnumber: 90pct_resptime}
         interval_secs = ts_interval
         splat_series = split_series(custom_timer_points, interval_secs)
-        report.write_line('<h3>Interval Details</h3>')
+        report.write_line('<h3>Interval Details (secs)</h3>')
         report.write_line('<table>')
         report.write_line('<tr><th>interval</th><th>count</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th></tr>') 
         for i, bucket in enumerate(splat_series):
@@ -177,10 +185,6 @@ def output_results(results_dir, results_file, run_time, ts_interval):
         report.write_line('</table>') 
         graph.resp_graph(avg_resptime_points, percentile_80_resptime_points, percentile_90_resptime_points, timer_name + '_response_times_intervals.png', results_dir)
     
-    
-        
-
-        
         
         report.write_line('<h3>Graphs</h3>')
         report.write_line('<img src="%s_response_times_intervals.png"></img>' % timer_name)    
@@ -203,6 +207,7 @@ def output_results(results_dir, results_file, run_time, ts_interval):
     #    print 'max: %.3f' % max(ug_timer_vals)
     #    print ''        
     
+    report.write_line('<hr />')
     report.write_closing_html()
 
 
