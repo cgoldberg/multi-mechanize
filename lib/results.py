@@ -14,10 +14,7 @@ import reportwriter
 
 
 
-
-
-
-def output_results(results_dir, results_file, run_time, ts_interval):
+def output_results(results_dir, results_file, run_time, rampup, ts_interval):
     report = reportwriter.Report(results_dir)
     
     results = Results(results_dir + results_file, run_time)
@@ -32,12 +29,13 @@ def output_results(results_dir, results_file, run_time, ts_interval):
     print ''
     
     report.write_line('<div class="summary">')
-    report.write_line('transactions: %s<br />' % results.total_transactions)
-    report.write_line('errors: %s<br />' % results.total_errors)
-    report.write_line('duration: %s secs<br /><br />' % run_time)
-    report.write_line('test start: %s<br />' % results.start_datetime)
-    report.write_line('test finish: %s<br /><br />' % results.finish_datetime)
-    report.write_line('time-series interval: %s secs<br />' % ts_interval)
+    report.write_line('<b>transactions:</b> %s<br />' % results.total_transactions)
+    report.write_line('<b>errors:</b> %s<br />' % results.total_errors)
+    report.write_line('<b>run time:</b> %s secs<br />' % run_time)
+    report.write_line('<b>rampup:</b> %s secs<br /><br />' % rampup)
+    report.write_line('<b>test start:</b> %s<br />' % results.start_datetime)
+    report.write_line('<b>test finish:</b> %s<br /><br />' % results.finish_datetime)
+    report.write_line('<b>time-series interval:</b> %s secs<br />' % ts_interval)
     report.write_line('</div>')
     
     report.write_line('<h2>All Transactions</h2>')
@@ -103,11 +101,7 @@ def output_results(results_dir, results_file, run_time, ts_interval):
     report.write_line('<h4>Throughput: 5 sec time-series</h4>')
     report.write_line('<img src="All_Transactions_throughput.png"></img>')  
     
-    
-    
-    
-    
-    
+
 
     # all transactions - throughput
     throughput_points = {}  # {intervalnumber: numberofrequests}
@@ -117,11 +111,6 @@ def output_results(results_dir, results_file, run_time, ts_interval):
         throughput_points[int((i + 1) * interval_secs)] = (len(bucket) / interval_secs)
     graph.tp_graph(throughput_points, 'All_Transactions_throughput.png', results_dir)
     
-    
-    
-
-        
-        
         
         
     # custom timers
@@ -146,7 +135,6 @@ def output_results(results_dir, results_file, run_time, ts_interval):
         
         report.write_line('<h3>Response Time Summary (secs)</h3>')
         
- 
         report.write_line('<table>')
         report.write_line('<tr><th>count</th><th>min</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>max</th></tr>') 
         report.write_line('<tr><td>%i</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>'  % (
@@ -188,10 +176,14 @@ def output_results(results_dir, results_file, run_time, ts_interval):
     
         
         report.write_line('<h3>Graphs</h3>')
-        report.write_line('<img src="%s_response_times_intervals.png"></img>' % timer_name)    
+        report.write_line('<h4>Response Time: %s sec time-series</h4>' % ts_interval)
+        report.write_line('<img src="%s_response_times_intervals.png"></img>' % timer_name)
+        report.write_line('<h4>Response Time: raw data (all points)</h4>')        
         report.write_line('<img src="%s_response_times.png"></img>' % timer_name)
+        report.write_line('<h4>Throughput: 5 sec time-series</h4>')
         report.write_line('<img src="%s_throughput.png"></img>' % timer_name) 
         
+    
         
     ## user group times
     #for user_group_name in sorted(results.uniq_user_group_names):
@@ -312,4 +304,4 @@ def percentile(seq, percentile):
 
 
 if __name__ == '__main__':
-    output_results('./', 'results.csv', 30, 10)
+    output_results('./', 'results.csv', 30, 30, 10)
