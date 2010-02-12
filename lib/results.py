@@ -77,16 +77,22 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval):
     for i, bucket in enumerate(splat_series):
         interval_start = int((i + 1) * interval_secs)
         cnt = len(bucket) 
-        avrg = avg(bucket)
-        pct_80 = percentile(bucket, 80)
-        pct_90 = percentile(bucket, 90)
-        pct_95 = percentile(bucket, 95)
         
-        report.write_line('<tr><td>%i</td><td>%i</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>' % (i + 1, cnt, avrg, pct_80, pct_90, pct_95))
+        if cnt == 0:
+            report.write_line('<tr><td>%i</td><td>0</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>' % (i + 1))  
+        else:
+            avrg = avg(bucket)
+            pct_80 = percentile(bucket, 80)
+            pct_90 = percentile(bucket, 90)
+            pct_95 = percentile(bucket, 95)
+            report.write_line('<tr><td>%i</td><td>%i</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>' % (i + 1, cnt, avrg, pct_80, pct_90, pct_95))
+        
+            avg_resptime_points[interval_start] = avrg
+            percentile_80_resptime_points[interval_start] = pct_80
+            percentile_90_resptime_points[interval_start] = pct_90
+            
          
-        avg_resptime_points[interval_start] = avrg
-        percentile_80_resptime_points[interval_start] = pct_80
-        percentile_90_resptime_points[interval_start] = pct_90
+        
     report.write_line('</table>') 
     graph.resp_graph(avg_resptime_points, percentile_80_resptime_points, percentile_90_resptime_points, 'All_Transactions_response_times_intervals.png', results_dir)
     
@@ -161,16 +167,20 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval):
         for i, bucket in enumerate(splat_series):
             interval_start = int((i + 1) * interval_secs)
             cnt = len(bucket) 
-            avrg = avg(bucket)
-            pct_80 = percentile(bucket, 80)
-            pct_90 = percentile(bucket, 90)
-            pct_95 = percentile(bucket, 95)
             
-            report.write_line('<tr><td>%i</td><td>%i</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>' % (i + 1, cnt, avrg, pct_80, pct_90, pct_95))
-             
-            avg_resptime_points[interval_start] = avrg
-            percentile_80_resptime_points[interval_start] = pct_80
-            percentile_90_resptime_points[interval_start] = pct_90
+            if cnt == 0:
+                report.write_line('<tr><td>%i</td><td>0</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>' % (i + 1))  
+            else:
+                avrg = avg(bucket)
+                pct_80 = percentile(bucket, 80)
+                pct_90 = percentile(bucket, 90)
+                pct_95 = percentile(bucket, 95)
+                
+                report.write_line('<tr><td>%i</td><td>%i</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>' % (i + 1, cnt, avrg, pct_80, pct_90, pct_95))
+                 
+                avg_resptime_points[interval_start] = avrg
+                percentile_80_resptime_points[interval_start] = pct_80
+                percentile_90_resptime_points[interval_start] = pct_90
         report.write_line('</table>') 
         graph.resp_graph(avg_resptime_points, percentile_80_resptime_points, percentile_90_resptime_points, timer_name + '_response_times_intervals.png', results_dir)
     
