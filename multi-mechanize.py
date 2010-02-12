@@ -75,7 +75,6 @@ def main():
                 sys.stdout.write(chr(27) + '[A' )
             time.sleep(.5)
             
-
         if not sys.platform.startswith('win'):
             print
 
@@ -83,7 +82,8 @@ def main():
     time.sleep(.2) # make sure the writer queue is flushed
     print '\n\nanalyzing results...\n'
     results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs)
-    
+    print '%sresults.html created\n' % output_dir
+    print 'done.'
     
     
 def configure():
