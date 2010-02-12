@@ -55,7 +55,7 @@ def main():
         print '  threads: %i\n' % (ug_config.num_threads * len(user_groups))
         p = progressbar.ProgressBar(run_time)
         elapsed = 0
-        while [user_group for user_group in user_groups if user_group.is_alive()] != []:
+        while elapsed < (run_time + 1):
             p.update_time(elapsed)
             if sys.platform.startswith('win'):
                 print '%s   transactions: %i  timers: %i  errors: %i\r' % (p, rw.trans_count, rw.timer_count, rw.error_count),
@@ -64,7 +64,18 @@ def main():
                 sys.stdout.write(chr(27) + '[A' )
             time.sleep(1)
             elapsed = time.time() - start_time
+        
         print p
+        
+        while [user_group for user_group in user_groups if user_group.is_alive()] != []:
+            if sys.platform.startswith('win'):
+                print 'waiting for all requests to finish...\r',
+            else:
+                print 'waiting for all requests to finish...\r'
+                sys.stdout.write(chr(27) + '[A' )
+            time.sleep(.5)
+            
+
         if not sys.platform.startswith('win'):
             print
 
