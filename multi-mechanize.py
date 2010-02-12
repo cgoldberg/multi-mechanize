@@ -176,7 +176,7 @@ class Agent(threading.Thread):
             try:
                 trans.run()
             except Exception, e:
-                error = str(e)
+                error = str(e).replace(',', '')
 
             finish = self.default_timer()
             
@@ -215,10 +215,10 @@ class ResultsWriter(threading.Thread):
                     self.timer_count += len(custom_timers)
                     if error != '':
                         self.error_count += 1
-                    f.write('%i,%.3f,%i,%s,%.3f,%s,%s\n' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, repr(error), repr(custom_timers)))
+                    f.write('%i,%.3f,%i,%s,%.3f,%s,%s\n' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, error, repr(custom_timers)))
                     f.flush()
                     if self.console_logging:
-                        print '%i, %.3f, %i, %s, %.3f, %s, %s' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, repr(error), repr(custom_timers))
+                        print '%i, %.3f, %i, %s, %.3f, %s, %s' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, error, repr(custom_timers))
                 except Queue.Empty:
                     time.sleep(.05)
 
