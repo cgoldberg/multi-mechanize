@@ -39,7 +39,7 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
     report.write_line('<b>test finish:</b> %s<br /><br />' % results.finish_datetime)
     report.write_line('<b>time-series interval:</b> %s secs<br /><br /><br />' % ts_interval)
     if user_group_configs:
-        report.write_line('<b>user group configuration:</b><br /><br />')
+        report.write_line('<b>workload configuration:</b><br /><br />')
         report.write_line('<table>')
         report.write_line('<tr><th>group name</th><th>threads</th><th>script name</th></tr>')
         for user_group_config in user_group_configs:
