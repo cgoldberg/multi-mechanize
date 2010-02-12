@@ -268,7 +268,7 @@ class Results(object):
             if elapsed_time < self.run_time:  # drop all times that appear after the last request was sent (incomplete interval)
                 resp_stats_list.append(r)
             
-            if error != "''":
+            if error != '':
                 self.total_errors += 1
                 
             self.total_transactions += 1
