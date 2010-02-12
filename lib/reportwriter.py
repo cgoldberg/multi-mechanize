@@ -33,14 +33,14 @@ class Report(object):
         body {
             background-color: #FFFFFF;
             color: #000000;
-            font-family: Trebuchet MS, Verdana, sans-serif;
+            font-family: Verdana, sans-serif;
             font-size: 11px;
             padding: 5px;
         }
         h1 {
             font-size: 16px;
-            margin-bottom: 0.5em;
             background: #FF9933;
+            margin-bottom: 0;
             padding-left: 5px;
             padding-top: 2px;
         }
@@ -75,7 +75,7 @@ class Report(object):
             background: #FFFFFF;
             padding-left: 10px;
             padding-right: 10px;
-            padding-bottom: 0px;
+            padding-bottom: 0;
         }
         th {
             text-align: center;

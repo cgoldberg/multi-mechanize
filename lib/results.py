@@ -14,32 +14,41 @@ import reportwriter
 
 
 
-def output_results(results_dir, results_file, run_time, rampup, ts_interval):
+def output_results(results_dir, results_file, run_time, rampup, ts_interval, user_group_configs=None):
     report = reportwriter.Report(results_dir)
     
     results = Results(results_dir + results_file, run_time)
     
-    report.write_line('<h1>Performance Results Report</h1>')
-    
-    print 'total transactions: %i' % results.total_transactions
-    print 'error transactions: %i' % results.total_errors
+    print 'transactions: %i' % results.total_transactions
+    print 'errors: %i' % results.total_errors
     print ''
     print 'test start: %s' % results.start_datetime
     print 'test finish: %s' % results.finish_datetime
     print ''
     
+    report.write_line('<h1>Performance Results Report</h1>')
+    
+    report.write_line('<h2>Summary</h2>')
+    
     report.write_line('<div class="summary">')
-    report.write_line('<b>transactions:</b> %s<br />' % results.total_transactions)
-    report.write_line('<b>errors:</b> %s<br />' % results.total_errors)
-    report.write_line('<b>run time:</b> %s secs<br />' % run_time)
-    report.write_line('<b>rampup:</b> %s secs<br /><br />' % rampup)
+    report.write_line('<b>transactions:</b> %d<br />' % results.total_transactions)
+    report.write_line('<b>errors:</b> %d<br />' % results.total_errors)
+    report.write_line('<b>run time:</b> %d secs<br />' % run_time)
+    report.write_line('<b>rampup:</b> %d secs<br /><br />' % rampup)
     report.write_line('<b>test start:</b> %s<br />' % results.start_datetime)
     report.write_line('<b>test finish:</b> %s<br /><br />' % results.finish_datetime)
-    report.write_line('<b>time-series interval:</b> %s secs<br />' % ts_interval)
+    report.write_line('<b>time-series interval:</b> %s secs<br /><br /><br />' % ts_interval)
+    if user_group_configs:
+        report.write_line('<b>user group configuration:</b><br /><br />')
+        report.write_line('<table>')
+        report.write_line('<tr><th>group name</th><th>threads</th><th>script name</th></tr>')
+        for user_group_config in user_group_configs:
+            report.write_line('<tr><td>%s</td><td>%d</td><td>%s</td></tr>' % 
+                (user_group_config.name, user_group_config.num_threads, user_group_config.script_file))
+        report.write_line('</table>')
     report.write_line('</div>')
     
     report.write_line('<h2>All Transactions</h2>')
-    
     
     # all transactions - response times
     trans_timer_points = []  # [elapsed, timervalue]

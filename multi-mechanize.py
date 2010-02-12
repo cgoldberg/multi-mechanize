@@ -71,7 +71,8 @@ def main():
     # all agents are done running at this point
     time.sleep(.2) # make sure the writer queue is flushed
     print '\n\nanalyzing results...\n'
-    results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval)
+    results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs)
+    
     
     
 def configure():
