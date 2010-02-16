@@ -61,15 +61,16 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
     
     report.write_line('<h3>Response Time Summary (secs)</h3>')
     report.write_line('<table>')
-    report.write_line('<tr><th>count</th><th>min</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>max</th></tr>') 
-    report.write_line('<tr><td>%i</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>'  % (
+    report.write_line('<tr><th>count</th><th>min</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>max</th><th>stdev</th></tr>') 
+    report.write_line('<tr><td>%i</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>'  % (
         results.total_transactions, 
         min(trans_timer_vals), 
-        avg(trans_timer_vals), 
+        average(trans_timer_vals), 
         percentile(trans_timer_vals, 80), 
         percentile(trans_timer_vals, 90), 
         percentile(trans_timer_vals, 95), 
-        max(trans_timer_vals)
+        max(trans_timer_vals),
+        standard_dev(trans_timer_vals), 
     ))
     report.write_line('</table>')
     
@@ -82,29 +83,27 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
     splat_series = split_series(trans_timer_points, interval_secs)
     report.write_line('<h3>Interval Details (secs)</h3>')
     report.write_line('<table>')
-    report.write_line('<tr><th>interval</th><th>count</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th></tr>') 
+    report.write_line('<tr><th>interval</th><th>count</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>stdev</th></tr>') 
     for i, bucket in enumerate(splat_series):
         interval_start = int((i + 1) * interval_secs)
         cnt = len(bucket) 
         
         if cnt == 0:
-            report.write_line('<tr><td>%i</td><td>0</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>' % (i + 1))  
+            report.write_line('<tr><td>%i</td><td>0</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>' % (i + 1))  
         else:
-            avrg = avg(bucket)
+            avg = average(bucket)
             pct_80 = percentile(bucket, 80)
             pct_90 = percentile(bucket, 90)
             pct_95 = percentile(bucket, 95)
-            report.write_line('<tr><td>%i</td><td>%i</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>' % (i + 1, cnt, avrg, pct_80, pct_90, pct_95))
+            stdev = standard_dev(bucket)
+            report.write_line('<tr><td>%i</td><td>%i</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>' % (i + 1, cnt, avg, pct_80, pct_90, pct_95, stdev))
         
-            avg_resptime_points[interval_start] = avrg
+            avg_resptime_points[interval_start] = avg
             percentile_80_resptime_points[interval_start] = pct_80
             percentile_90_resptime_points[interval_start] = pct_90
-            
-         
-        
+
     report.write_line('</table>') 
     graph.resp_graph(avg_resptime_points, percentile_80_resptime_points, percentile_90_resptime_points, 'All_Transactions_response_times_intervals.png', results_dir)
-    
     
     
     
@@ -151,15 +150,16 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
         report.write_line('<h3>Response Time Summary (secs)</h3>')
         
         report.write_line('<table>')
-        report.write_line('<tr><th>count</th><th>min</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>max</th></tr>') 
-        report.write_line('<tr><td>%i</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>'  % (
+        report.write_line('<tr><th>count</th><th>min</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>max</th><th>stdev</th></tr>') 
+        report.write_line('<tr><td>%i</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>'  % (
             len(custom_timer_vals), 
             min(custom_timer_vals), 
-            avg(custom_timer_vals), 
+            average(custom_timer_vals), 
             percentile(custom_timer_vals, 80), 
             percentile(custom_timer_vals, 90), 
             percentile(custom_timer_vals, 95), 
-            max(custom_timer_vals)
+            max(custom_timer_vals),
+            standard_dev(custom_timer_vals)
         ))
         report.write_line('</table>')
     
@@ -172,22 +172,23 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
         splat_series = split_series(custom_timer_points, interval_secs)
         report.write_line('<h3>Interval Details (secs)</h3>')
         report.write_line('<table>')
-        report.write_line('<tr><th>interval</th><th>count</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th></tr>') 
+        report.write_line('<tr><th>interval</th><th>count</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>stdev</th></tr>') 
         for i, bucket in enumerate(splat_series):
             interval_start = int((i + 1) * interval_secs)
             cnt = len(bucket) 
             
             if cnt == 0:
-                report.write_line('<tr><td>%i</td><td>0</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>' % (i + 1))  
+                report.write_line('<tr><td>%i</td><td>0</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>' % (i + 1))  
             else:
-                avrg = avg(bucket)
+                avg = average(bucket)
                 pct_80 = percentile(bucket, 80)
                 pct_90 = percentile(bucket, 90)
                 pct_95 = percentile(bucket, 95)
+                stdev = standard_dev(bucket)
                 
-                report.write_line('<tr><td>%i</td><td>%i</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>' % (i + 1, cnt, avrg, pct_80, pct_90, pct_95))
+                report.write_line('<tr><td>%i</td><td>%i</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>' % (i + 1, cnt, avg, pct_80, pct_90, pct_95, stdev))
                  
-                avg_resptime_points[interval_start] = avrg
+                avg_resptime_points[interval_start] = avg
                 percentile_80_resptime_points[interval_start] = pct_80
                 percentile_90_resptime_points[interval_start] = pct_90
         report.write_line('</table>') 
@@ -212,7 +213,7 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
     #            ug_timer_vals.append(resp_stats.trans_time)
     #    print user_group_name
     #    print 'min: %.3f' % min(ug_timer_vals)
-    #    print 'avg: %.3f' % avg(ug_timer_vals)
+    #    print 'avg: %.3f' % average(ug_timer_vals)
     #    print '80pct: %.3f' % percentile(ug_timer_vals, 80)
     #    print '90pct: %.3f' % percentile(ug_timer_vals, 90)
     #    print '95pct: %.3f' % percentile(ug_timer_vals, 95)
@@ -309,11 +310,20 @@ def split_series(points, interval):
 
 
 
-def avg(seq):
-    return float(sum(seq) / len(seq)) 
+def average(seq):
+    avg = (float(sum(seq)) / len(seq)) 
+    return avg
 
 
 
+def standard_dev(seq):
+    avg = average(seq)
+    sdsq = sum([(i - avg) ** 2 for i in seq])
+    stdev = (sdsq / (len(seq) - 1)) ** .5
+    return stdev
+
+    
+    
 def percentile(seq, percentile):
     i = int(len(seq) * (percentile / 100.0))
     seq.sort()
@@ -323,4 +333,4 @@ def percentile(seq, percentile):
 
 
 if __name__ == '__main__':
-    output_results('./', 'results.csv', 30, 30, 10)
+    output_results('./', 'results.csv', 10, 0, 5)
