@@ -25,7 +25,7 @@ try:
 except IndexError:
     sys.stderr.write('ERROR: Can not find project\n\n')
     sys.stderr.write('usage: >python multimechanize.py <project_name>\n')
-    sys.stderr.write('example: >python multimechanize.py default_project\n')
+    sys.stderr.write('example: >python multimechanize.py default_project\n\n')
     sys.exit(1)   
 sys.path.append('projects/%s/test_scripts' % project_name)          
 exec 'from projects.%s.test_scripts import *' % project_name 
