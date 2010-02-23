@@ -20,7 +20,13 @@ import time
 import lib.results as results
 import lib.progressbar as progressbar        
 
-project_name = sys.argv[1]
+try:
+    project_name = sys.argv[1]
+except IndexError:
+    sys.stderr.write('ERROR: Can not find project\n\n')
+    sys.stderr.write('usage: >python multimechanize.py <project_name>\n')
+    sys.stderr.write('example: >python multimechanize.py default_project\n')
+    sys.exit(1)   
 sys.path.append('projects/%s/test_scripts' % project_name)          
 exec 'from projects.%s.test_scripts import *' % project_name 
 
