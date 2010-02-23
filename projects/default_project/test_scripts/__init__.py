@@ -6,7 +6,8 @@
 #  This file is part of Multi-Mechanize
 #
 #
-#  keep this file in your test-scripts directory
+#  keep this file in your test_scripts directory
+
 
 
 import glob
