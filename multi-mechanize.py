@@ -23,7 +23,7 @@ import lib.progressbar as progressbar
 try:
     project_name = sys.argv[1]
 except IndexError:
-    sys.stderr.write('ERROR: Can not find project\n\n')
+    sys.stderr.write('ERROR: no project specified\n\n')
     sys.stderr.write('usage: >python multimechanize.py <project_name>\n')
     sys.stderr.write('example: >python multimechanize.py default_project\n\n')
     sys.exit(1)   
