@@ -18,19 +18,18 @@ import sys
 import threading
 import time
 import lib.results as results
-import lib.progressbar as progressbar
+import lib.progressbar as progressbar        
 
-config = ConfigParser.ConfigParser()
-config.read('config.cfg')
-script_dir = config.get('global', 'script_directory')
-exec 'from %s import *' % script_dir            
+project_name = sys.argv[1]
+sys.path.append('projects/%s/test_scripts' % project_name)          
+exec 'from projects.%s.test_scripts import *' % project_name 
 
-            
 
-def main():
-    run_time, rampup, console_logging, results_ts_interval, user_group_configs = configure()
+
+def main():   
+    run_time, rampup, console_logging, results_ts_interval, user_group_configs = configure(project_name)
     
-    output_dir = time.strftime('results/results_%Y.%m.%d_%H.%M.%S/', time.localtime()) 
+    output_dir = time.strftime('projects/' + project_name + '/results/results_%Y.%m.%d_%H.%M.%S/', time.localtime()) 
     
     # this queue is shared between all processes/threads
     queue = multiprocessing.Queue()
@@ -86,10 +85,10 @@ def main():
     print 'done.'
     
     
-def configure():
+def configure(project_name):
     user_group_configs = []
     config = ConfigParser.ConfigParser()
-    config.read('config.cfg')
+    config.read( 'projects/%s/config.cfg' % project_name)
     for section in config.sections():
         if section == 'global':
             run_time = config.getint(section, 'run_time')
@@ -102,7 +101,7 @@ def configure():
             user_group_name = section
             ug_config = UserGroupConfig(threads, user_group_name, script)
             user_group_configs.append(ug_config)
-    
+
     return (run_time, rampup, console_logging, results_ts_interval, user_group_configs)
         
 
@@ -187,7 +186,7 @@ class Agent(threading.Thread):
             
             try:
                 trans.run()
-            except Exception, e:
+            except Exception, e:  # test runner catches all script exceptions here
                 error = str(e).replace(',', '')
 
             finish = self.default_timer()
