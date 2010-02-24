@@ -40,6 +40,7 @@ for f in glob.glob( '%s/*.py' % scripts_path):  # import all test scripts as mod
 
 
 
+
 def main():   
     run_time, rampup, console_logging, results_ts_interval, user_group_configs = configure(project_name)
     
