@@ -24,12 +24,15 @@ import lib.progressbar as progressbar
 try:
     project_name = sys.argv[1]
 except IndexError:
-    sys.stderr.write('ERROR: no project specified\n\n')
-    sys.stderr.write('usage: >python multimechanize.py <project_name>\n')
-    sys.stderr.write('example: >python multimechanize.py default_project\n\n')
+    sys.stderr.write('\nERROR: no project specified\n\n')
+    sys.stderr.write('usage: >python multi-mechanize.py <project_name>\n')
+    sys.stderr.write('example: >python multi-mechanize.py default_project\n\n')
     sys.exit(1)  
 
 scripts_path = 'projects/%s/test_scripts' % project_name
+if not os.path.exists(scripts_path):
+    sys.stderr.write('\nERROR: can not find project: %s\n\n' % project_name)
+    sys.exit(1) 
 sys.path.append(scripts_path)          
 for f in glob.glob( '%s/*.py' % scripts_path):  # import all test scripts as modules
     f = f.replace(scripts_path, '')
