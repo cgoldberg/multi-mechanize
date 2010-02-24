@@ -98,7 +98,7 @@ def main():
     print '\n\nanalyzing results...\n'
     results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs)
     print '%sresults.html created\n' % output_dir
-    print 'done.'
+    print 'done.\n'
     
     
 def configure(project_name):
