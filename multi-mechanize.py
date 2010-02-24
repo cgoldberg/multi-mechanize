@@ -35,9 +35,7 @@ if not os.path.exists(scripts_path):
     sys.exit(1) 
 sys.path.append(scripts_path)          
 for f in glob.glob( '%s/*.py' % scripts_path):  # import all test scripts as modules
-    f = f.replace(scripts_path, '')
-    f = f.replace(os.sep, '')
-    f = f.replace('.py', '')
+    f = f.replace(scripts_path, '').replace(os.sep, '').replace('.py', '')
     exec('import %s' % f)
 
 
