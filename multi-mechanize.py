@@ -11,6 +11,7 @@
 
 
 import ConfigParser
+import glob
 import multiprocessing
 import os
 import Queue
@@ -26,9 +27,15 @@ except IndexError:
     sys.stderr.write('ERROR: no project specified\n\n')
     sys.stderr.write('usage: >python multimechanize.py <project_name>\n')
     sys.stderr.write('example: >python multimechanize.py default_project\n\n')
-    sys.exit(1)   
-sys.path.append('projects/%s/test_scripts' % project_name)          
-exec 'from projects.%s.test_scripts import *' % project_name 
+    sys.exit(1)  
+
+scripts_path = 'projects/%s/test_scripts' % project_name
+sys.path.append(scripts_path)          
+for f in glob.glob( '%s/*.py' % scripts_path):  # import all test scripts as modules
+    f = f.replace(scripts_path, '')
+    f = f.replace(os.sep, '')
+    f = f.replace('.py', '')
+    exec('import %s' % f)
 
 
 
