@@ -42,9 +42,9 @@ for f in glob.glob( '%s/*.py' % scripts_path):  # import all test scripts as mod
 
 
 def main():   
-    run_time, rampup, console_logging, results_ts_interval, user_group_configs = configure(project_name)
-    
-    output_dir = time.strftime('projects/' + project_name + '/results/results_%Y.%m.%d_%H.%M.%S/', time.localtime()) 
+    run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database = configure(project_name)
+    run_localtime = time.localtime() 
+    output_dir = time.strftime('projects/' + project_name + '/results/results_%Y.%m.%d_%H.%M.%S/', run_localtime) 
     
     # this queue is shared between all processes/threads
     queue = multiprocessing.Queue()
@@ -96,7 +96,11 @@ def main():
     time.sleep(.2) # make sure the writer queue is flushed
     print '\n\nanalyzing results...\n'
     results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs)
-    print '%sresults.html created\n' % output_dir
+    print 'created: %sresults.html\n' % output_dir
+    if results_database is not None:
+        print 'loading results into database: %s\n' % results_database
+        import lib.resultsloader
+        lib.resultsloader.load_results_database(results_database, project_name, run_localtime, output_dir)
     print 'done.\n'
     
     
@@ -110,6 +114,10 @@ def configure(project_name):
             rampup = config.getint(section, 'rampup')
             console_logging = config.getboolean(section, 'console_logging')
             results_ts_interval = config.getint(section, 'results_ts_interval')
+            try:
+                results_database = config.get(section, 'results_database')
+            except ConfigParser.NoOptionError:
+                results_database = None
         else:
             threads = config.getint(section, 'threads')
             script = config.get(section, 'script')
@@ -117,7 +125,7 @@ def configure(project_name):
             ug_config = UserGroupConfig(threads, user_group_name, script)
             user_group_configs.append(ug_config)
 
-    return (run_time, rampup, console_logging, results_ts_interval, user_group_configs)
+    return (run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database)
         
 
 
