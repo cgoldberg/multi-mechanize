@@ -10,8 +10,8 @@ import sys
 
 try:
     from pylab import *  # Matplotlib for graphing
-except ImportError, e:
-    sys.stderr.write('Matplotlib ImportError: %s\n' % e)
+except ImportError:
+    print 'ERROR: can not import Matplotlib. install Matplotlib to generate graphs'
     
 
 
