@@ -319,7 +319,10 @@ def average(seq):
 def standard_dev(seq):
     avg = average(seq)
     sdsq = sum([(i - avg) ** 2 for i in seq])
-    stdev = (sdsq / (len(seq) - 1)) ** .5
+    try:
+        stdev = (sdsq / (len(seq) - 1)) ** .5
+    except ZeroDivisionError:
+        stdev = 0 
     return stdev
 
     
