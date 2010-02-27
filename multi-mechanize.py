@@ -20,6 +20,7 @@ import threading
 import time
 import lib.results as results
 import lib.progressbar as progressbar        
+import lib.resultsloader as resultsloader
 
 try:
     project_name = sys.argv[1]
@@ -99,8 +100,8 @@ def main():
     print 'created: %sresults.html\n' % output_dir
     if results_database is not None:
         print 'loading results into database: %s\n' % results_database
-        import lib.resultsloader
-        lib.resultsloader.load_results_database(results_database, project_name, run_localtime, output_dir)
+        resultsloader.load_results_database(project_name, run_localtime, output_dir, results_database)
+
     print 'done.\n'
     
     
