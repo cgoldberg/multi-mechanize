@@ -15,6 +15,7 @@ import glob
 import multiprocessing
 import os
 import Queue
+import shutil
 import sys
 import threading
 import time
@@ -97,6 +98,12 @@ def main():
     print '\n\nanalyzing results...\n'
     results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs)
     print 'created: %sresults.html\n' % output_dir
+    
+    # copy config file to results directory
+    project_config = os.sep.join(['projects', project_name, 'config.cfg'])
+    saved_config = os.sep.join([output_dir, 'config.cfg'])
+    shutil.copy(project_config, saved_config)
+    
     if results_database is not None:
         print 'loading results into database: %s\n' % results_database
         import lib.resultsloader
