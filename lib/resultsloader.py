@@ -14,13 +14,28 @@ from datetime import datetime
 try:
     from sqlalchemy.orm import sessionmaker, mapper, relation
     from sqlalchemy import create_engine
-    from sqlalchemy import Table, Column, Integer, String, Float, DateTime
+    from sqlalchemy import Table, Column
+    from sqlalchemy import Integer, String, Float, DateTime
     from sqlalchemy import ForeignKey, UniqueConstraint
     from sqlalchemy import MetaData
 except ImportError:
     print "(optional: please install sqlalchemy to enable db logging)"
 
 LOGLINE_RE = re.compile('(.+),(.+),(.+),(.+),(.+),(.?),(\{.+\})')
+
+class GlobalConfig(object):
+    """class representing a multi-mechanize global config section"""
+    def __init__(self, run_time, rampup, results_ts_interval):
+        self.run_time = int(run_time)
+        self.rampup = int(rampup)
+        self.results_ts_interval = int(results_ts_interval)
+
+class UserGroupConfig(object):
+    """class representing a multi-mechanize user group config"""
+    def __init__(self, user_group, threads, script):
+        self.user_group = user_group
+        self.threads = threads
+        self.script = script
 
 class ResultRow(object):
     """class representing a multi-mechanize results.csv row"""
@@ -65,10 +80,34 @@ def get_run_id(run_localtime):
         run_localtime.tm_sec)
     return run_id
 
+def sa_get_global_configs_table(sa_metadata):
+    """returns a global config table object"""
+    table = Table('mechanize_global_configs', sa_metadata,
+        Column('id',Integer, nullable=False, primary_key=True),
+        Column('run_time', Integer, nullable=False),
+        Column('rampup', Integer, nullable=False),
+        Column('results_ts_interval', Integer, nullable=False)
+        )
+    return table
+
+def sa_get_user_group_configs_table(sa_metadata):
+    """returns a user config table object"""
+    table = Table('mechanize_user_group_configs', sa_metadata,
+        Column('id',Integer, nullable=False, primary_key=True),
+        Column('mechanize_global_config_id', Integer, 
+            ForeignKey('mechanize_global_configs.id'), nullable=False),
+        Column('user_group', String, nullable=False),
+        Column('threads', Integer, nullable=False),
+        Column('script', String, nullable=False)
+        )
+    return table
+
 def sa_get_results_db_table(sa_metadata):
     """returns the mechanize_results table object"""
     table = Table('mechanize_results', sa_metadata,
         Column('id',Integer, nullable=False, primary_key=True),
+        Column('mechanize_global_configs_id', Integer, 
+            ForeignKey('mechanize_global_configs.id'), nullable=False),
         Column('project_name', String, nullable=False, index=True),
         Column('run_id', DateTime, nullable=False, index=True),
         Column('trans_count', Integer, nullable=False, index=True),
@@ -86,34 +125,56 @@ def sa_get_timers_db_table(sa_metadata):
     """returns the mechanize_timers table object"""
     table = Table('mechanize_timers', sa_metadata,
         Column('id', Integer, nullable=False, primary_key=True),
-        Column('mechanize_results_id', Integer, ForeignKey('mechanize_results.id'), nullable=False),
+        Column('mechanize_results_id', Integer, 
+            ForeignKey('mechanize_results.id'), nullable=False),
         Column('timer_name', String, nullable=False, index=True),
         Column('elapsed', Float, nullable=False, index=True)
         )
     return table
 
-def sa_create_mappings(results_db_table, timers_db_table):
+def sa_create_mappings(results_db_table, timers_db_table, 
+        global_configs_table, user_group_configs_table):
     """create the sqlalchemy object to table mappings"""
     mapper(ResultRow, results_db_table, properties = {
-        'timers': relation(TimerRow)
+        'timers': relation(TimerRow),
         })
     mapper(TimerRow, timers_db_table)
+    mapper(GlobalConfig, global_configs_table, properties = {
+        'results': relation(ResultRow),
+        'user_group_configs': relation(UserGroupConfig)
+        })
+    mapper(UserGroupConfig, user_group_configs_table)
 
 def load_results_database(project_name, run_localtime, results_dir, 
-        results_database):
+        results_database, run_time, rampup, results_ts_interval,
+        user_group_configs):
     """parse and load a multi-mechanize results csv file into a database"""
     engine = create_engine(results_database, echo=False)
     sa_metadata = MetaData()
+
     results_db_table = sa_get_results_db_table(sa_metadata)
     timers_db_table = sa_get_timers_db_table(sa_metadata)
+    global_configs_table = sa_get_global_configs_table(sa_metadata)
+    user_group_configs_table = sa_get_user_group_configs_table(sa_metadata)
+    
     sa_metadata.create_all(engine)
-    sa_create_mappings(results_db_table, timers_db_table)
+    sa_create_mappings(results_db_table, timers_db_table, 
+            global_configs_table, user_group_configs_table)
+    
     sa_session = sessionmaker(bind=engine)
     sa_current_session = sa_session()
 
     run_id = get_run_id(run_localtime)
     results_file = results_dir + 'results.csv'
+   
+    global_config = GlobalConfig(run_time, rampup, results_ts_interval)
+    sa_current_session.add(global_config)
     
+    for i, ug_config in enumerate(user_group_configs):
+        user_group_config = UserGroupConfig(ug_config.name, 
+                ug_config.num_threads, ug_config.script_file)
+        global_config.user_group_configs.append(user_group_config)
+
     for line in fileinput.input([results_file]):
         line = line.rstrip()
         match = LOGLINE_RE.match(line)
@@ -121,7 +182,8 @@ def load_results_database(project_name, run_localtime, results_dir,
             result_row = ResultRow(project_name, run_id, match.group(1), 
                     match.group(2), match.group(3), match.group(4),
                     match.group(5), match.group(6), match.group(7))
-           
+    
+            global_config.results.append(result_row)
             timer_data = eval(match.group(7))
             for index in timer_data:
                 timer_row = TimerRow(index, timer_data[index])
