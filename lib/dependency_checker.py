@@ -28,4 +28,9 @@ try:
 except ImportError:
     print 'can not import Matplotlib'
     
+try:
+    import sqlalchemy
+    print 'imported SQLAlchemy succesfully'
+except ImportError:
+    print 'can not import SQLAlchemy'
     
