@@ -30,12 +30,20 @@ class GlobalConfig(object):
         self.rampup = int(rampup)
         self.results_ts_interval = int(results_ts_interval)
 
+    def __repr__(self):
+        return "<GlobalConfig('%i', '%i', '%i')>" % (
+                self.run_time, self.rampup, self.results_ts_interval)
+
 class UserGroupConfig(object):
     """class representing a multi-mechanize user group config"""
     def __init__(self, user_group, threads, script):
         self.user_group = user_group
         self.threads = threads
         self.script = script
+
+    def __repr__(self):
+        return "<UserGroupConfig('%s','%s','%s')>" % (
+                self.user_group, self.threads, self.script)
 
 class ResultRow(object):
     """class representing a multi-mechanize results.csv row"""
@@ -96,9 +104,9 @@ def sa_get_user_group_configs_table(sa_metadata):
         Column('id',Integer, nullable=False, primary_key=True),
         Column('mechanize_global_config_id', Integer, 
             ForeignKey('mechanize_global_configs.id'), nullable=False),
-        Column('user_group', String, nullable=False),
+        Column('user_group', String(50), nullable=False),
         Column('threads', Integer, nullable=False),
-        Column('script', String, nullable=False)
+        Column('script', String(50), nullable=False)
         )
     return table
 
@@ -108,15 +116,15 @@ def sa_get_results_db_table(sa_metadata):
         Column('id',Integer, nullable=False, primary_key=True),
         Column('mechanize_global_configs_id', Integer, 
             ForeignKey('mechanize_global_configs.id'), nullable=False),
-        Column('project_name', String, nullable=False, index=True),
+        Column('project_name', String(50), nullable=False, index=True),
         Column('run_id', DateTime, nullable=False, index=True),
         Column('trans_count', Integer, nullable=False, index=True),
         Column('elapsed', Float, nullable=False, index=True),
         Column('epoch', Float, nullable=False, index=True),
-        Column('user_group_name', String, nullable=False),
+        Column('user_group_name', String(50), nullable=False),
         Column('scriptrun_time', Float, nullable=False),
-        Column('error', String),
-        Column('custom_timers', String),
+        Column('error', String(50)),
+        Column('custom_timers', String(50)),
         UniqueConstraint('run_id','trans_count', name='uix_1')
         )
     return table
@@ -127,7 +135,7 @@ def sa_get_timers_db_table(sa_metadata):
         Column('id', Integer, nullable=False, primary_key=True),
         Column('mechanize_results_id', Integer, 
             ForeignKey('mechanize_results.id'), nullable=False),
-        Column('timer_name', String, nullable=False, index=True),
+        Column('timer_name', String(50), nullable=False, index=True),
         Column('elapsed', Float, nullable=False, index=True)
         )
     return table
