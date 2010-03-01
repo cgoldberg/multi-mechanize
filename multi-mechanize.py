@@ -107,7 +107,8 @@ def main():
     if results_database is not None:
         print 'loading results into database: %s\n' % results_database
         import lib.resultsloader
-        lib.resultsloader.load_results_database(project_name, run_localtime, output_dir, results_database)
+        lib.resultsloader.load_results_database(project_name, run_localtime, output_dir, results_database, 
+                run_time, rampup, results_ts_interval, user_group_configs)
 
     print 'done.\n'
     
