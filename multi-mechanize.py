@@ -16,6 +16,7 @@ import multiprocessing
 import os
 import Queue
 import shutil
+import subprocess
 import sys
 import threading
 import time
@@ -43,7 +44,8 @@ for f in glob.glob( '%s/*.py' % scripts_path):  # import all test scripts as mod
 
 
 def main():   
-    run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database = configure(project_name)
+    run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database, post_run_script = configure(project_name)
+    
     run_localtime = time.localtime() 
     output_dir = time.strftime('projects/' + project_name + '/results/results_%Y.%m.%d_%H.%M.%S/', run_localtime) 
     
@@ -109,7 +111,11 @@ def main():
         import lib.resultsloader
         lib.resultsloader.load_results_database(project_name, run_localtime, output_dir, results_database, 
                 run_time, rampup, results_ts_interval, user_group_configs)
-
+    
+    if post_run_script is not None:
+        print 'running post_run_script: %s\n' % post_run_script
+        subprocess.call(post_run_script)
+        
     print 'done.\n'
     
     
@@ -127,6 +133,10 @@ def configure(project_name):
                 results_database = config.get(section, 'results_database')
             except ConfigParser.NoOptionError:
                 results_database = None
+            try:
+                post_run_script = config.get(section, 'post_run_script')
+            except ConfigParser.NoOptionError:
+                post_run_script = None
         else:
             threads = config.getint(section, 'threads')
             script = config.get(section, 'script')
@@ -134,7 +144,7 @@ def configure(project_name):
             ug_config = UserGroupConfig(threads, user_group_name, script)
             user_group_configs.append(ug_config)
 
-    return (run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database)
+    return (run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database, post_run_script)
         
 
 
