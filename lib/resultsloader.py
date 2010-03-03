@@ -39,6 +39,7 @@ class GlobalConfig(Base):
     def __init__(self, run_time=None, rampup=None, results_ts_interval=None):
         self.run_time = str(run_time)
         self.rampup = int(rampup)
+        """rampup time for the rest run"""
         self.results_ts_interval = int(results_ts_interval)
 
     def __repr__(self):
@@ -81,7 +82,7 @@ class ResultRow(Base):
     epoch = Column(Float, nullable=False, index=True)
     user_group_name = Column(String(50), nullable=False)
     scriptrun_time = Column(Float, nullable=False)
-    error = Column(String(50))
+    error = Column(String(255))
     custom_timers = Column(String(50))
 
     global_config = relation("GlobalConfig",
