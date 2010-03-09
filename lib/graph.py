@@ -9,7 +9,9 @@
 import sys
 
 try:
-    from pylab import *  # Matplotlib for graphing
+    import matplotlib
+    matplotlib.use('Agg')
+    from pylab import *
 except ImportError:
     print 'ERROR: can not import Matplotlib. install Matplotlib to generate graphs'
     
