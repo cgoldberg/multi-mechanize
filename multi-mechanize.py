@@ -13,6 +13,7 @@
 import ConfigParser
 import glob
 import multiprocessing
+import optparse
 import os
 import Queue
 import shutil
@@ -23,12 +24,17 @@ import time
 import lib.results as results
 import lib.progressbar as progressbar        
 
+usage = 'Usage: %prog <project name> [options]'
+parser = optparse.OptionParser(usage=usage)
+parser.add_option('-p', '--port', dest='port', type='int', help='rpc listener port')
+cmd_opts, args = parser.parse_args()
+
 try:
-    project_name = sys.argv[1]
+    project_name = args[0]
 except IndexError:
     sys.stderr.write('\nERROR: no project specified\n\n')
-    sys.stderr.write('usage: >python multi-mechanize.py <project_name>\n')
-    sys.stderr.write('example: >python multi-mechanize.py default_project\n\n')
+    sys.stderr.write('usage: python multi-mechanize.py <project_name>\n')
+    sys.stderr.write('example: python multi-mechanize.py default_project\n\n')
     sys.exit(1)  
 
 scripts_path = 'projects/%s/test_scripts' % project_name
@@ -42,8 +48,29 @@ for f in glob.glob( '%s/*.py' % scripts_path):  # import all test scripts as mod
 
 
 
-
-def main():   
+def main():
+    if not cmd_opts.port:  
+        run_test()
+    else:  # when a port is specified, the xml-rpc server is launched
+        import SimpleXMLRPCServer
+        import socket
+        class RemoteStarter:
+            def start(self):
+                return run_test()
+        rs = RemoteStarter()
+        host = socket.gethostbyaddr(socket.gethostname())[0]
+        server = SimpleXMLRPCServer.SimpleXMLRPCServer((host, cmd_opts.port))
+        server.register_instance(rs)
+        print 'Multi-Mechanize: %s listening on port %i' % (host, cmd_opts.port)
+        print 'waiting for xml-rpc commands...\n'
+        try:
+            server.serve_forever()
+        except KeyboardInterrupt:
+            pass
+    
+    
+    
+def run_test():   
     run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database, post_run_script = configure(project_name)
     
     run_localtime = time.localtime() 
@@ -117,6 +144,9 @@ def main():
         subprocess.call(post_run_script)
         
     print 'done.\n'
+    
+    return output_dir
+    
     
     
 def configure(project_name):
