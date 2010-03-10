@@ -49,26 +49,11 @@ for f in glob.glob( '%s/*.py' % scripts_path):  # import all test scripts as mod
 
 
 def main():
-    if not cmd_opts.port:  
+    if cmd_opts.port:
+        launch_xmlrpc()
+    else:  
         run_test()
-    else:  # when a port is specified, the xml-rpc server is launched
-        import SimpleXMLRPCServer
-        import socket
-        class RemoteStarter:
-            def start(self):
-                return run_test()
-        rs = RemoteStarter()
-        host = socket.gethostbyaddr(socket.gethostname())[0]
-        server = SimpleXMLRPCServer.SimpleXMLRPCServer((host, cmd_opts.port))
-        server.register_instance(rs)
-        print 'Multi-Mechanize: %s listening on port %i' % (host, cmd_opts.port)
-        print 'waiting for xml-rpc commands...\n'
-        try:
-            server.serve_forever()
-        except KeyboardInterrupt:
-            pass
-    
-    
+        
     
 def run_test():   
     run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database, post_run_script = configure(project_name)
@@ -148,7 +133,6 @@ def run_test():
     return output_dir
     
     
-    
 def configure(project_name):
     user_group_configs = []
     config = ConfigParser.ConfigParser()
@@ -175,7 +159,31 @@ def configure(project_name):
             user_group_configs.append(ug_config)
 
     return (run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database, post_run_script)
-        
+    
+
+def launch_xmlrpc():
+    import SimpleXMLRPCServer
+    import socket
+    class RemoteStarter:
+        def start(self):
+            return run_test()
+        def update_config(self):
+            pass
+        def push_script(self):
+            pass
+        def get_last_results(self):
+            pass
+    rs = RemoteStarter()
+    host = socket.gethostbyaddr(socket.gethostname())[0]
+    server = SimpleXMLRPCServer.SimpleXMLRPCServer((host, cmd_opts.port))
+    server.register_instance(rs)
+    print 'Multi-Mechanize: %s listening on port %i' % (host, cmd_opts.port)
+    print 'waiting for xml-rpc commands...\n'
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+
 
 
 class UserGroupConfig(object):
