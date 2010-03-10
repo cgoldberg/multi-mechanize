@@ -54,6 +54,7 @@ def main():
     else:  
         run_test()
         
+        
     
 def run_test():   
     run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database, post_run_script = configure(project_name)
@@ -133,6 +134,7 @@ def run_test():
     return output_dir
     
     
+    
 def configure(project_name):
     user_group_configs = []
     config = ConfigParser.ConfigParser()
@@ -161,22 +163,24 @@ def configure(project_name):
     return (run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database, post_run_script)
     
 
+
 def launch_xmlrpc():
     import SimpleXMLRPCServer
     import socket
+    
     class RemoteStarter:
         def start(self):
             return run_test()
-        def update_config(self):
+        def update_config(self, config):
             pass
-        def push_script(self):
+        def deploy_script(self, script):
             pass
-        def get_last_results(self):
+        def get_results(self):
             pass
-    rs = RemoteStarter()
+    
     host = socket.gethostbyaddr(socket.gethostname())[0]
     server = SimpleXMLRPCServer.SimpleXMLRPCServer((host, cmd_opts.port))
-    server.register_instance(rs)
+    server.register_instance(RemoteStarter())
     print 'Multi-Mechanize: %s listening on port %i' % (host, cmd_opts.port)
     print 'waiting for xml-rpc commands...\n'
     try:
