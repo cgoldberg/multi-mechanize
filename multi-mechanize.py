@@ -192,7 +192,6 @@ class UserGroup(multiprocessing.Process):
         self.rampup = rampup
         self.start_time = time.time()
         
-        
     def run(self):
         threads = []
         for i in range(self.num_threads):
@@ -224,7 +223,6 @@ class Agent(threading.Thread):
             self.default_timer = time.clock
         else:
             self.default_timer = time.time
-            
             
     def run(self):
         elapsed = 0
