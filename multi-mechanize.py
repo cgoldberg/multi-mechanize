@@ -59,12 +59,13 @@ def main():
 def run_test(remote_starter=None):
     if remote_starter is not None:
         remote_starter.test_running = True
+        remote_starter.output_dir = None
         
     run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database, post_run_script = configure(project_name)
     
     run_localtime = time.localtime() 
     output_dir = time.strftime('projects/' + project_name + '/results/results_%Y.%m.%d_%H.%M.%S/', run_localtime) 
-    
+        
     # this queue is shared between all processes/threads
     queue = multiprocessing.Queue()
     rw = ResultsWriter(queue, output_dir, console_logging)
@@ -136,8 +137,9 @@ def run_test(remote_starter=None):
     
     if remote_starter is not None:
         remote_starter.test_running = False
-        
-    return output_dir
+        remote_starter.output_dir = output_dir
+    
+    return
     
     
     
@@ -190,6 +192,7 @@ class UserGroup(multiprocessing.Process):
         self.rampup = rampup
         self.start_time = time.time()
         
+        
     def run(self):
         threads = []
         for i in range(self.num_threads):
@@ -221,6 +224,7 @@ class Agent(threading.Thread):
             self.default_timer = time.clock
         else:
             self.default_timer = time.time
+            
             
     def run(self):
         elapsed = 0
@@ -304,26 +308,37 @@ def launch_xmlrpc(port, project_name):
     import socket
     import thread
     
-    class RemoteStarter:
+    class RemoteStarter(object):
         def __init__(self):
             self.test_running = False
+            self.output_dir = None
+        
         def run_test(self):
             if self.test_running:
                 return 'Test Already Running'
             else:
                 thread.start_new_thread(run_test, (self,))
                 return 'Test Started'    
+        
         def check_test_running(self):
             return self.test_running
+        
         def get_project_name(self):
             return project_name
+        
         def get_config(self):
             with open('projects/%s/config.cfg' % project_name, 'r') as f:
                 return f.read()
+        
         def update_config(self, config):
             pass
+        
         def get_results(self):
-            pass
+            if self.output_dir is None:
+                return 'Results Not Available'
+            else:
+                with open(self.output_dir + 'results.csv', 'r') as f:
+                    return f.read()
     
     host = socket.gethostbyaddr(socket.gethostname())[0]
     server = SimpleXMLRPCServer.SimpleXMLRPCServer((host, port))
