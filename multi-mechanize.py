@@ -50,7 +50,7 @@ for f in glob.glob( '%s/*.py' % scripts_path):  # import all test scripts as mod
 
 def main():
     if cmd_opts.port:
-        launch_xmlrpc(project_name)
+        launch_xmlrpc(cmd_opts.port, project_name)
     else:  
         run_test()
         
@@ -164,34 +164,6 @@ def configure(project_name):
     
 
 
-def launch_xmlrpc(project_name):
-    import SimpleXMLRPCServer
-    import socket
-    
-    class RemoteStarter:
-        def run_test(self):
-            return run_test()
-        def get_project_name(self):
-            pass
-        def get_config(self):
-            pass
-        def update_config(self, config):
-            pass
-        def get_results(self):
-            pass
-    
-    host = socket.gethostbyaddr(socket.gethostname())[0]
-    server = SimpleXMLRPCServer.SimpleXMLRPCServer((host, cmd_opts.port))
-    server.register_instance(RemoteStarter())
-    print 'Multi-Mechanize: %s listening on port %i' % (host, cmd_opts.port)
-    print 'waiting for xml-rpc commands...\n'
-    try:
-        server.serve_forever()
-    except KeyboardInterrupt:
-        pass
-
-
-
 class UserGroupConfig(object):
     def __init__(self, num_threads, name, script_file):
         self.num_threads = num_threads
@@ -238,7 +210,7 @@ class Agent(threading.Thread):
         self.user_group_name = user_group_name
         self.script_file = script_file
         
-        # choose timer to use
+        # choose most accurate timer to use (time.clock has finer granularity than time.time on windows, but shouldn't be used on other systems)
         if sys.platform.startswith('win'):
             self.default_timer = time.clock
         else:
@@ -321,6 +293,33 @@ class ResultsWriter(threading.Thread):
 
         
 
+def launch_xmlrpc(port, project_name):
+    import SimpleXMLRPCServer
+    import socket
+    
+    class RemoteStarter:
+        def run_test(self):
+            return run_test()
+        def get_project_name(self):
+            return project_name
+        def get_config(self):
+            pass
+        def update_config(self, config):
+            pass
+        def get_results(self):
+            pass
+    
+    host = socket.gethostbyaddr(socket.gethostname())[0]
+    server = SimpleXMLRPCServer.SimpleXMLRPCServer((host, port))
+    server.register_instance(RemoteStarter())
+    print 'Multi-Mechanize: %s listening on port %i' % (host, port)
+    print 'waiting for xml-rpc commands...\n'
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+        
+        
 
 if __name__ == '__main__':
     main()
