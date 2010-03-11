@@ -339,7 +339,7 @@ def launch_xmlrpc(port, project_name):
                     return f.read()
     
     host = socket.gethostbyaddr(socket.gethostname())[0]
-    server = SimpleXMLRPCServer.SimpleXMLRPCServer((host, port))
+    server = SimpleXMLRPCServer.SimpleXMLRPCServer((host, port), logRequests=False)
     server.register_instance(RemoteStarter())
     server.register_introspection_functions()
     print 'Multi-Mechanize: %s listening on port %i' % (host, port)
