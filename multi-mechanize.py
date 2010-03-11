@@ -56,7 +56,10 @@ def main():
         
         
     
-def run_test():   
+def run_test(remote_starter=None):
+    if remote_starter is not None:
+        remote_starter.test_running = True
+        
     run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database, post_run_script = configure(project_name)
     
     run_localtime = time.localtime() 
@@ -131,6 +134,9 @@ def run_test():
         
     print 'done.\n'
     
+    if remote_starter is not None:
+        remote_starter.test_running = False
+        
     return output_dir
     
     
@@ -296,10 +302,19 @@ class ResultsWriter(threading.Thread):
 def launch_xmlrpc(port, project_name):
     import SimpleXMLRPCServer
     import socket
+    import thread
     
     class RemoteStarter:
+        def __init__(self):
+            self.test_running = False
         def run_test(self):
-            return run_test()
+            if self.test_running:
+                return 'Test Already Running'
+            else:
+                thread.start_new_thread(run_test, (self,))
+                return 'Test Started'    
+        def check_test_running(self):
+            return self.test_running
         def get_project_name(self):
             return project_name
         def get_config(self):
