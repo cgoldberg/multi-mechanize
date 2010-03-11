@@ -318,7 +318,8 @@ def launch_xmlrpc(port, project_name):
         def get_project_name(self):
             return project_name
         def get_config(self):
-            pass
+            with open('projects/%s/config.cfg' % project_name, 'r') as f:
+                return f.read()
         def update_config(self, config):
             pass
         def get_results(self):
@@ -327,6 +328,7 @@ def launch_xmlrpc(port, project_name):
     host = socket.gethostbyaddr(socket.gethostname())[0]
     server = SimpleXMLRPCServer.SimpleXMLRPCServer((host, port))
     server.register_instance(RemoteStarter())
+    server.register_introspection_functions()
     print 'Multi-Mechanize: %s listening on port %i' % (host, port)
     print 'waiting for xml-rpc commands...\n'
     try:
