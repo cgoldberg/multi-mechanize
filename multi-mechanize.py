@@ -50,7 +50,7 @@ for f in glob.glob( '%s/*.py' % scripts_path):  # import all test scripts as mod
 
 def main():
     if cmd_opts.port:
-        launch_xmlrpc(cmd_opts.port, project_name)
+        launch_rpc_server(cmd_opts.port, project_name)
     else:  
         run_test()
         
@@ -301,7 +301,7 @@ class ResultsWriter(threading.Thread):
 
         
 
-def launch_xmlrpc(port, project_name):
+def launch_rpc_server(port, project_name):
     import SimpleXMLRPCServer
     import socket
     import thread
