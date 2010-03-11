@@ -306,7 +306,7 @@ def launch_xmlrpc(port, project_name):
     import socket
     import thread
     
-    class RemoteStarter(object):
+    class RemoteControl(object):
         def __init__(self):
             self.test_running = False
             self.output_dir = None
@@ -340,7 +340,7 @@ def launch_xmlrpc(port, project_name):
     
     host = socket.gethostbyaddr(socket.gethostname())[0]
     server = SimpleXMLRPCServer.SimpleXMLRPCServer((host, port), logRequests=False)
-    server.register_instance(RemoteStarter())
+    server.register_instance(RemoteControl())
     server.register_introspection_functions()
     print 'Multi-Mechanize: %s listening on port %i' % (host, port)
     print 'waiting for xml-rpc commands...\n'
