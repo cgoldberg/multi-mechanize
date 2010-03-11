@@ -50,7 +50,7 @@ for f in glob.glob( '%s/*.py' % scripts_path):  # import all test scripts as mod
 
 def main():
     if cmd_opts.port:
-        launch_xmlrpc()
+        launch_xmlrpc(project_name)
     else:  
         run_test()
         
@@ -164,16 +164,18 @@ def configure(project_name):
     
 
 
-def launch_xmlrpc():
+def launch_xmlrpc(project_name):
     import SimpleXMLRPCServer
     import socket
     
     class RemoteStarter:
-        def start(self):
+        def run_test(self):
             return run_test()
-        def update_config(self, config):
+        def get_project_name(self):
             pass
-        def deploy_script(self, script):
+        def get_config(self):
+            pass
+        def update_config(self, config):
             pass
         def get_results(self):
             pass
