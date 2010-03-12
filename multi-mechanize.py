@@ -230,15 +230,15 @@ class Agent(threading.Thread):
         if self.script_file.lower().endswith('.py'):
             module_name = self.script_file.replace('.py', '')
         else:
-            print 'ERROR: scripts must have .py extension. can not run test script: %s.  aborting user group: %s' % (self.script_file, self.user_group_name)
+            sys.stderr.write('ERROR: scripts must have .py extension. can not run test script: %s.  aborting user group: %s\n' % (self.script_file, self.user_group_name))
             return
         try:
             trans = eval(module_name + '.Transaction()')
         except NameError, e:
-            print 'ERROR: can not find test script: %s.  aborting user group: %s' % (self.script_file, self.user_group_name)
+            sys.stderr.write('ERROR: can not find test script: %s.  aborting user group: %s\n' % (self.script_file, self.user_group_name))
             return
         except Exception, e:
-            print 'ERROR: failed initializing Transaction: %s.  aborting user group: %s' % (self.script_file, self.user_group_name)
+            sys.stderr.write('ERROR: failed initializing Transaction: %s.  aborting user group: %s\n' % (self.script_file, self.user_group_name))
             return
         
         trans.custom_timers = {}
