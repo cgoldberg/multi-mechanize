@@ -13,7 +13,6 @@ import reportwriter
 
 
 
-
 def output_results(results_dir, results_file, run_time, rampup, ts_interval, user_group_configs=None):
     report = reportwriter.Report(results_dir)
     
