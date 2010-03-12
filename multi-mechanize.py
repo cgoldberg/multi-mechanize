@@ -329,7 +329,9 @@ def launch_rpc_server(port, project_name):
                 return f.read()
         
         def update_config(self, config):
-            pass
+            with open('projects/%s/config.cfg' % project_name, 'w') as f:
+                f.write(config)
+                return True
         
         def get_results(self):
             if self.output_dir is None:
