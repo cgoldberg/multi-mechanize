@@ -344,7 +344,7 @@ def launch_rpc_server(port, project_name):
     server = SimpleXMLRPCServer.SimpleXMLRPCServer((host, port), logRequests=False)
     server.register_instance(RemoteControl())
     server.register_introspection_functions()
-    print 'Multi-Mechanize: %s listening on port %i' % (host, port)
+    print '\nMulti-Mechanize: %s listening on port %i' % (host, port)
     print 'waiting for xml-rpc commands...\n'
     try:
         server.serve_forever()
