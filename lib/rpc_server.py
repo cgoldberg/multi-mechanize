@@ -6,11 +6,13 @@
 #  This file is part of Multi-Mechanize
 
 
-def launch_rpc_server(port, project_name, run_callback):
-    import SimpleXMLRPCServer
-    import socket
-    import thread
+import SimpleXMLRPCServer
+import socket
+import thread
     
+    
+    
+def launch_rpc_server(port, project_name, run_callback):  
     host = socket.gethostbyaddr(socket.gethostname())[0]
     server = SimpleXMLRPCServer.SimpleXMLRPCServer((host, port), logRequests=False)
     server.register_instance(RemoteControl(project_name))
