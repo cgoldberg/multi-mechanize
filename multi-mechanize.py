@@ -50,7 +50,8 @@ for f in glob.glob( '%s/*.py' % scripts_path):  # import all test scripts as mod
 
 def main():
     if cmd_opts.port:
-        launch_rpc_server(cmd_opts.port, project_name)
+        import lib.rpc_server
+        lib.rpc_server.launch_rpc_server(cmd_opts.port, project_name, run_test)
     else:  
         run_test()
         
@@ -299,59 +300,8 @@ class ResultsWriter(threading.Thread):
                 except Queue.Empty:
                     time.sleep(.05)
 
-        
 
-def launch_rpc_server(port, project_name):
-    import SimpleXMLRPCServer
-    import socket
-    import thread
-    
-    class RemoteControl(object):
-        def __init__(self):
-            self.test_running = False
-            self.output_dir = None
-        
-        def run_test(self):
-            if self.test_running:
-                return 'Test Already Running'
-            else:
-                thread.start_new_thread(run_test, (self,))
-                return 'Test Started'    
-        
-        def check_test_running(self):
-            return self.test_running
-        
-        def get_project_name(self):
-            return project_name
-        
-        def get_config(self):
-            with open('projects/%s/config.cfg' % project_name, 'r') as f:
-                return f.read()
-        
-        def update_config(self, config):
-            with open('projects/%s/config.cfg' % project_name, 'w') as f:
-                f.write(config)
-                return True
-        
-        def get_results(self):
-            if self.output_dir is None:
-                return 'Results Not Available'
-            else:
-                with open(self.output_dir + 'results.csv', 'r') as f:
-                    return f.read()
-    
-    host = socket.gethostbyaddr(socket.gethostname())[0]
-    server = SimpleXMLRPCServer.SimpleXMLRPCServer((host, port), logRequests=False)
-    server.register_instance(RemoteControl())
-    server.register_introspection_functions()
-    print '\nMulti-Mechanize: %s listening on port %i' % (host, port)
-    print 'waiting for xml-rpc commands...\n'
-    try:
-        server.serve_forever()
-    except KeyboardInterrupt:
-        pass
-        
-        
 
 if __name__ == '__main__':
     main()
+
