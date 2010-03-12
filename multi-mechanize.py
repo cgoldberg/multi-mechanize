@@ -50,8 +50,8 @@ for f in glob.glob( '%s/*.py' % scripts_path):  # import all test scripts as mod
 
 def main():
     if cmd_opts.port:
-        import lib.rpc_server
-        lib.rpc_server.launch_rpc_server(cmd_opts.port, project_name, run_test)
+        import lib.rpcserver
+        lib.rpcserver.launch_rpc_server(cmd_opts.port, project_name, run_test)
     else:  
         run_test()
         
