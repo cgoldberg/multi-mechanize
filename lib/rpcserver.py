@@ -27,8 +27,9 @@ def launch_rpc_server(port, project_name, run_callback):
 
 
 class RemoteControl(object):
-    def __init__(self, project_name):
+    def __init__(self, project_name, run_callback):
         self.project_name = project_name
+        self.run_callback = run_callback
         self.test_running = False
         self.output_dir = None
     
@@ -36,7 +37,7 @@ class RemoteControl(object):
         if self.test_running:
             return 'Test Already Running'
         else:
-            thread.start_new_thread(run_callback, (self,))
+            thread.start_new_thread(self.run_callback, (self,))
             return 'Test Started'    
     
     def check_test_running(self):
