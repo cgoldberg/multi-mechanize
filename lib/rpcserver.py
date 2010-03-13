@@ -15,7 +15,7 @@ import thread
 def launch_rpc_server(port, project_name, run_callback):  
     host = socket.gethostbyaddr(socket.gethostname())[0]
     server = SimpleXMLRPCServer.SimpleXMLRPCServer((host, port), logRequests=False)
-    server.register_instance(RemoteControl(project_name))
+    server.register_instance(RemoteControl(project_name, run_callback))
     server.register_introspection_functions()
     print '\nMulti-Mechanize: %s listening on port %i' % (host, port)
     print 'waiting for xml-rpc commands...\n'
