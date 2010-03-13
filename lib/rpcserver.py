@@ -42,18 +42,18 @@ class RemoteControl(object):
     def check_test_running(self):
         return self.test_running
     
-    def get_project_name(self):
-        return self.project_name
-    
-    def get_config(self):
-        with open('projects/%s/config.cfg' % self.project_name, 'r') as f:
-            return f.read()
-    
     def update_config(self, config):
         with open('projects/%s/config.cfg' % self.project_name, 'w') as f:
             f.write(config)
             return True
-    
+ 
+    def get_config(self):
+        with open('projects/%s/config.cfg' % self.project_name, 'r') as f:
+            return f.read()
+            
+    def get_project_name(self):
+        return self.project_name
+
     def get_results(self):
         if self.output_dir is None:
             return 'Results Not Available'
