@@ -6,6 +6,12 @@
 #  This file is part of Multi-Mechanize
 
 
+""" 
+Multi-Mechanize Grid Controller
+sample gui application for controlling multi-mechanize instances via the remote management api
+"""
+
+
 import socket
 import ScrolledText
 import Tkinter
