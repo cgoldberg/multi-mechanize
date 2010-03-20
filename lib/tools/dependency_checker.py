@@ -9,9 +9,7 @@
 """ script to verify all multi-mechanize dependencies are satisfied """
 
 
-
 import sys
-
 
 
 if sys.version_info >= (3,):
