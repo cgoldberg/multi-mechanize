@@ -120,7 +120,7 @@ class Application:
         
         
 def main():
-    hosts = [(field.split(':')[0], field.split(':')[1]) for field in NODES]
+    hosts = [(host_port.split(':')[0], host_port.split(':')[1]) for host_port in NODES]
     root = tk.Tk()
     app = Application(root, hosts)
     root.mainloop()
