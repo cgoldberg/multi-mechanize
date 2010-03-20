@@ -6,14 +6,15 @@
 #  This file is part of Multi-Mechanize
 
 
-import xmlrpclib
 import socket
 import Tkinter as tk
 import tkFileDialog
+import xmlrpclib
 from ScrolledText import ScrolledText
 
 
 
+# list of hosts:ports where multi-mechanize is listening
 NODES = [
     '127.0.0.1:9001',
     '127.0.0.1:9002',
