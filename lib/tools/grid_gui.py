@@ -16,8 +16,8 @@ import xmlrpclib
 
 # list of hosts:ports where multi-mechanize is listening
 NODES = [
-    '127.0.0.1:9001',
-    '127.0.0.1:9002',
+    '192.168.1.2:9001',
+    '192.168.1.3:9001',
 ]
 
 
