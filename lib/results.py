@@ -131,9 +131,12 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
         custom_timer_vals = []
         custom_timer_points = []
         for resp_stats in results.resp_stats_list:
-            val = resp_stats.custom_timers[timer_name]
-            custom_timer_points.append((resp_stats.elapsed_time, val)) 
-            custom_timer_vals.append(val)
+            try:
+                val = resp_stats.custom_timers[timer_name]
+                custom_timer_points.append((resp_stats.elapsed_time, val)) 
+                custom_timer_vals.append(val)
+            except KeyError:
+                pass
         graph.resp_graph_raw(custom_timer_points, timer_name + '_response_times.png', results_dir)
         
         throughput_points = {}  # {intervalnumber: numberofrequests}
@@ -335,4 +338,4 @@ def percentile(seq, percentile):
 
 
 if __name__ == '__main__':
-    output_results('./', 'results.csv', 10, 0, 5)
+    output_results('./', 'results.csv', 30, 30, 1)
