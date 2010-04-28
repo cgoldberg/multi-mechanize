@@ -338,4 +338,4 @@ def percentile(seq, percentile):
 
 
 if __name__ == '__main__':
-    output_results('./', 'results.csv', 30, 30, 1)
+    output_results('./', 'results.csv', 60, 30, 10)
