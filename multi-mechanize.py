@@ -224,10 +224,11 @@ class Agent(threading.Thread):
             self.default_timer = time.clock
         else:
             self.default_timer = time.time
-            
+    
+    
     def run(self):
         elapsed = 0
-        error = ''
+        
         if self.script_file.lower().endswith('.py'):
             module_name = self.script_file.replace('.py', '')
         else:
@@ -249,6 +250,7 @@ class Agent(threading.Thread):
         trans.process_num = self.process_num
             
         while elapsed < self.run_time:
+            error = ''
             start = self.default_timer()  
             
             try:
