@@ -88,15 +88,17 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
         cnt = len(bucket) 
         
         if cnt == 0:
-            report.write_line('<tr><td>%i</td><td>0</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>' % (i + 1))  
+            report.write_line('<tr><td>%i</td><td>0</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>' % (i + 1))  
         else:
+            mn = min(bucket)
             avg = average(bucket)
             pct_80 = percentile(bucket, 80)
             pct_90 = percentile(bucket, 90)
             pct_95 = percentile(bucket, 95)
+            mx = max(bucket)
             stdev = standard_dev(bucket)
-            report.write_line('<tr><td>%i</td><td>%i</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>' % (i + 1, cnt, avg, pct_80, pct_90, pct_95, stdev))
-        
+            report.write_line('<tr><td>%i</td><td>%i</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>' % (i + 1, cnt, mn, avg, pct_80, pct_90, pct_95, mx, stdev))
+
             avg_resptime_points[interval_start] = avg
             percentile_80_resptime_points[interval_start] = pct_80
             percentile_90_resptime_points[interval_start] = pct_90
@@ -180,15 +182,17 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
             cnt = len(bucket) 
             
             if cnt == 0:
-                report.write_line('<tr><td>%i</td><td>0</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>' % (i + 1))  
+                report.write_line('<tr><td>%i</td><td>0</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>' % (i + 1))  
             else:
+                mn = min(bucket)
                 avg = average(bucket)
                 pct_80 = percentile(bucket, 80)
                 pct_90 = percentile(bucket, 90)
                 pct_95 = percentile(bucket, 95)
+                mx = max(bucket)
                 stdev = standard_dev(bucket)
-                
-                report.write_line('<tr><td>%i</td><td>%i</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>' % (i + 1, cnt, avg, pct_80, pct_90, pct_95, stdev))
+
+                report.write_line('<tr><td>%i</td><td>%i</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td></tr>' % (i + 1, cnt, mn, avg, pct_80, pct_90, pct_95, mx, stdev))
                  
                 avg_resptime_points[interval_start] = avg
                 percentile_80_resptime_points[interval_start] = pct_80

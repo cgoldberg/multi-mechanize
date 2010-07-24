@@ -85,7 +85,7 @@ def tp_graph(throughputs_dict, image_name, dir='./'):
     fig = figure(figsize=(8, 3.3))  # image dimensions  
     ax = fig.add_subplot(111)
     ax.set_xlabel('Elapsed Time In Test (secs)', size='x-small')
-    ax.set_ylabel('Requests Per Second (count)' , size='x-small')
+    ax.set_ylabel('Transactions Per Second (count)' , size='x-small')
     ax.grid(True, color='#666666')
     xticks(size='x-small')
     yticks(size='x-small')
