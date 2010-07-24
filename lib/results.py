@@ -82,7 +82,7 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
     splat_series = split_series(trans_timer_points, interval_secs)
     report.write_line('<h3>Interval Details (secs)</h3>')
     report.write_line('<table>')
-    report.write_line('<tr><th>interval</th><th>count</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>stdev</th></tr>') 
+    report.write_line('<tr><th>interval</th><th>count</th><th>min</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>max</th><th>stdev</th></tr>') 
     for i, bucket in enumerate(splat_series):
         interval_start = int((i + 1) * interval_secs)
         cnt = len(bucket) 
@@ -105,7 +105,6 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
 
     report.write_line('</table>') 
     graph.resp_graph(avg_resptime_points, percentile_80_resptime_points, percentile_90_resptime_points, 'All_Transactions_response_times_intervals.png', results_dir)
-    
     
     
     report.write_line('<h3>Graphs</h3>')
@@ -176,7 +175,7 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
         splat_series = split_series(custom_timer_points, interval_secs)
         report.write_line('<h3>Interval Details (secs)</h3>')
         report.write_line('<table>')
-        report.write_line('<tr><th>interval</th><th>count</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>stdev</th></tr>') 
+        report.write_line('<tr><th>interval</th><th>count</th><th>min</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>max</th><th>stdev</th></tr>') 
         for i, bucket in enumerate(splat_series):
             interval_start = int((i + 1) * interval_secs)
             cnt = len(bucket) 
