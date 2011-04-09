@@ -27,6 +27,7 @@ import lib.progressbar as progressbar
 usage = 'Usage: %prog <project name> [options]'
 parser = optparse.OptionParser(usage=usage)
 parser.add_option('-p', '--port', dest='port', type='int', help='rpc listener port')
+parser.add_option('-r', '--results', dest='results_dir', help='results directory to reprocess')
 cmd_opts, args = parser.parse_args()
 
 try:
@@ -49,11 +50,14 @@ for f in glob.glob( '%s/*.py' % scripts_path):  # import all test scripts as mod
 
 
 def main():
-    if cmd_opts.port:
+    if cmd_opts.results_dir:  # don't run a test, just reprocess results
+        rerun_results(cmd_opts.results_dir)
+    elif cmd_opts.port:
         import lib.rpcserver
         lib.rpcserver.launch_rpc_server(cmd_opts.port, project_name, run_test)
     else:  
         run_test()
+    return
         
         
     
@@ -144,10 +148,22 @@ def run_test(remote_starter=None):
     
     
     
-def configure(project_name):
+def rerun_results(results_dir):
+    output_dir = 'projects/%s/results/%s/' % (project_name, results_dir)
+    saved_config = '%s/config.cfg' % output_dir
+    run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database, post_run_script = configure(project_name, config_file=saved_config)
+    print '\n\nanalyzing results...\n'
+    results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs)
+    print 'created: %sresults.html\n' % output_dir
+
+
+
+def configure(project_name, config_file=None):
     user_group_configs = []
     config = ConfigParser.ConfigParser()
-    config.read( 'projects/%s/config.cfg' % project_name)
+    if config_file is None:
+        config_file = 'projects/%s/config.cfg' % project_name
+    config.read(config_file)
     for section in config.sections():
         if section == 'global':
             run_time = config.getint(section, 'run_time')
