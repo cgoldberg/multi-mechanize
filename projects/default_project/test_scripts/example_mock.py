@@ -7,7 +7,7 @@
 #
 #
 #  this is a mock plugin.  
-#  it does nothing but return random custom_timer and bytes_received data.
+#  it does nothing but return random custom_timer data.
 
 
 import random
@@ -23,7 +23,6 @@ class Transaction(object):
         r = random.uniform(1, 2)
         time.sleep(r)
         self.custom_timers['Example_Timer'] = r
-        
 
  
 if __name__ == '__main__':

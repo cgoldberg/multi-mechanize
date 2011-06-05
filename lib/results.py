@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-#  Copyright (c) 2010 Corey Goldberg (corey@goldb.org)
+#  Copyright (c) 2010-2011 Corey Goldberg (corey@goldb.org)
 #  License: GNU LGPLv3
 #  
 #  This file is part of Multi-Mechanize
@@ -10,13 +10,14 @@ import time
 from collections import defaultdict
 import graph
 import reportwriter
+import reportwriterxml
 
 
 
-def output_results(results_dir, results_file, run_time, rampup, ts_interval, user_group_configs=None):
-    report = reportwriter.Report(results_dir)
-    
+def output_results(results_dir, results_file, run_time, rampup, ts_interval, user_group_configs=None, xml_reports=False):
     results = Results(results_dir + results_file, run_time)
+    
+    report = reportwriter.Report(results_dir)
     
     print 'transactions: %i' % results.total_transactions
     print 'errors: %i' % results.total_errors
@@ -25,6 +26,10 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
     print 'test finish: %s' % results.finish_datetime
     print ''
     
+    # write the results in XML
+    if xml_reports:
+        reportwriterxml.write_jmeter_output(results.resp_stats_list, results_dir)
+
     report.write_line('<h1>Performance Results Report</h1>')
     
     report.write_line('<h2>Summary</h2>')
@@ -120,7 +125,7 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
 
     # all transactions - throughput
     throughput_points = {}  # {intervalnumber: numberofrequests}
-    interval_secs = 5.0
+    interval_secs = ts_interval
     splat_series = split_series(trans_timer_points, interval_secs)
     for i, bucket in enumerate(splat_series):
         throughput_points[int((i + 1) * interval_secs)] = (len(bucket) / interval_secs)
@@ -142,7 +147,7 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
         graph.resp_graph_raw(custom_timer_points, timer_name + '_response_times.png', results_dir)
         
         throughput_points = {}  # {intervalnumber: numberofrequests}
-        interval_secs = 5.0
+        interval_secs = ts_interval
         splat_series = split_series(custom_timer_points, interval_secs)
         for i, bucket in enumerate(splat_series):
             throughput_points[int((i + 1) * interval_secs)] = (len(bucket) / interval_secs)
@@ -207,7 +212,7 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
         report.write_line('<img src="%s_response_times_intervals.png"></img>' % timer_name)
         report.write_line('<h4>Response Time: raw data (all points)</h4>')        
         report.write_line('<img src="%s_response_times.png"></img>' % timer_name)
-        report.write_line('<h4>Throughput: 5 sec time-series</h4>')
+        report.write_line('<h4>Throughput: %s sec time-series</h4>' % ts_interval)
         report.write_line('<img src="%s_throughput.png"></img>' % timer_name) 
         
     
@@ -231,7 +236,8 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
     report.write_closing_html()
 
 
-
+    
+    
 class Results(object):
     def __init__(self, results_file_name, run_time):
         self.results_file_name = results_file_name

@@ -66,7 +66,7 @@ def run_test(remote_starter=None):
         remote_starter.test_running = True
         remote_starter.output_dir = None
         
-    run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database, post_run_script = configure(project_name)
+    run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database, post_run_script, xml_report = configure(project_name)
     
     run_localtime = time.localtime() 
     output_dir = time.strftime('projects/' + project_name + '/results/results_%Y.%m.%d_%H.%M.%S/', run_localtime) 
@@ -120,8 +120,10 @@ def run_test(remote_starter=None):
     # all agents are done running at this point
     time.sleep(.2) # make sure the writer queue is flushed
     print '\n\nanalyzing results...\n'
-    results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs)
+    results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs, xml_report)
     print 'created: %sresults.html\n' % output_dir
+    if xml_report:
+        print 'created: %sresults.xml\n' % output_dir
     
     # copy config file to results directory
     project_config = os.sep.join(['projects', project_name, 'config.cfg'])
@@ -151,11 +153,13 @@ def run_test(remote_starter=None):
 def rerun_results(results_dir):
     output_dir = 'projects/%s/results/%s/' % (project_name, results_dir)
     saved_config = '%s/config.cfg' % output_dir
-    run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database, post_run_script = configure(project_name, config_file=saved_config)
+    run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database, post_run_script, xml_report = configure(project_name, config_file=saved_config)
     print '\n\nanalyzing results...\n'
-    results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs)
+    results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs, xml_report)
     print 'created: %sresults.html\n' % output_dir
-
+    if xml_report:
+        print 'created: %sresults.xml\n' % output_dir
+    
 
 
 def configure(project_name, config_file=None):
@@ -178,6 +182,10 @@ def configure(project_name, config_file=None):
                 post_run_script = config.get(section, 'post_run_script')
             except ConfigParser.NoOptionError:
                 post_run_script = None
+            try:
+                xml_report = config.getboolean(section, 'xml_report')
+            except ConfigParser.NoOptionError:
+                xml_report = False
         else:
             threads = config.getint(section, 'threads')
             script = config.get(section, 'script')
@@ -185,7 +193,7 @@ def configure(project_name, config_file=None):
             ug_config = UserGroupConfig(threads, user_group_name, script)
             user_group_configs.append(ug_config)
 
-    return (run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database, post_run_script)
+    return (run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database, post_run_script, xml_report)
     
 
 
