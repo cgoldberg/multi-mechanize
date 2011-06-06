@@ -29,9 +29,10 @@ def write_jmeter_output(mm_data, output_path):
         transaction_root.set('t', '%d' % ms_trans_time)
         ms_timestamp = test_transaction.epoch_secs * 1000
         transaction_root.set('ts', '%d' % ms_timestamp)
-        label = test_transaction.user_group_name.lstrip('user_group-')
-        transaction_root.set('lb', label) # Label
-        transaction_root.set('sc', '1') # sample count
+        #label = test_transaction.user_group_name.lstrip('user_group-')
+        label = test_transaction.user_group_name
+        transaction_root.set('lb', test_transaction.user_group_name)  # label
+        transaction_root.set('sc', '1')  # sample count
 
         if test_transaction.error:
             transaction_root.set('ec', '1') # was an error
@@ -57,3 +58,4 @@ def write_jmeter_output(mm_data, output_path):
 
     tree = ET.ElementTree(root)
     tree.write(output_path + '/results.jtl')
+    tree.write('last_results.jtl')
