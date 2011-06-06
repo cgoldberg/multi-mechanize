@@ -66,7 +66,7 @@ def run_test(remote_starter=None):
         remote_starter.test_running = True
         remote_starter.output_dir = None
         
-    run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database, post_run_script, xml_report = configure(project_name)
+    run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs = configure(project_name)
     
     run_localtime = time.localtime() 
     output_dir = time.strftime('projects/' + project_name + '/results/results_%Y.%m.%d_%H.%M.%S/', run_localtime) 
@@ -92,20 +92,22 @@ def run_test(remote_starter=None):
     else:
         print '\n  user_groups:  %i' % len(user_groups)
         print '  threads: %i\n' % (ug_config.num_threads * len(user_groups))
-        p = progressbar.ProgressBar(run_time)
-        elapsed = 0
-        while elapsed < (run_time + 1):
-            p.update_time(elapsed)
-            if sys.platform.startswith('win'):
-                print '%s   transactions: %i  timers: %i  errors: %i\r' % (p, rw.trans_count, rw.timer_count, rw.error_count),
-            else:
-                print '%s   transactions: %i  timers: %i  errors: %i' % (p, rw.trans_count, rw.timer_count, rw.error_count)
-                sys.stdout.write(chr(27) + '[A' )
-            time.sleep(1)
-            elapsed = time.time() - start_time
         
-        print p
-        
+        if progress_bar:
+            p = progressbar.ProgressBar(run_time)
+            elapsed = 0
+            while elapsed < (run_time + 1):
+                p.update_time(elapsed)
+                if sys.platform.startswith('win'):
+                    print '%s   transactions: %i  timers: %i  errors: %i\r' % (p, rw.trans_count, rw.timer_count, rw.error_count),
+                else:
+                    print '%s   transactions: %i  timers: %i  errors: %i' % (p, rw.trans_count, rw.timer_count, rw.error_count)
+                    sys.stdout.write(chr(27) + '[A' )
+                time.sleep(1)
+                elapsed = time.time() - start_time
+            
+            print p
+            
         while [user_group for user_group in user_groups if user_group.is_alive()] != []:
             if sys.platform.startswith('win'):
                 print 'waiting for all requests to finish...\r',
@@ -154,7 +156,7 @@ def run_test(remote_starter=None):
 def rerun_results(results_dir):
     output_dir = 'projects/%s/results/%s/' % (project_name, results_dir)
     saved_config = '%s/config.cfg' % output_dir
-    run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database, post_run_script, xml_report = configure(project_name, config_file=saved_config)
+    run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs = configure(project_name, config_file=saved_config)
     print '\n\nanalyzing results...\n'
     results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs, xml_report)
     print 'created: %sresults.html\n' % output_dir
@@ -174,14 +176,23 @@ def configure(project_name, config_file=None):
         if section == 'global':
             run_time = config.getint(section, 'run_time')
             rampup = config.getint(section, 'rampup')
-            console_logging = config.getboolean(section, 'console_logging')
             results_ts_interval = config.getint(section, 'results_ts_interval')
+            try: 
+                console_logging = config.getboolean(section, 'console_logging')
+            except ConfigParser.NoOptionError:
+                console_logging = False
+            try: 
+                progress_bar = config.getboolean(section, 'progress_bar')
+            except ConfigParser.NoOptionError:
+                progress_bar = True
             try:
                 results_database = config.get(section, 'results_database')
+                if results_database == 'None': results_database = None
             except ConfigParser.NoOptionError:
                 results_database = None
             try:
                 post_run_script = config.get(section, 'post_run_script')
+                if post_run_script == 'None': post_run_script = None
             except ConfigParser.NoOptionError:
                 post_run_script = None
             try:
@@ -195,7 +206,7 @@ def configure(project_name, config_file=None):
             ug_config = UserGroupConfig(threads, user_group_name, script)
             user_group_configs.append(ug_config)
 
-    return (run_time, rampup, console_logging, results_ts_interval, user_group_configs, results_database, post_run_script, xml_report)
+    return (run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs)
     
 
 
