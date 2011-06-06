@@ -123,7 +123,8 @@ def run_test(remote_starter=None):
     results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs, xml_report)
     print 'created: %sresults.html\n' % output_dir
     if xml_report:
-        print 'created: %sresults.xml\n' % output_dir
+        print 'created: %sresults.jtl' % output_dir
+        print 'created: last_results.jtl\n'
     
     # copy config file to results directory
     project_config = os.sep.join(['projects', project_name, 'config.cfg'])
@@ -158,7 +159,8 @@ def rerun_results(results_dir):
     results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs, xml_report)
     print 'created: %sresults.html\n' % output_dir
     if xml_report:
-        print 'created: %sresults.xml\n' % output_dir
+        print 'created: %sresults.jtl' % output_dir
+        print 'created: last_results.jtl\n'
     
 
 
