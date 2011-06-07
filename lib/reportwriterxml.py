@@ -29,8 +29,6 @@ def write_jmeter_output(mm_data, output_path):
         transaction_root.set('t', '%d' % ms_trans_time)
         ms_timestamp = test_transaction.epoch_secs * 1000
         transaction_root.set('ts', '%d' % ms_timestamp)
-        #label = test_transaction.user_group_name.lstrip('user_group-')
-        label = test_transaction.user_group_name
         transaction_root.set('lb', test_transaction.user_group_name)  # label
         transaction_root.set('sc', '1')  # sample count
 
