@@ -19,11 +19,12 @@ import shutil
 import subprocess
 import sys
 import time
+
+
 import multimechanize.core as core
 import multimechanize.results as results
 import multimechanize.resultswriter as resultswriter
-import multimechanize.progressbar as progressbar        
-
+import multimechanize.progressbar as progressbar
 
 
 usage = 'Usage: %prog <project name> [options]'
@@ -32,7 +33,17 @@ parser.add_option('-p', '--port', dest='port', type='int', help='rpc listener po
 parser.add_option('-r', '--results', dest='results_dir', help='results directory to reprocess')
 cmd_opts, args = parser.parse_args()
 
-project_name = sys.argv[1]
+try:
+    project_name = args[0]
+except IndexError:
+    sys.stderr.write('\nERROR: no project specified\n\n')
+    sys.stderr.write('usage: python multi-mechanize.py <project_name>\n')
+    sys.stderr.write('example: python multi-mechanize.py default_project\n\n')
+    sys.exit(1)  
+
+core.project_name = project_name
+core.init()
+
 
 
 
