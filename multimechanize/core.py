@@ -13,22 +13,19 @@ import sys
 import threading
 import time
 
-try:
-    project_name = sys.argv[1]
-except IndexError:
-    sys.stderr.write('\nERROR: no project specified\n\n')
-    sys.stderr.write('usage: python multi-mechanize.py <project_name>\n')
-    sys.stderr.write('example: python multi-mechanize.py default_project\n\n')
-    sys.exit(1)  
 
-scripts_path = 'projects/%s/test_scripts' % project_name
-if not os.path.exists(scripts_path):
-    sys.stderr.write('\nERROR: can not find project: %s\n\n' % project_name)
-    sys.exit(1) 
-sys.path.append(scripts_path)          
-for f in glob.glob( '%s/*.py' % scripts_path):  # import all test scripts as modules
-    f = f.replace(scripts_path, '').replace(os.sep, '').replace('.py', '')
-    exec('import %s' % f)
+project_name = None
+
+
+def init():
+    scripts_path = 'projects/%s/test_scripts' % project_name
+    if not os.path.exists(scripts_path):
+        sys.stderr.write('\nERROR: can not find project: %s\n\n' % project_name)
+        sys.exit(1) 
+    sys.path.append(scripts_path)          
+    for f in glob.glob( '%s/*.py' % scripts_path):  # import all test scripts as modules
+        f = f.replace(scripts_path, '').replace(os.sep, '').replace('.py', '')
+        exec('import %s' % f) in globals()
         
         
 
@@ -85,15 +82,14 @@ class Agent(threading.Thread):
         else:
             sys.stderr.write('ERROR: scripts must have .py extension. can not run test script: %s.  aborting user group: %s\n' % (self.script_file, self.user_group_name))
             return
-        #try:
-        #print module_name + '.Transaction()'
-        trans = eval(module_name + '.Transaction()')
-        #except NameError, e:
-        #    sys.stderr.write('ERROR: can not find test script: %s.  aborting user group: %s\n' % (self.script_file, self.user_group_name))
-        #    return
-        #except Exception, e:
-        #    sys.stderr.write('ERROR: failed initializing Transaction: %s.  aborting user group: %s\n' % (self.script_file, self.user_group_name))
-        #    return
+        try:
+            trans = eval(module_name + '.Transaction()')
+        except NameError, e:
+            sys.stderr.write('ERROR: can not find test script: %s.  aborting user group: %s\n' % (self.script_file, self.user_group_name))
+            return
+        except Exception, e:
+            sys.stderr.write('ERROR: failed initializing Transaction: %s.  aborting user group: %s\n' % (self.script_file, self.user_group_name))
+            return
         
         trans.custom_timers = {}
         
