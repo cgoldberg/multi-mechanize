@@ -19,10 +19,10 @@ import shutil
 import subprocess
 import sys
 import time
-import lib.core as core
-import lib.results as results
-import lib.resultswriter as resultswriter
-import lib.progressbar as progressbar        
+import multimechanize.core as core
+import multimechanize.results as results
+import multimechanize.resultswriter as resultswriter
+import multimechanize.progressbar as progressbar        
 
 
 
@@ -40,8 +40,8 @@ def main():
     if cmd_opts.results_dir:  # don't run a test, just re-process results
         rerun_results(cmd_opts.results_dir)
     elif cmd_opts.port:
-        import lib.rpcserver
-        lib.rpcserver.launch_rpc_server(cmd_opts.port, project_name, run_test)
+        import multimechanize.rpcserver
+        multimechanize.rpcserver.launch_rpc_server(cmd_opts.port, project_name, run_test)
     else:  
         run_test()
     return
@@ -123,8 +123,8 @@ def run_test(remote_starter=None):
     
     if results_database is not None:
         print 'loading results into database: %s\n' % results_database
-        import lib.resultsloader
-        lib.resultsloader.load_results_database(project_name, run_localtime, output_dir, results_database, 
+        import multimechanize.resultsloader
+        multimechanize.resultsloader.load_results_database(project_name, run_localtime, output_dir, results_database, 
                 run_time, rampup, results_ts_interval, user_group_configs)
     
     if post_run_script is not None:
