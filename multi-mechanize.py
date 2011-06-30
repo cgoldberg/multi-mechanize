@@ -11,7 +11,6 @@
 
 
 import ConfigParser
-import glob
 import multiprocessing
 import optparse
 import os
@@ -19,10 +18,13 @@ import Queue
 import shutil
 import subprocess
 import sys
-import threading
 import time
+import lib.core as core
 import lib.results as results
+import lib.resultswriter as resultswriter
 import lib.progressbar as progressbar        
+
+
 
 usage = 'Usage: %prog <project name> [options]'
 parser = optparse.OptionParser(usage=usage)
@@ -30,27 +32,12 @@ parser.add_option('-p', '--port', dest='port', type='int', help='rpc listener po
 parser.add_option('-r', '--results', dest='results_dir', help='results directory to reprocess')
 cmd_opts, args = parser.parse_args()
 
-try:
-    project_name = args[0]
-except IndexError:
-    sys.stderr.write('\nERROR: no project specified\n\n')
-    sys.stderr.write('usage: python multi-mechanize.py <project_name>\n')
-    sys.stderr.write('example: python multi-mechanize.py default_project\n\n')
-    sys.exit(1)  
-
-scripts_path = 'projects/%s/test_scripts' % project_name
-if not os.path.exists(scripts_path):
-    sys.stderr.write('\nERROR: can not find project: %s\n\n' % project_name)
-    sys.exit(1) 
-sys.path.append(scripts_path)          
-for f in glob.glob( '%s/*.py' % scripts_path):  # import all test scripts as modules
-    f = f.replace(scripts_path, '').replace(os.sep, '').replace('.py', '')
-    exec('import %s' % f)
+project_name = sys.argv[1]
 
 
 
 def main():
-    if cmd_opts.results_dir:  # don't run a test, just reprocess results
+    if cmd_opts.results_dir:  # don't run a test, just re-process results
         rerun_results(cmd_opts.results_dir)
     elif cmd_opts.port:
         import lib.rpcserver
@@ -73,13 +60,13 @@ def run_test(remote_starter=None):
         
     # this queue is shared between all processes/threads
     queue = multiprocessing.Queue()
-    rw = ResultsWriter(queue, output_dir, console_logging)
+    rw = resultswriter.ResultsWriter(queue, output_dir, console_logging)
     rw.daemon = True
     rw.start()
     
     user_groups = [] 
     for i, ug_config in enumerate(user_group_configs):
-        ug = UserGroup(queue, i, ug_config.name, ug_config.num_threads, ug_config.script_file, run_time, rampup)
+        ug = core.UserGroup(queue, i, ug_config.name, ug_config.num_threads, ug_config.script_file, run_time, rampup)
         user_groups.append(ug)    
     for user_group in user_groups:
         user_group.start()
@@ -209,136 +196,13 @@ def configure(project_name, config_file=None):
 
     return (run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs)
     
-
-
+    
+    
 class UserGroupConfig(object):
     def __init__(self, num_threads, name, script_file):
         self.num_threads = num_threads
         self.name = name
         self.script_file = script_file
-    
-    
-    
-class UserGroup(multiprocessing.Process):
-    def __init__(self, queue, process_num, user_group_name, num_threads, script_file, run_time, rampup):
-        multiprocessing.Process.__init__(self)
-        self.queue = queue
-        self.process_num = process_num
-        self.user_group_name = user_group_name
-        self.num_threads = num_threads
-        self.script_file = script_file
-        self.run_time = run_time
-        self.rampup = rampup
-        self.start_time = time.time()
-        
-    def run(self):
-        threads = []
-        for i in range(self.num_threads):
-            spacing = float(self.rampup) / float(self.num_threads)
-            if i > 0:
-                time.sleep(spacing)
-            agent_thread = Agent(self.queue, self.process_num, i, self.start_time, self.run_time, self.user_group_name, self.script_file)
-            agent_thread.daemon = True
-            threads.append(agent_thread)
-            agent_thread.start()            
-        for agent_thread in threads:
-            agent_thread.join()
-        
-
-
-class Agent(threading.Thread):
-    def __init__(self, queue, process_num, thread_num, start_time, run_time, user_group_name, script_file):
-        threading.Thread.__init__(self)
-        self.queue = queue
-        self.process_num = process_num
-        self.thread_num = thread_num
-        self.start_time = start_time
-        self.run_time = run_time
-        self.user_group_name = user_group_name
-        self.script_file = script_file
-        
-        # choose most accurate timer to use (time.clock has finer granularity than time.time on windows, but shouldn't be used on other systems)
-        if sys.platform.startswith('win'):
-            self.default_timer = time.clock
-        else:
-            self.default_timer = time.time
-    
-    
-    def run(self):
-        elapsed = 0
-        
-        if self.script_file.lower().endswith('.py'):
-            module_name = self.script_file.replace('.py', '')
-        else:
-            sys.stderr.write('ERROR: scripts must have .py extension. can not run test script: %s.  aborting user group: %s\n' % (self.script_file, self.user_group_name))
-            return
-        try:
-            trans = eval(module_name + '.Transaction()')
-        except NameError, e:
-            sys.stderr.write('ERROR: can not find test script: %s.  aborting user group: %s\n' % (self.script_file, self.user_group_name))
-            return
-        except Exception, e:
-            sys.stderr.write('ERROR: failed initializing Transaction: %s.  aborting user group: %s\n' % (self.script_file, self.user_group_name))
-            return
-        
-        trans.custom_timers = {}
-        
-        # scripts have access to these vars, which can be useful for loading unique data
-        trans.thread_num = self.thread_num
-        trans.process_num = self.process_num
-            
-        while elapsed < self.run_time:
-            error = ''
-            start = self.default_timer()  
-            
-            try:
-                trans.run()
-            except Exception, e:  # test runner catches all script exceptions here
-                error = str(e).replace(',', '')
-
-            finish = self.default_timer()
-            
-            scriptrun_time = finish - start
-            elapsed = time.time() - self.start_time 
-
-            epoch = time.mktime(time.localtime())
-            
-            fields = (elapsed, epoch, self.user_group_name, scriptrun_time, error, trans.custom_timers)
-            self.queue.put(fields)
-            
-
-
-class ResultsWriter(threading.Thread):
-    def __init__(self, queue, output_dir, console_logging):
-        threading.Thread.__init__(self)
-        self.queue = queue
-        self.console_logging = console_logging
-        self.output_dir = output_dir
-        self.trans_count = 0
-        self.timer_count = 0
-        self.error_count = 0
-        
-        try:
-            os.makedirs(self.output_dir, 0755)
-        except OSError:
-            sys.stderr.write('ERROR: Can not create output directory\n')
-            sys.exit(1)    
-    
-    def run(self):
-        with open(self.output_dir + 'results.csv', 'w') as f:     
-            while True:
-                try:
-                    elapsed, epoch, self.user_group_name, scriptrun_time, error, custom_timers = self.queue.get(False)
-                    self.trans_count += 1
-                    self.timer_count += len(custom_timers)
-                    if error != '':
-                        self.error_count += 1
-                    f.write('%i,%.3f,%i,%s,%f,%s,%s\n' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, error, repr(custom_timers)))
-                    f.flush()
-                    if self.console_logging:
-                        print '%i, %.3f, %i, %s, %.3f, %s, %s' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, error, repr(custom_timers))
-                except Queue.Empty:
-                    time.sleep(.05)
 
 
 
