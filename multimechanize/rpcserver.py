@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-#  Copyright (c) 2010 Corey Goldberg (corey@goldb.org)
+#  Copyright (c) 2010-2011 Corey Goldberg (corey@goldb.org)
 #  License: GNU LGPLv3
 #  
 #  This file is part of Multi-Mechanize
@@ -12,12 +12,11 @@ import thread
     
     
     
-def launch_rpc_server(port, project_name, run_callback):  
-    host = socket.gethostbyaddr(socket.gethostname())[0]
-    server = SimpleXMLRPCServer.SimpleXMLRPCServer((host, port), logRequests=False)
+def launch_rpc_server(bind_addr, port, project_name, run_callback):  
+    server = SimpleXMLRPCServer.SimpleXMLRPCServer((bind_addr, port), logRequests=False)
     server.register_instance(RemoteControl(project_name, run_callback))
     server.register_introspection_functions()
-    print '\nMulti-Mechanize: %s listening on port %i' % (host, port)
+    print '\nMulti-Mechanize: %s listening on port %i' % (bind_addr, port)
     print 'waiting for xml-rpc commands...\n'
     try:
         server.serve_forever()

@@ -30,6 +30,7 @@ usage = 'Usage: %prog <project name> [options]'
 parser = optparse.OptionParser(usage=usage)
 parser.add_option('-p', '--port', dest='port', type='int', help='rpc listener port')
 parser.add_option('-r', '--results', dest='results_dir', help='results directory to reprocess')
+parser.add_option('-b', '--bind-addr', dest='bind_addr', help='rpc bind address', default='localhost')
 cmd_opts, args = parser.parse_args()
 
 try:
@@ -50,7 +51,7 @@ def main():
         rerun_results(cmd_opts.results_dir)
     elif cmd_opts.port:
         import multimechanize.rpcserver
-        multimechanize.rpcserver.launch_rpc_server(cmd_opts.port, project_name, run_test)
+        multimechanize.rpcserver.launch_rpc_server(cmd_opts.bind_addr, cmd_opts.port, project_name, run_test)
     else:  
         run_test()
     return
