@@ -20,7 +20,6 @@ import subprocess
 import sys
 import time
 
-
 import multimechanize.core as core
 import multimechanize.results as results
 import multimechanize.resultswriter as resultswriter
