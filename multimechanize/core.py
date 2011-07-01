@@ -14,10 +14,8 @@ import threading
 import time
 
 
-project_name = None
 
-
-def init():
+def init(project_name):
     scripts_path = 'projects/%s/test_scripts' % project_name
     if not os.path.exists(scripts_path):
         sys.stderr.write('\nERROR: can not find project: %s\n\n' % project_name)
@@ -87,9 +85,9 @@ class Agent(threading.Thread):
         except NameError, e:
             sys.stderr.write('ERROR: can not find test script: %s.  aborting user group: %s\n' % (self.script_file, self.user_group_name))
             return
-        except Exception, e:
-            sys.stderr.write('ERROR: failed initializing Transaction: %s.  aborting user group: %s\n' % (self.script_file, self.user_group_name))
-            return
+        #except Exception, e:
+        #    sys.stderr.write('ERROR: failed initializing Transaction: %s.  aborting user group: %s\n' % (self.script_file, self.user_group_name))
+        #    return
         
         trans.custom_timers = {}
         

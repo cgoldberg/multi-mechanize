@@ -41,8 +41,7 @@ except IndexError:
     sys.stderr.write('example: python multi-mechanize.py default_project\n\n')
     sys.exit(1)  
 
-core.project_name = project_name
-core.init()
+core.init(project_name)
 
 
 
