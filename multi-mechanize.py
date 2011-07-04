@@ -31,6 +31,7 @@ parser = optparse.OptionParser(usage=usage)
 parser.add_option('-p', '--port', dest='port', type='int', help='rpc listener port')
 parser.add_option('-r', '--results', dest='results_dir', help='results directory to reprocess')
 parser.add_option('-b', '--bind-addr', dest='bind_addr', help='rpc bind address', default='localhost')
+parser.add_option('-d', '--directory', dest='projects_dir', help='directory containing projects', default='projects')
 cmd_opts, args = parser.parse_args()
 
 try:
@@ -41,7 +42,7 @@ except IndexError:
     sys.stderr.write('example: python multi-mechanize.py default_project\n\n')
     sys.exit(1)  
 
-core.init(project_name)
+core.init(cmd_opts.projects_dir, project_name)
 
 
 
@@ -66,8 +67,8 @@ def run_test(remote_starter=None):
     run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs = configure(project_name)
     
     run_localtime = time.localtime() 
-    output_dir = time.strftime('projects/' + project_name + '/results/results_%Y.%m.%d_%H.%M.%S/', run_localtime) 
-        
+    output_dir = '%s/%s/results/results_%s' % (cmd_opts.projects_dir, project_name, time.strftime('%Y.%m.%d_%H.%M.%S/', run_localtime)) 
+    
     # this queue is shared between all processes/threads
     queue = multiprocessing.Queue()
     rw = resultswriter.ResultsWriter(queue, output_dir, console_logging)
@@ -127,7 +128,7 @@ def run_test(remote_starter=None):
         print 'created: last_results.jtl\n'
     
     # copy config file to results directory
-    project_config = os.sep.join(['projects', project_name, 'config.cfg'])
+    project_config = os.sep.join([cmd_opts.projects_dir, project_name, 'config.cfg'])
     saved_config = os.sep.join([output_dir, 'config.cfg'])
     shutil.copy(project_config, saved_config)
     
@@ -152,7 +153,7 @@ def run_test(remote_starter=None):
     
     
 def rerun_results(results_dir):
-    output_dir = 'projects/%s/results/%s/' % (project_name, results_dir)
+    output_dir = '%s/%s/results/%s/' % (cmd_opts.projects_dir, project_name, results_dir)
     saved_config = '%s/config.cfg' % output_dir
     run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs = configure(project_name, config_file=saved_config)
     print '\n\nanalyzing results...\n'
@@ -168,7 +169,7 @@ def configure(project_name, config_file=None):
     user_group_configs = []
     config = ConfigParser.ConfigParser()
     if config_file is None:
-        config_file = 'projects/%s/config.cfg' % project_name
+        config_file = '%s/%s/config.cfg' % (cmd_opts.projects_dir, project_name)
     config.read(config_file)
     for section in config.sections():
         if section == 'global':

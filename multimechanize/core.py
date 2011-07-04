@@ -15,8 +15,8 @@ import time
 
 
 
-def init(project_name):
-    scripts_path = 'projects/%s/test_scripts' % project_name
+def init(projects_dir, project_name):
+    scripts_path = '%s/%s/test_scripts' % (projects_dir, project_name)
     if not os.path.exists(scripts_path):
         sys.stderr.write('\nERROR: can not find project: %s\n\n' % project_name)
         sys.exit(1) 
