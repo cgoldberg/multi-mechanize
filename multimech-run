@@ -31,7 +31,7 @@ parser = optparse.OptionParser(usage=usage)
 parser.add_option('-p', '--port', dest='port', type='int', help='rpc listener port')
 parser.add_option('-r', '--results', dest='results_dir', help='results directory to reprocess')
 parser.add_option('-b', '--bind-addr', dest='bind_addr', help='rpc bind address', default='localhost')
-parser.add_option('-d', '--directory', dest='projects_dir', help='directory containing projects', default='projects')
+parser.add_option('-d', '--directory', dest='projects_dir', help='directory containing projects', default='.')
 cmd_opts, args = parser.parse_args()
 
 try:
