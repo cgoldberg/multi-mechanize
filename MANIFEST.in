@@ -1,0 +1,7 @@
+include setup.py
+include requirements.txt
+include README.rst
+include MANIFEST.in
+recursive-include multimechanize *.py
+recursive-include examples *.py *.cfg
+recursive-include docs README *.py *.rst *.png *.css *.ico
