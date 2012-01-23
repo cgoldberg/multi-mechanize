@@ -2,7 +2,7 @@
 #
 #  Copyright (c) 2010 Corey Goldberg (corey@goldb.org)
 #  License: GNU LGPLv3
-#  
+#
 #  This file is part of Multi-Mechanize
 
 
@@ -14,7 +14,7 @@ class ProgressBar(object):
         self.fill_char = '='
         self.width = 40
         self.__update_amount(0)
-    
+
     def __update_amount(self, new_amount):
         percent_done = int(round((new_amount / 100.0) * 100.0))
         if percent_done > 100:
@@ -26,10 +26,10 @@ class ProgressBar(object):
         pct_string = '%i%%' % percent_done
         self.prog_bar = self.prog_bar[0:pct_place] + \
             (pct_string + self.prog_bar[pct_place + len(pct_string):])
-        
+
     def update_time(self, elapsed_secs):
         self.__update_amount((elapsed_secs / float(self.duration)) * 100.0)
         self.prog_bar += '  %ds/%ss' % (elapsed_secs, self.duration)
-        
+
     def __str__(self):
         return str(self.prog_bar)

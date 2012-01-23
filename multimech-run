@@ -2,7 +2,7 @@
 #
 #  Copyright (c) 2010-2012 Corey Goldberg (corey@goldb.org)
 #  License: GNU LGPLv3 - distributed under the terms of the GNU Lesser General Public License version 3
-#  
+#
 #  This file is part of Multi-Mechanize:
 #       Multi-Process, Multi-Threaded, Web Load Generator, with python-mechanize agents
 #
@@ -40,7 +40,7 @@ except IndexError:
     sys.stderr.write('\nERROR: no project specified\n\n')
     sys.stderr.write('%s\n' % usage)
     sys.stderr.write('example: %s my_project\n\n' % __file__)
-    sys.exit(1)  
+    sys.exit(1)
 
 core.init(cmd_opts.projects_dir, project_name)
 
@@ -53,44 +53,44 @@ def main():
     elif cmd_opts.port:
         import multimechanize.rpcserver
         multimechanize.rpcserver.launch_rpc_server(cmd_opts.bind_addr, cmd_opts.port, project_name, run_test)
-    else:  
+    else:
         run_test()
     return
-        
-        
-    
+
+
+
 def run_test(remote_starter=None):
     if remote_starter is not None:
         remote_starter.test_running = True
         remote_starter.output_dir = None
-        
+
     run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs = configure(project_name)
-    
-    run_localtime = time.localtime() 
-    output_dir = '%s/%s/results/results_%s' % (cmd_opts.projects_dir, project_name, time.strftime('%Y.%m.%d_%H.%M.%S/', run_localtime)) 
-    
+
+    run_localtime = time.localtime()
+    output_dir = '%s/%s/results/results_%s' % (cmd_opts.projects_dir, project_name, time.strftime('%Y.%m.%d_%H.%M.%S/', run_localtime))
+
     # this queue is shared between all processes/threads
     queue = multiprocessing.Queue()
     rw = resultswriter.ResultsWriter(queue, output_dir, console_logging)
     rw.daemon = True
     rw.start()
-    
-    user_groups = [] 
+
+    user_groups = []
     for i, ug_config in enumerate(user_group_configs):
         ug = core.UserGroup(queue, i, ug_config.name, ug_config.num_threads, ug_config.script_file, run_time, rampup)
-        user_groups.append(ug)    
+        user_groups.append(ug)
     for user_group in user_groups:
         user_group.start()
-        
-    start_time = time.time() 
-    
+
+    start_time = time.time()
+
     if console_logging:
         for user_group in user_groups:
             user_group.join()
     else:
         print '\n  user_groups:  %i' % len(user_groups)
         print '  threads: %i\n' % (ug_config.num_threads * len(user_groups))
-        
+
         if progress_bar:
             p = progressbar.ProgressBar(run_time)
             elapsed = 0
@@ -103,9 +103,9 @@ def run_test(remote_starter=None):
                     sys.stdout.write(chr(27) + '[A' )
                 time.sleep(1)
                 elapsed = time.time() - start_time
-            
+
             print p
-            
+
         while [user_group for user_group in user_groups if user_group.is_alive()] != []:
             if progress_bar:
                 if sys.platform.startswith('win'):
@@ -114,7 +114,7 @@ def run_test(remote_starter=None):
                     print 'waiting for all requests to finish...\r'
                     sys.stdout.write(chr(27) + '[A' )
             time.sleep(.5)
-            
+
         if not sys.platform.startswith('win'):
             print
 
@@ -126,32 +126,32 @@ def run_test(remote_starter=None):
     if xml_report:
         print 'created: %sresults.jtl' % output_dir
         print 'created: last_results.jtl\n'
-    
+
     # copy config file to results directory
     project_config = os.sep.join([cmd_opts.projects_dir, project_name, 'config.cfg'])
     saved_config = os.sep.join([output_dir, 'config.cfg'])
     shutil.copy(project_config, saved_config)
-    
+
     if results_database is not None:
         print 'loading results into database: %s\n' % results_database
         import multimechanize.resultsloader
-        multimechanize.resultsloader.load_results_database(project_name, run_localtime, output_dir, results_database, 
+        multimechanize.resultsloader.load_results_database(project_name, run_localtime, output_dir, results_database,
                 run_time, rampup, results_ts_interval, user_group_configs)
-    
+
     if post_run_script is not None:
         print 'running post_run_script: %s\n' % post_run_script
         subprocess.call(post_run_script)
-        
+
     print 'done.\n'
-    
+
     if remote_starter is not None:
         remote_starter.test_running = False
         remote_starter.output_dir = output_dir
-    
+
     return
-    
-    
-    
+
+
+
 def rerun_results(results_dir):
     output_dir = '%s/%s/results/%s/' % (cmd_opts.projects_dir, project_name, results_dir)
     saved_config = '%s/config.cfg' % output_dir
@@ -162,7 +162,7 @@ def rerun_results(results_dir):
     if xml_report:
         print 'created: %sresults.jtl' % output_dir
         print 'created: last_results.jtl\n'
-    
+
 
 
 def configure(project_name, config_file=None):
@@ -176,11 +176,11 @@ def configure(project_name, config_file=None):
             run_time = config.getint(section, 'run_time')
             rampup = config.getint(section, 'rampup')
             results_ts_interval = config.getint(section, 'results_ts_interval')
-            try: 
+            try:
                 console_logging = config.getboolean(section, 'console_logging')
             except ConfigParser.NoOptionError:
                 console_logging = False
-            try: 
+            try:
                 progress_bar = config.getboolean(section, 'progress_bar')
             except ConfigParser.NoOptionError:
                 progress_bar = True
@@ -206,9 +206,9 @@ def configure(project_name, config_file=None):
             user_group_configs.append(ug_config)
 
     return (run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs)
-    
-    
-    
+
+
+
 class UserGroupConfig(object):
     def __init__(self, num_threads, name, script_file):
         self.num_threads = num_threads

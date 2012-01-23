@@ -2,7 +2,7 @@
 #
 #  Copyright (c) 2010-2011 Corey Goldberg (corey@goldb.org)
 #  License: GNU LGPLv3
-#  
+#
 #  This file is part of Multi-Mechanize
 
 
@@ -22,15 +22,15 @@ class ResultsWriter(threading.Thread):
         self.trans_count = 0
         self.timer_count = 0
         self.error_count = 0
-        
+
         try:
             os.makedirs(self.output_dir, 0755)
         except OSError:
             sys.stderr.write('ERROR: Can not create output directory\n')
-            sys.exit(1)    
-    
+            sys.exit(1)
+
     def run(self):
-        with open(self.output_dir + 'results.csv', 'w') as f:     
+        with open(self.output_dir + 'results.csv', 'w') as f:
             while True:
                 try:
                     elapsed, epoch, self.user_group_name, scriptrun_time, error, custom_timers = self.queue.get(False)

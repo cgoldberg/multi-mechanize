@@ -2,7 +2,7 @@
 #
 #  Copyright (c) 2010 Brian Knox (taotetek@gmail.com)
 #  License: GNU LGPLv3
-#  
+#
 #  This file is part of Multi-Mechanize
 #
 """a collection of functions and classes for multi-mechanize results files"""
@@ -73,7 +73,7 @@ class ResultRow(Base):
         )
 
     id = Column(Integer, nullable=False, primary_key=True)
-    mechanize_global_configs_id = Column(Integer, 
+    mechanize_global_configs_id = Column(Integer,
         ForeignKey('mechanize_global_configs.id'), nullable=False)
     project_name = Column(String(50), nullable=False, index=True)
     run_id = Column(DateTime, nullable=False, index=True)
@@ -91,7 +91,7 @@ class ResultRow(Base):
     timers = relation("TimerRow",
         primaryjoin="ResultRow.id==TimerRow.mechanize_results_id")
 
-    def __init__(self, project_name=None, run_id=None, trans_count=None, 
+    def __init__(self, project_name=None, run_id=None, trans_count=None,
             elapsed=None, epoch=None, user_group_name=None,
             scriptrun_time=None, error=None, custom_timers=None):
         self.project_name = str(project_name)
@@ -106,15 +106,15 @@ class ResultRow(Base):
 
     def __repr__(self):
         return "<ResultRow('%s','%s','%i','%.3f','%i','%s','%.3f','%s','%s')>" % (
-                self.project_name, self.run_id, self.trans_count, self.elapsed, 
-                self.epoch, self.user_group_name, self.scriptrun_time, 
+                self.project_name, self.run_id, self.trans_count, self.elapsed,
+                self.epoch, self.user_group_name, self.scriptrun_time,
                 self.error, self.custom_timers)
- 
+
 class TimerRow(Base):
     """class representing a multi-mechanize custom timer result"""
     __tablename__ = 'mechanize_custom_timers'
     id = Column(Integer, nullable=False, primary_key=True)
-    mechanize_results_id = Column(Integer, 
+    mechanize_results_id = Column(Integer,
          ForeignKey('mechanize_results.id'), nullable=False)
     timer_name = Column(String(50), nullable=False, index=True)
     elapsed = Column(Float, nullable=False, index=True)
@@ -129,13 +129,13 @@ class TimerRow(Base):
     result_rows = relation("ResultRow",
         primaryjoin="TimerRow.mechanize_results_id==ResultRow.id")
 
-def load_results_database(project_name, run_localtime, results_dir, 
+def load_results_database(project_name, run_localtime, results_dir,
         results_database, run_time, rampup, results_ts_interval,
         user_group_configs):
     """parse and load a multi-mechanize results csv file into a database"""
 
     logline_re = re.compile('(.+),(.+),(.+),(.+),(.+),(.?),(\{.+\})')
-    
+
     engine = create_engine(results_database, echo=False)
     ResultRow.metadata.create_all(engine)
     TimerRow.metadata.create_all(engine)
@@ -144,18 +144,18 @@ def load_results_database(project_name, run_localtime, results_dir,
 
     sa_session = sessionmaker(bind=engine)
     sa_current_session = sa_session()
-    
+
     run_id = datetime(run_localtime.tm_year, run_localtime.tm_mon,
         run_localtime.tm_mday, run_localtime.tm_hour, run_localtime.tm_min,
         run_localtime.tm_sec)
 
     results_file = results_dir + 'results.csv'
-   
+
     global_config = GlobalConfig(run_time, rampup, results_ts_interval)
     sa_current_session.add(global_config)
-    
+
     for i, ug_config in enumerate(user_group_configs):
-        user_group_config = UserGroupConfig(ug_config.name, 
+        user_group_config = UserGroupConfig(ug_config.name,
                 ug_config.num_threads, ug_config.script_file)
         global_config.user_group_configs.append(user_group_config)
 
@@ -163,10 +163,10 @@ def load_results_database(project_name, run_localtime, results_dir,
         line = line.rstrip()
         match = logline_re.match(line)
         if match:
-            result_row = ResultRow(project_name, run_id, match.group(1), 
+            result_row = ResultRow(project_name, run_id, match.group(1),
                     match.group(2), match.group(3), match.group(4),
                     match.group(5), match.group(6), match.group(7))
-    
+
             global_config.results.append(result_row)
             timer_data = eval(match.group(7))
             for index in timer_data:
@@ -174,6 +174,6 @@ def load_results_database(project_name, run_localtime, results_dir,
                 result_row.timers.append(timer_row)
 
             sa_current_session.add(result_row)
-    
+
     sa_current_session.commit()
     sa_current_session.close()

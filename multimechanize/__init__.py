@@ -2,7 +2,7 @@
 #
 #  Copyright (c) 2010-2012 Corey Goldberg (corey@goldb.org)
 #  License: GNU LGPLv3
-#  
+#
 #  This file is part of Multi-Mechanize
 
-__version__ = '1.1.0'
+__version__ = '1.2.0'

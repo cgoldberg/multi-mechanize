@@ -2,7 +2,7 @@
 #
 #  Copyright (c) 2010 Corey Goldberg (corey@goldb.org)
 #  License: GNU LGPLv3
-#  
+#
 #  This file is part of Multi-Mechanize
 
 
@@ -14,7 +14,7 @@ import time
 class Transaction(object):
     def __init__(self):
         self.custom_timers = {}
-    
+
     def run(self):
         start_timer = time.time()
         conn = httplib.HTTPConnection('www.example.com')
@@ -22,9 +22,9 @@ class Transaction(object):
         resp = conn.getresponse()
         content = resp.read()
         latency = time.time() - start_timer
-        
+
         self.custom_timers['Example_Homepage'] = latency
-        
+
         assert (resp.status == 200), 'Bad HTTP Response'
         assert ('Example Web Page' in content), 'Failed Content Verification'
 

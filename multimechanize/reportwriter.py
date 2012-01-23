@@ -2,7 +2,7 @@
 #
 #  Copyright (c) 2010 Corey Goldberg (corey@goldb.org)
 #  License: GNU LGPLv3
-#  
+#
 #  This file is part of Multi-Mechanize
 #
 
@@ -13,7 +13,7 @@ class Report(object):
         self.fn = results_dir + 'results.html'
         self.write_head_html()
 
-    
+
     def write_line(self, line):
         with open(self.fn, 'a') as f:
             f.write('%s\n' % line)
@@ -91,7 +91,7 @@ class Report(object):
 </head>
 <body>
 """)
-  
+
 
     def write_closing_html(self):
         with open(self.fn, 'a') as f:
