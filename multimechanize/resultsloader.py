@@ -5,6 +5,7 @@
 #
 #  This file is part of Multi-Mechanize
 #
+
 """a collection of functions and classes for multi-mechanize results files"""
 
 import re

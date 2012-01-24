@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 #
 #  Copyright (c) 2010-2012 Corey Goldberg (corey@goldb.org)
-#  License: GNU LGPLv3 - distributed under the terms of the GNU Lesser General Public License version 3
+#  License: GNU LGPLv3
 #
-#  This file is part of Multi-Mechanize:
-#       Multi-Process, Multi-Threaded, Web Load Generator, with python-mechanize agents
+#  This file is part of Multi-Mechanize | Performance Test Framework
 #
-#  requires Python 2.6+
 
 
 """
@@ -26,17 +24,17 @@ this_dir = os.path.abspath(os.path.dirname(__file__))
 NAME = 'multimechanize'
 VERSION = __version__
 PACKAGES = ['multimechanize',]
-SCRIPTS = ['multimech-run',]
+SCRIPTS = ['multimech-run', 'multimech-newproject']
 DESCRIPTION = 'Multi-Mechanize - Performance Test Framework'
 URL = 'http://testutils.org/multimechanize'
 LICENSE = 'GNU LGPLv3'
-LONG_DESCRIPTION = '\n%s' % open(os.path.join(this_dir, 'README.rst')).read()
+LONG_DESCRIPTION = open(os.path.join(this_dir, 'README.rst')).read()
 REQUIREMENTS = filter(None, open(os.path.join(this_dir, 'requirements.txt')).read().splitlines())
 AUTHOR = 'Corey Goldberg'
 AUTHOR_EMAIL = 'corey@goldb.org'
 KEYWORDS = ('performance scalability load test testing benchmark').split(' ')
 CLASSIFIERS = [
-    'Development Status :: 3 - Alpha',
+    'Development Status :: 4 - Beta',
     'Environment :: Console',
     'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
     'Operating System :: OS Independent',
