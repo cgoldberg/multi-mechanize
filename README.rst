@@ -3,8 +3,9 @@
 Multi-Mechanize - Performance Test Framework
 ============================================
 
-copyright: (c) 2010-2012 Corey Goldberg (corey@goldb.org)
+Copyright: (c) 2010-2012 Corey Goldberg (corey@goldb.org)
+License: GNU LGPLv3
 
-license: GNU Lesser General Public License version 3 (LGPLv3)
-
-visit: http://multimechanize.com for info and instructions
+:Web: `multimechanize.com <http://multimechanize.com>`_
+:Twitter: `multimechanize tweets <http://twitter.com/multimechanize>`_
+:IRC: #multimech (freenode)
