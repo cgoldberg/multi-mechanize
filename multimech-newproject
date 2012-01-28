@@ -21,7 +21,6 @@ CONFIG_CONTENT = """
 run_time: 30
 rampup: 0
 results_ts_interval: 10
-
 progress_bar: on
 console_logging: off
 xml_report: off
@@ -39,7 +38,9 @@ script: %s
 
 
 SCRIPT_CONTENT = """
+import random
 import time
+
 
 class Transaction(object):
     def __init__(self):
