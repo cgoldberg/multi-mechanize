@@ -81,6 +81,7 @@ def create_project(
     with open(os.path.join(project_name, scripts_dir, script_name), 'w') as f:
         f.write(script_content)
 
+
 def main():
     try:
         project_name = sys.argv[1]
@@ -91,6 +92,7 @@ def main():
         sys.exit(1)
 
     create_project(project_name)
+
 
 if __name__ == '__main__':
     main()

@@ -44,6 +44,12 @@ CLASSIFIERS = [
     'Topic :: Software Development :: Testing :: Traffic Generation',
     'Topic :: System :: Benchmark',
 ]
+CONSOLE_SCRIPTS = [
+    'multimech-run = multimechanize.utilities.run:main',
+    'multimech-newproject = multimechanize.utilities.newproject:main',
+    'multimech-gridgui = multimechanize.utilities.gridgui:main',
+]
+
 
 params = dict(
     name=NAME,
@@ -59,10 +65,7 @@ params = dict(
     keywords=KEYWORDS,
     url=URL,
     classifiers=CLASSIFIERS,
-    entry_points = { 'console_scripts': ['multimech-run = multimechanize.utilities.run:main'
-                                        ,'multimech-newproject = multimechanize.utilities.newproject:main'
-                                        ,'multimech-gridgui = multimechanize.utilities.gridgui:main'
-                                        ] }
+    entry_points = { 'console_scripts': CONSOLE_SCRIPTS }
 )
 
 setup(**params)
