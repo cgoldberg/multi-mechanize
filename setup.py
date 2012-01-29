@@ -13,7 +13,7 @@ setup.py for multimechanize
 
 import os
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 from multimechanize import __version__
 
@@ -23,8 +23,7 @@ this_dir = os.path.abspath(os.path.dirname(__file__))
 
 NAME = 'multimechanize'
 VERSION = __version__
-PACKAGES = ['multimechanize',]
-SCRIPTS = ['multimech-run', 'multimech-newproject']
+PACKAGES = find_packages(exclude=['ez_setup'])
 DESCRIPTION = 'Multi-Mechanize - Performance Test Framework'
 URL = 'http://testutils.org/multimechanize'
 LICENSE = 'GNU LGPLv3'
@@ -50,7 +49,6 @@ params = dict(
     name=NAME,
     version=VERSION,
     packages=PACKAGES,
-    scripts=SCRIPTS,
     install_requires = REQUIREMENTS,
 
     # metadata for upload to PyPI
@@ -61,6 +59,10 @@ params = dict(
     keywords=KEYWORDS,
     url=URL,
     classifiers=CLASSIFIERS,
+    entry_points = { 'console_scripts': ['multimech-run = multimechanize.utilities.run:main'
+                                        ,'multimech-newproject = multimechanize.utilities.newproject:main'
+                                        ,'multimech-gridgui = multimechanize.utilities.gridgui:main'
+                                        ] }
 )
 
 setup(**params)
