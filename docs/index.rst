@@ -26,13 +26,12 @@
 --------------------------------------
 
 Multi-Mechanize is an open source framework for API performance and load testing. 
-It allows you to run simultaneous python scripts to generate load (synthetic transactions) 
-against a web site or API/service.
+It allows you to run simultaneous Python scripts to generate synthetic transactions 
+against a web site service.
 
-In your scripts, you have the convenience of mechanize along with the power of the full 
-Python programming language at your disposal. You programmatically create test scripts to 
-simulate virtual user activity. Your scripts will then generate HTTP requests to intelligently 
-navigate a web site or send requests to a web service.
+You programmatically create test scripts to simulate virtual user activity. Your 
+scripts will then generate HTTP requests to intelligently navigate a web site or 
+send requests to a web service.
 
 Multi-Mechanize uses a multi-process, multi-threaded engine to replay your scripts and 
 generate concurrent virtual users.
@@ -48,15 +47,23 @@ SST can be installed from `PyPI <http://pypi.python.org/pypi/multimechanize>`_ u
     
     pip install -U multimechanize
 
-... or download the 'source distribution from PyPI <http://pypi.python.org/pypi/multimechanize#downloads>`_, unarchive, and run::
+... or download the `source distribution from PyPI <http://pypi.python.org/pypi/multimechanize#downloads>`_, unarchive, and run::
 
     python setup.py install
     
-------------------------------------
-    Discussion / Help / Mailing List
-------------------------------------
+-------------------------------
+    Discussion / Help / Updates
+-------------------------------
 
-* http://groups.google.com/group/multi-mechanize
+* IRC: #multimech (freenode)
+* Google Group: http://groups.google.com/group/multi-mechanize
+* Twitter: http://twitter.com/multimechanize
+
+---------------
+    Development
+---------------
+
+* GitHub: http://github.com/cgoldberg/multi-mechanize>
 
 -------------
     Site Menu
