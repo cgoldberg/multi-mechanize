@@ -14,7 +14,7 @@
 ----
 
 :Home: http://testutils.org/multimechanize
-:Dev: http://github.com/cgoldberg/multimechanize
+:Dev: http://github.com/cgoldberg/multi-mechanize
 :PyPI: http://pypi.python.org/pypi/multimechanize
 :License: GNU LGPLv3
 :Author: Copyright (c) 2010-2012 Corey Goldberg
@@ -43,7 +43,7 @@ CI systems.
     Install / Download
 ----------------------
 
-SST can be installed from `PyPI <http://pypi.python.org/pypi/multimechanize>`_ using `pip <http://www.pip-installer.org>`_::
+Multi-Mechanize can be installed from `PyPI <http://pypi.python.org/pypi/multimechanize>`_ using `pip <http://www.pip-installer.org>`_::
     
     pip install -U multimechanize
 
@@ -63,7 +63,7 @@ SST can be installed from `PyPI <http://pypi.python.org/pypi/multimechanize>`_ u
     Development
 ---------------
 
-* GitHub: http://github.com/cgoldberg/multi-mechanize>
+* GitHub: http://github.com/cgoldberg/multi-mechanize
 
 -------------
     Site Menu
@@ -72,10 +72,10 @@ SST can be installed from `PyPI <http://pypi.python.org/pypi/multimechanize>`_ u
 .. toctree::
     :maxdepth: 1
     
-    Configuration <configfile>
-    Developing Scripts <developing>
-    Sample Graphs <graphs>
-    F.A.Q. <faq>
+    configfile
+    developing
+    graphs
+    faq
    
 ----
 
