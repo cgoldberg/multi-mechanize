@@ -2,7 +2,13 @@
 Build the Multi-Mechanize docs/website:
 ---------------------------------------
 
-* install sphinx (`$ sudo apt-get install python-sphinx`)
-* from the multi-mechanize directory, run: `$ sphinx-build -b html docs multimech_docs`
-* this will produce HTML documentation in the multimech_docs directory
-* open `index.html` with your browser.
+The multi-mechanize documentation/website is built using `Sphinx`_.
+
+.. _Sphinx: http://sphinx.pocoo.org/
+
+To build the docs you need to perform the following tasks:
+
+* Install Uphinx (``$ sudo apt-get install python-sphinx``)
+* From this ``docs`` directory, run: ``$ make html``
+* This will produce HTML documentation in the ``_build/html/`` directory
+* Open ``_build/html/index.html`` with your browser
