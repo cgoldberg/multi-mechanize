@@ -1,4 +1,5 @@
-*.pyc
 *.nja
+*.pyc
+_build
 build
 dist
