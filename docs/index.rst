@@ -76,6 +76,7 @@ Multi-Mechanize can be installed from `PyPI <http://pypi.python.org/pypi/multime
     developing
     graphs
     faq
+    changelog
    
 ----
 
