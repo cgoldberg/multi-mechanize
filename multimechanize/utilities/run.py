@@ -18,11 +18,20 @@ import subprocess
 import sys
 import time
 
+try:
+    # installed
+    import multimechanize
+except ImportError:
+    # from dev/source
+    this_dir = os.path.abspath(os.path.dirname(__file__))
+    sys.path.append(os.path.join(this_dir, '../../'))
+    import multimechanize
+
 import multimechanize.core as core
 import multimechanize.results as results
 import multimechanize.resultswriter as resultswriter
 import multimechanize.progressbar as progressbar
-
+    
 
 usage = 'Usage: %prog <project name> [options]'
 parser = optparse.OptionParser(usage=usage)
@@ -37,7 +46,7 @@ try:
 except IndexError:
     sys.stderr.write('\nERROR: no project specified\n\n')
     sys.stderr.write('%s\n' % usage)
-    sys.stderr.write('example: %s my_project\n\n' % __file__)
+    sys.stderr.write('Example: multimech-run my_project\n\n')
     sys.exit(1)
 
 core.init(cmd_opts.projects_dir, project_name)
