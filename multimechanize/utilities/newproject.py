@@ -87,8 +87,7 @@ def main():
         project_name = sys.argv[1]
     except IndexError:
         sys.stderr.write('\nERROR: no project specified\n\n')
-        sys.stderr.write('usage: %prog <project name>\n')
-        sys.stderr.write('example: %s my_project\n\n' % __file__)
+        sys.stderr.write('usage: multimech-newproject <project name>\n\n')
         sys.exit(1)
 
     create_project(project_name)
