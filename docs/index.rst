@@ -27,21 +27,14 @@
 
 Multi-Mechanize is an open source framework for API performance and load testing. 
 It allows you to run simultaneous Python scripts to generate synthetic transactions 
-against a web site service.
-
-You programmatically create test scripts to simulate virtual user activity. Your 
-scripts will then generate HTTP requests to intelligently navigate a web site or 
-send requests to a web service.
-
-Multi-Mechanize uses a multi-process, multi-threaded engine to replay your scripts and 
-generate concurrent virtual users.
+against a web site or service.
     
-Test output reports are saved as HTML (with PNG graphs), or JUnit-compatible XML for compatibility with 
-CI systems.
+Test output reports are saved as HTML (with PNG graphs), or JUnit-compatible XML 
+for compatibility with CI systems.
 
-----------------------
-    Install / Download
-----------------------
+-------------------
+    Install / Setup
+-------------------
 
 Multi-Mechanize can be installed from `PyPI <http://pypi.python.org/pypi/multimechanize>`_ using `pip <http://www.pip-installer.org>`_::
     
@@ -76,8 +69,9 @@ Multi-Mechanize can be installed from `PyPI <http://pypi.python.org/pypi/multime
     developing
     graphs
     faq
+    contributors
     changelog
-   
+    
 ----
 
 .. image:: assets/python-powered.png
