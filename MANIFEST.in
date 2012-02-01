@@ -4,3 +4,4 @@ include README.rst
 include MANIFEST.in
 recursive-include multimechanize *.py
 recursive-include examples *.py *.cfg
+recursive-exclude docs
