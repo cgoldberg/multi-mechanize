@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Multi-Mechanize - Results</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta http-equiv="Content-Language" content="en" />
+    <style type="text/css">
+        body {
+            background-color: #FFFFFF;
+            color: #000000;
+            font-family: Verdana, sans-serif;
+            font-size: 11px;
+            padding: 5px;
+        }
+        h1 {
+            font-size: 16px;
+            background: #FF9933;
+            margin-bottom: 0;
+            padding-left: 5px;
+            padding-top: 2px;
+        }
+        h2 {
+            font-size: 13px;
+            background: #C0C0C0;
+            padding-left: 5px;
+            margin-top: 2em;
+            margin-bottom: .75em;
+        }
+        h3 {
+            font-size: 12px;
+            background: #EEEEEE;
+            padding-left: 5px;
+            margin-bottom: 0.5em;
+        }
+        h4 {
+            font-size: 11px;
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        p {
+            margin: 0;
+            padding: 0;
+        }
+        table {
+            margin-left: 10px;
+        }
+        td {
+            text-align: right;
+            color: #000000;
+            background: #FFFFFF;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-bottom: 0;
+        }
+        th {
+            text-align: center;
+            padding-right: 10px;
+            padding-left: 10px;
+            color: #000000;
+            background: #FFFFFF;
+        }
+        div.summary {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>Performance Results Report</h1>
+<h2>Summary</h2>
+<div class="summary">
+<b>transactions:</b> 7126<br />
+<b>errors:</b> 0<br />
+<b>run time:</b> 90 secs<br />
+<b>rampup:</b> 90 secs<br /><br />
+<b>test start:</b> 2010-02-20 18:53:17<br />
+<b>test finish:</b> 2010-02-20 18:54:47<br /><br />
+<b>time-series interval:</b> 9 secs<br /><br /><br />
+<b>workload configuration:</b><br /><br />
+<table>
+<tr><th>group name</th><th>threads</th><th>script name</th></tr>
+<tr><td>user_group-2</td><td>45</td><td>django_load.py</td></tr>
+<tr><td>user_group-1</td><td>45</td><td>django_load.py</td></tr>
+</table>
+</div>
+<h2>All Transactions</h2>
+<h3>Response Time Summary (secs)</h3>
+<table>
+<tr><th>count</th><th>min</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>max</th><th>stdev</th></tr>
+<tr><td>7126</td><td>0.506</td><td>0.579</td><td>0.580</td><td>0.649</td><td>0.699</td><td>3.801</td><td>0.231</td></tr>
+</table>
+<h3>Interval Details (secs)</h3>
+<table>
+<tr><th>interval</th><th>count</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>stdev</th></tr>
+<tr><td>1</td><td>100</td><td>0.513</td><td>0.515</td><td>0.517</td><td>0.519</td><td>0.004</td></tr>
+<tr><td>2</td><td>260</td><td>0.512</td><td>0.513</td><td>0.516</td><td>0.518</td><td>0.008</td></tr>
+<tr><td>3</td><td>414</td><td>0.513</td><td>0.516</td><td>0.519</td><td>0.526</td><td>0.007</td></tr>
+<tr><td>4</td><td>574</td><td>0.514</td><td>0.517</td><td>0.521</td><td>0.527</td><td>0.009</td></tr>
+<tr><td>5</td><td>728</td><td>0.515</td><td>0.518</td><td>0.524</td><td>0.530</td><td>0.010</td></tr>
+<tr><td>6</td><td>878</td><td>0.519</td><td>0.526</td><td>0.534</td><td>0.539</td><td>0.010</td></tr>
+<tr><td>7</td><td>1015</td><td>0.529</td><td>0.532</td><td>0.541</td><td>0.585</td><td>0.098</td></tr>
+<tr><td>8</td><td>1111</td><td>0.555</td><td>0.548</td><td>0.598</td><td>0.642</td><td>0.193</td></tr>
+<tr><td>9</td><td>868</td><td>0.737</td><td>0.664</td><td>0.742</td><td>2.062</td><td>0.476</td></tr>
+<tr><td>10</td><td>1088</td><td>0.694</td><td>0.681</td><td>0.869</td><td>1.398</td><td>0.263</td></tr>
+</table>
+<h3>Graphs</h3>
+<h4>Response Time: 9 sec time-series</h4>
+<img src="All_Transactions_response_times_intervals.png"></img>
+<h4>Response Time: raw data (all points)</h4>
+<img src="All_Transactions_response_times.png"></img>
+<h4>Throughput: 5 sec time-series</h4>
+<img src="All_Transactions_throughput.png"></img>
+<hr />
+<h2>Custom Timer: Django_Debug_Page</h2>
+<h3>Response Time Summary (secs)</h3>
+<table>
+<tr><th>count</th><th>min</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>max</th><th>stdev</th></tr>
+<tr><td>7036</td><td>0.005</td><td>0.078</td><td>0.079</td><td>0.148</td><td>0.198</td><td>3.301</td><td>0.231</td></tr>
+</table>
+<h3>Interval Details (secs)</h3>
+<table>
+<tr><th>interval</th><th>count</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>stdev</th></tr>
+<tr><td>1</td><td>100</td><td>0.012</td><td>0.015</td><td>0.016</td><td>0.018</td><td>0.004</td></tr>
+<tr><td>2</td><td>260</td><td>0.011</td><td>0.012</td><td>0.015</td><td>0.017</td><td>0.008</td></tr>
+<tr><td>3</td><td>414</td><td>0.012</td><td>0.015</td><td>0.018</td><td>0.025</td><td>0.006</td></tr>
+<tr><td>4</td><td>574</td><td>0.014</td><td>0.017</td><td>0.020</td><td>0.026</td><td>0.009</td></tr>
+<tr><td>5</td><td>728</td><td>0.014</td><td>0.017</td><td>0.023</td><td>0.029</td><td>0.009</td></tr>
+<tr><td>6</td><td>878</td><td>0.018</td><td>0.025</td><td>0.033</td><td>0.038</td><td>0.010</td></tr>
+<tr><td>7</td><td>1015</td><td>0.028</td><td>0.031</td><td>0.040</td><td>0.084</td><td>0.098</td></tr>
+<tr><td>8</td><td>1111</td><td>0.053</td><td>0.046</td><td>0.097</td><td>0.141</td><td>0.193</td></tr>
+<tr><td>9</td><td>868</td><td>0.236</td><td>0.164</td><td>0.241</td><td>1.561</td><td>0.476</td></tr>
+<tr><td>10</td><td>1088</td><td>0.193</td><td>0.180</td><td>0.369</td><td>0.897</td><td>0.263</td></tr>
+</table>
+<h3>Graphs</h3>
+<h4>Response Time: 9 sec time-series</h4>
+<img src="Django_Debug_Page_response_times_intervals.png"></img>
+<h4>Response Time: raw data (all points)</h4>
+<img src="Django_Debug_Page_response_times.png"></img>
+<h4>Throughput: 5 sec time-series</h4>
+<img src="Django_Debug_Page_throughput.png"></img>
+<hr />
+</body>
+</html>

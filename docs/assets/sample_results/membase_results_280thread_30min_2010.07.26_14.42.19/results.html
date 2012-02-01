@@ -1,0 +1,279 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Multi-Mechanize - Results</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta http-equiv="Content-Language" content="en" />
+    <style type="text/css">
+        body {
+            background-color: #FFFFFF;
+            color: #000000;
+            font-family: Verdana, sans-serif;
+            font-size: 11px;
+            padding: 5px;
+        }
+        h1 {
+            font-size: 16px;
+            background: #FF9933;
+            margin-bottom: 0;
+            padding-left: 5px;
+            padding-top: 2px;
+        }
+        h2 {
+            font-size: 13px;
+            background: #C0C0C0;
+            padding-left: 5px;
+            margin-top: 2em;
+            margin-bottom: .75em;
+        }
+        h3 {
+            font-size: 12px;
+            background: #EEEEEE;
+            padding-left: 5px;
+            margin-bottom: 0.5em;
+        }
+        h4 {
+            font-size: 11px;
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        p {
+            margin: 0;
+            padding: 0;
+        }
+        table {
+            margin-left: 10px;
+        }
+        td {
+            text-align: right;
+            color: #000000;
+            background: #FFFFFF;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-bottom: 0;
+        }
+        th {
+            text-align: center;
+            padding-right: 10px;
+            padding-left: 10px;
+            color: #000000;
+            background: #FFFFFF;
+        }
+        div.summary {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>Performance Results Report</h1>
+<h2>Summary</h2>
+<div class="summary">
+<b>transactions:</b> 3692446<br />
+<b>errors:</b> 0<br />
+<b>run time:</b> 1800 secs<br />
+<b>rampup:</b> 1800 secs<br /><br />
+<b>test start:</b> 2010-07-26 14:42:19<br />
+<b>test finish:</b> 2010-07-26 15:12:19<br /><br />
+<b>time-series interval:</b> 100 secs<br /><br /><br />
+<b>workload configuration:</b><br /><br />
+<table>
+<tr><th>group name</th><th>threads</th><th>script name</th></tr>
+<tr><td>user_group-2</td><td>140</td><td>mem_set.py</td></tr>
+<tr><td>user_group-1</td><td>140</td><td>mem_get.py</td></tr>
+</table>
+
+
+<br /><br />
+<b>Notes:</b></p>
+<ul>
+<li>Membase Server 1.6 Beta 2</li>
+<li>1 Membase Node</li>
+<li>Node Specs: Ubuntu 10.04 64-bit, 4 CPU, 10 GB RAM, 1 Gbit NIC, VMWare on HP G6</li>
+<li>1 Client Load Generator (PFTOOLS205)</li>
+<li>Client Specs: Ubuntu 10.04 64-bit, 4 CPU, 10 GB RAM, 1 Gbit NIC, VMWare on HP G6</li>
+<li>Client Lib: python-memcached 1.44</li>
+<li>VU script doing Sets (random key range 1-1000), 30kb string values</li>
+<li>VU script doing Gets (random key range 1-1000)</li>
+<li>.05 sec (50 ms) sleep inside each script/transaction</li>
+<li>Load scales by increasing connections/threads over time (rampup)</li>
+</ul>
+
+</div>
+<h2>All Transactions</h2>
+<h3>Transaction Response Summary (secs)</h3>
+<table>
+<tr><th>count</th><th>min</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>max</th><th>stdev</th></tr>
+<tr><td>3692446</td><td>0.050</td><td>0.063</td><td>0.058</td><td>0.065</td><td>0.076</td><td>3.062</td><td>0.048</td></tr>
+</table>
+<h3>Interval Details (secs)</h3>
+<table>
+<tr><th>interval</th><th>count</th><th>rate</th><th>min</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>max</th><th>stdev</th></tr>
+<tr><td>1</td><td>16996</td><td>169.96</td><td>0.051</td><td>0.052</td><td>0.052</td><td>0.053</td><td>0.053</td><td>0.065</td><td>0.001</td></tr>
+<tr><td>2</td><td>46678</td><td>466.78</td><td>0.051</td><td>0.052</td><td>0.052</td><td>0.053</td><td>0.054</td><td>0.090</td><td>0.001</td></tr>
+<tr><td>3</td><td>75690</td><td>756.90</td><td>0.051</td><td>0.052</td><td>0.053</td><td>0.054</td><td>0.056</td><td>0.316</td><td>0.004</td></tr>
+<tr><td>4</td><td>102259</td><td>1022.59</td><td>0.051</td><td>0.054</td><td>0.054</td><td>0.056</td><td>0.058</td><td>0.763</td><td>0.014</td></tr>
+<tr><td>5</td><td>126894</td><td>1268.94</td><td>0.051</td><td>0.055</td><td>0.055</td><td>0.058</td><td>0.061</td><td>0.745</td><td>0.020</td></tr>
+<tr><td>6</td><td>149384</td><td>1493.84</td><td>0.051</td><td>0.057</td><td>0.056</td><td>0.060</td><td>0.065</td><td>0.624</td><td>0.025</td></tr>
+<tr><td>7</td><td>175532</td><td>1755.32</td><td>0.051</td><td>0.057</td><td>0.056</td><td>0.059</td><td>0.064</td><td>1.068</td><td>0.027</td></tr>
+<tr><td>8</td><td>184503</td><td>1845.03</td><td>0.051</td><td>0.062</td><td>0.058</td><td>0.064</td><td>0.076</td><td>1.275</td><td>0.040</td></tr>
+<tr><td>9</td><td>210036</td><td>2100.36</td><td>0.051</td><td>0.060</td><td>0.059</td><td>0.066</td><td>0.076</td><td>3.062</td><td>0.034</td></tr>
+<tr><td>10</td><td>222000</td><td>2220.00</td><td>0.051</td><td>0.063</td><td>0.059</td><td>0.069</td><td>0.084</td><td>1.115</td><td>0.043</td></tr>
+<tr><td>11</td><td>247942</td><td>2479.42</td><td>0.051</td><td>0.062</td><td>0.058</td><td>0.065</td><td>0.078</td><td>1.243</td><td>0.043</td></tr>
+<tr><td>12</td><td>254466</td><td>2544.66</td><td>0.051</td><td>0.065</td><td>0.061</td><td>0.071</td><td>0.087</td><td>2.037</td><td>0.050</td></tr>
+<tr><td>13</td><td>278695</td><td>2786.95</td><td>0.051</td><td>0.065</td><td>0.060</td><td>0.068</td><td>0.084</td><td>1.859</td><td>0.049</td></tr>
+<tr><td>14</td><td>312915</td><td>3129.15</td><td>0.051</td><td>0.063</td><td>0.058</td><td>0.063</td><td>0.072</td><td>2.019</td><td>0.049</td></tr>
+<tr><td>15</td><td>315024</td><td>3150.24</td><td>0.051</td><td>0.066</td><td>0.059</td><td>0.065</td><td>0.076</td><td>2.020</td><td>0.055</td></tr>
+<tr><td>16</td><td>326897</td><td>3268.97</td><td>0.050</td><td>0.066</td><td>0.059</td><td>0.064</td><td>0.076</td><td>3.055</td><td>0.063</td></tr>
+<tr><td>17</td><td>321649</td><td>3216.49</td><td>0.050</td><td>0.068</td><td>0.061</td><td>0.070</td><td>0.090</td><td>2.048</td><td>0.059</td></tr>
+<tr><td>18</td><td>324605</td><td>3246.05</td><td>0.051</td><td>0.069</td><td>0.061</td><td>0.069</td><td>0.090</td><td>2.101</td><td>0.068</td></tr>
+</table>
+<h3>Graphs</h3>
+<h4>Response Time: 100 sec time-series</h4>
+<img src="All_Transactions_response_times_intervals.png"></img>
+<h4>Response Time: raw data (all points)</h4>
+<img src="All_Transactions_response_times.png"></img>
+<h4>Throughput: 5 sec time-series</h4>
+<img src="All_Transactions_throughput.png"></img>
+<hr />
+<h2>Custom Timer: GET</h2>
+<h3>Timer Summary (secs)</h3>
+<table>
+<tr><th>count</th><th>min</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>max</th><th>stdev</th></tr>
+<tr><td>1759922</td><td>0.000</td><td>0.008</td><td>0.007</td><td>0.011</td><td>0.017</td><td>3.003</td><td>0.032</td></tr>
+</table>
+<h3>Interval Details (secs)</h3>
+<table>
+<tr><th>interval</th><th>count</th><th>rate</th><th>min</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>max</th><th>stdev</th></tr>
+<tr><td>1</td><td>8491</td><td>84.91</td><td>0.001</td><td>0.001</td><td>0.002</td><td>0.002</td><td>0.003</td><td>0.014</td><td>0.001</td></tr>
+<tr><td>2</td><td>23280</td><td>232.80</td><td>0.001</td><td>0.002</td><td>0.002</td><td>0.003</td><td>0.004</td><td>0.038</td><td>0.001</td></tr>
+<tr><td>3</td><td>37695</td><td>376.95</td><td>0.001</td><td>0.002</td><td>0.003</td><td>0.004</td><td>0.005</td><td>0.214</td><td>0.003</td></tr>
+<tr><td>4</td><td>50890</td><td>508.90</td><td>0.001</td><td>0.003</td><td>0.003</td><td>0.005</td><td>0.006</td><td>0.713</td><td>0.012</td></tr>
+<tr><td>5</td><td>63165</td><td>631.65</td><td>0.001</td><td>0.004</td><td>0.004</td><td>0.006</td><td>0.008</td><td>0.670</td><td>0.017</td></tr>
+<tr><td>6</td><td>74450</td><td>744.50</td><td>0.001</td><td>0.005</td><td>0.005</td><td>0.007</td><td>0.010</td><td>0.562</td><td>0.020</td></tr>
+<tr><td>7</td><td>87572</td><td>875.72</td><td>0.001</td><td>0.005</td><td>0.005</td><td>0.007</td><td>0.010</td><td>0.722</td><td>0.022</td></tr>
+<tr><td>8</td><td>91472</td><td>914.72</td><td>0.001</td><td>0.008</td><td>0.006</td><td>0.009</td><td>0.015</td><td>0.886</td><td>0.032</td></tr>
+<tr><td>9</td><td>102732</td><td>1027.32</td><td>0.001</td><td>0.007</td><td>0.006</td><td>0.010</td><td>0.016</td><td>3.003</td><td>0.027</td></tr>
+<tr><td>10</td><td>108853</td><td>1088.53</td><td>0.001</td><td>0.008</td><td>0.006</td><td>0.010</td><td>0.019</td><td>1.027</td><td>0.031</td></tr>
+<tr><td>11</td><td>120879</td><td>1208.79</td><td>0.001</td><td>0.008</td><td>0.007</td><td>0.010</td><td>0.017</td><td>1.192</td><td>0.030</td></tr>
+<tr><td>12</td><td>122825</td><td>1228.25</td><td>0.001</td><td>0.010</td><td>0.007</td><td>0.012</td><td>0.022</td><td>0.848</td><td>0.034</td></tr>
+<tr><td>13</td><td>134123</td><td>1341.23</td><td>0.001</td><td>0.009</td><td>0.007</td><td>0.011</td><td>0.018</td><td>0.957</td><td>0.032</td></tr>
+<tr><td>14</td><td>149427</td><td>1494.27</td><td>0.001</td><td>0.008</td><td>0.007</td><td>0.010</td><td>0.015</td><td>0.791</td><td>0.030</td></tr>
+<tr><td>15</td><td>146780</td><td>1467.80</td><td>0.001</td><td>0.009</td><td>0.008</td><td>0.012</td><td>0.017</td><td>0.821</td><td>0.030</td></tr>
+<tr><td>16</td><td>149290</td><td>1492.90</td><td>0.000</td><td>0.010</td><td>0.008</td><td>0.012</td><td>0.019</td><td>1.897</td><td>0.041</td></tr>
+<tr><td>17</td><td>144629</td><td>1446.29</td><td>0.000</td><td>0.011</td><td>0.009</td><td>0.015</td><td>0.023</td><td>1.771</td><td>0.038</td></tr>
+<tr><td>18</td><td>143369</td><td>1433.69</td><td>0.001</td><td>0.013</td><td>0.010</td><td>0.016</td><td>0.025</td><td>1.693</td><td>0.044</td></tr>
+</table>
+<h3>Graphs</h3>
+<h4>Response Time: 100 sec time-series</h4>
+<img src="GET_response_times_intervals.png"></img>
+<h4>Response Time: raw data (all points)</h4>
+<img src="GET_response_times.png"></img>
+<h4>Throughput: 5 sec time-series</h4>
+<img src="GET_throughput.png"></img>
+<hr />
+<h2>Custom Timer: SET</h2>
+<h3>Timer Summary (secs)</h3>
+<table>
+<tr><th>count</th><th>min</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>max</th><th>stdev</th></tr>
+<tr><td>1932243</td><td>0.000</td><td>0.007</td><td>0.004</td><td>0.007</td><td>0.012</td><td>3.011</td><td>0.036</td></tr>
+</table>
+<h3>Interval Details (secs)</h3>
+<table>
+<tr><th>interval</th><th>count</th><th>rate</th><th>min</th><th>avg</th><th>80pct</th><th>90pct</th><th>95pct</th><th>max</th><th>stdev</th></tr>
+<tr><td>1</td><td>8505</td><td>85.05</td><td>0.001</td><td>0.001</td><td>0.002</td><td>0.002</td><td>0.003</td><td>0.014</td><td>0.001</td></tr>
+<tr><td>2</td><td>23402</td><td>234.02</td><td>0.001</td><td>0.002</td><td>0.002</td><td>0.002</td><td>0.003</td><td>0.030</td><td>0.001</td></tr>
+<tr><td>3</td><td>37991</td><td>379.91</td><td>0.001</td><td>0.002</td><td>0.002</td><td>0.003</td><td>0.004</td><td>0.261</td><td>0.005</td></tr>
+<tr><td>4</td><td>51373</td><td>513.73</td><td>0.001</td><td>0.003</td><td>0.002</td><td>0.003</td><td>0.005</td><td>0.633</td><td>0.013</td></tr>
+<tr><td>5</td><td>63726</td><td>637.26</td><td>0.001</td><td>0.004</td><td>0.003</td><td>0.004</td><td>0.007</td><td>0.543</td><td>0.021</td></tr>
+<tr><td>6</td><td>74934</td><td>749.34</td><td>0.001</td><td>0.005</td><td>0.003</td><td>0.005</td><td>0.009</td><td>0.327</td><td>0.025</td></tr>
+<tr><td>7</td><td>87959</td><td>879.59</td><td>0.001</td><td>0.005</td><td>0.003</td><td>0.005</td><td>0.009</td><td>1.018</td><td>0.028</td></tr>
+<tr><td>8</td><td>93031</td><td>930.31</td><td>0.001</td><td>0.008</td><td>0.004</td><td>0.007</td><td>0.013</td><td>1.193</td><td>0.035</td></tr>
+<tr><td>9</td><td>107304</td><td>1073.04</td><td>0.001</td><td>0.006</td><td>0.004</td><td>0.006</td><td>0.012</td><td>3.011</td><td>0.028</td></tr>
+<tr><td>10</td><td>113152</td><td>1131.52</td><td>0.001</td><td>0.007</td><td>0.004</td><td>0.007</td><td>0.015</td><td>1.051</td><td>0.035</td></tr>
+<tr><td>11</td><td>127059</td><td>1270.59</td><td>0.001</td><td>0.007</td><td>0.004</td><td>0.007</td><td>0.013</td><td>1.087</td><td>0.035</td></tr>
+<tr><td>12</td><td>131645</td><td>1316.45</td><td>0.001</td><td>0.008</td><td>0.004</td><td>0.008</td><td>0.016</td><td>1.986</td><td>0.042</td></tr>
+<tr><td>13</td><td>144575</td><td>1445.75</td><td>0.001</td><td>0.008</td><td>0.004</td><td>0.007</td><td>0.013</td><td>1.808</td><td>0.036</td></tr>
+<tr><td>14</td><td>163482</td><td>1634.82</td><td>0.001</td><td>0.007</td><td>0.004</td><td>0.006</td><td>0.011</td><td>1.969</td><td>0.039</td></tr>
+<tr><td>15</td><td>168244</td><td>1682.44</td><td>0.001</td><td>0.007</td><td>0.004</td><td>0.007</td><td>0.011</td><td>1.504</td><td>0.035</td></tr>
+<tr><td>16</td><td>177606</td><td>1776.06</td><td>0.000</td><td>0.008</td><td>0.005</td><td>0.007</td><td>0.011</td><td>2.065</td><td>0.048</td></tr>
+<tr><td>17</td><td>177022</td><td>1770.22</td><td>0.000</td><td>0.008</td><td>0.005</td><td>0.009</td><td>0.016</td><td>1.996</td><td>0.039</td></tr>
+<tr><td>18</td><td>181233</td><td>1812.33</td><td>0.001</td><td>0.009</td><td>0.006</td><td>0.010</td><td>0.017</td><td>1.971</td><td>0.043</td></tr>
+</table>
+<h3>Graphs</h3>
+<h4>Response Time: 100 sec time-series</h4>
+<img src="SET_response_times_intervals.png"></img>
+<h4>Response Time: raw data (all points)</h4>
+<img src="SET_response_times.png"></img>
+<h4>Throughput: 5 sec time-series</h4>
+<img src="SET_throughput.png"></img>
+<hr />
+
+<b>VU Script: mem_get.py</b>
+<pre style="font-size:11px;border:1px #999999 dashed;font-family:monospace;color:#990000;background-color:#EEEEEE;padding-left:10px;">
+#!/usr/bin/env python
+
+import random
+import time
+import memcache
+
+NODES = ['192.168.12.171:11211',]
+WAIT_TIME = .05
+KEY_RANGE = (1, 1000)
+
+class Transaction(object):
+    def __init__(self):
+        self.mc = memcache.Client(NODES)
+        self.custom_timers = {}
+
+    def run(self):
+        key = str(random.randint(*KEY_RANGE))
+
+        start_timer = time.time()
+        self.mc.get(key)
+        stop_timer = time.time()
+
+        self.custom_timers['GET'] = stop_timer - start_timer
+
+        time.sleep(WAIT_TIME)
+        
+</pre>
+
+<hr />
+
+<b>VU Script: mem_set.py</b>
+<pre style="font-size:11px;border:1px #999999 dashed;font-family:monospace;color:#990000;background-color:#EEEEEE;padding-left:10px;">
+#!/usr/bin/env python
+
+import random
+import time
+import memcache
+
+NODES = ['192.168.12.171:11211',]
+DATA_SIZE = 30000
+WAIT_TIME = .05
+KEY_RANGE = (1, 1000)
+
+class Transaction(object):
+    def __init__(self):
+        self.mc = memcache.Client(NODES)
+        self.custom_timers = {}
+
+    def run(self):
+        key = str(random.randint(*KEY_RANGE))
+        data = '*' * DATA_SIZE
+
+        start_timer = time.time()
+        self.mc.set(key, data)
+        stop_timer = time.time()
+
+        self.custom_timers['SET'] = stop_timer - start_timer
+
+        time.sleep(WAIT_TIME)
+        
+</pre>    
+
+<hr />
+
+</body>
+</html>
