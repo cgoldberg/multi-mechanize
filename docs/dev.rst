@@ -1,5 +1,5 @@
-Contributors
-============
+Development
+===========
 
 Thanks for contributing code to Multi-Mechanize:
 

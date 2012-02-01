@@ -66,10 +66,10 @@ Multi-Mechanize can be installed from `PyPI <http://pypi.python.org/pypi/multime
     :maxdepth: 1
     
     configfile
-    developing
+    scripts
     graphs
     faq
-    contributors
+    dev
     changelog
     
 ----
