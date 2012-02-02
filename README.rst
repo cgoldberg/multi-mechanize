@@ -74,7 +74,7 @@ installing system dependencies.
 * install dependencies on Debian/Ubuntu::
 
     $ sudo apt-get install build-essential libfreetype6-dev libpng-dev
-    $ sudo apt-get install python-dev python-virtualenv git
+    $ sudo apt-get install python-dev python-virtualenv
 
 * install multi-mechanize and matplotlib from PyPI in a virtualenv::
 
