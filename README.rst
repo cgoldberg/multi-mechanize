@@ -1,7 +1,7 @@
 
-============================================
-Multi-Mechanize - Performance Test Framework
-============================================
+================================================
+    Multi-Mechanize - Performance Test Framework
+================================================
 
 * Copyright: (c) 2010-2012 Corey Goldberg (corey@goldb.org)
 * License: GNU LGPLv3
@@ -17,27 +17,78 @@ Multi-Mechanize - Performance Test Framework
 
 ----
 
--------------------
-    Setup / Install
--------------------
+***********************
+    Docs / Instructions
+***********************
 
-install dependencies on Debian/Ubuntu::
+    please visit: http://multimechanize.com
+
+*******************
+    Setup / Install
+*******************
+
+These instructions are for Debian/Ubuntu Linux.  For other 
+platforms, the setup is generally the same, with the exeption of 
+installing system dependencies.  
+
+-----------------------
+    system-wide install
+-----------------------
+
+* install dependencies on Debian/Ubuntu::
+
+    $ sudo apt-get install python-pip python-matplotlib
+    
+* install multi-mechanize from PyPI using Pip::
+
+    $ sudo pip install -U multi-mechanize
+    
+* create a new project::
+
+    $ multimech-newproject my_project
+
+* run a project::
+
+    $ multimech-run my_project
+
+   
+-------------------------------------------------------------
+    virtualenv + pip install (with matplotlib system package)
+-------------------------------------------------------------
+
+* install dependencies on Debian/Ubuntu::
 
     $ sudo apt-get install python-virtualenv python-matplotlib
 
-install from dev branch in a virtualenv::
+* install multi-mechanize from PyPI in a virtualenv::
 
     $ virtualenv --system-site-packages ENV
     $ cd ENV
     $ source bin/activate
-    (ENV)$ pip install -e git+http://github.com/cgoldberg/multi-mechanize.git#egg=multimechanize
+    (ENV)$ pip install multi-mechanize
+    
+------------------------------------------------------
+    virtualenv + pip install (with --no-site-packages)
+------------------------------------------------------
 
-create a new project::
+* install dependencies on Debian/Ubuntu::
 
-    (ENV)$ multimech-newproject my_project
+    $ sudo apt-get install build-essential libfreetype6-dev libpng-dev
+    $ sudo apt-get install python-dev python-virtualenv git
 
-run a project::
+* install multi-mechanize and matplotlib from PyPI in a virtualenv::
 
-    (ENV)$ multimech-run my_project
+    $ virtualenv ENV
+    $ cd ENV
+    $ source bin/activate
+    (ENV)$ pip install multi-mechanize
+    (ENV)$ pip install matplotlib
 
-----
+-----------------------------------------------
+    pip install latest dev branch from git repo
+-----------------------------------------------
+
+::
+
+    pip install -e git+http://github.com/cgoldberg/multi-mechanize.git#egg=multimechanize
+
