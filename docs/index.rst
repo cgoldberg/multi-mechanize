@@ -14,8 +14,8 @@
 ----
 
 :Home: http://multimechanize.com
-:Dev: http://github.com/cgoldberg/multi-mechanize
 :PyPI: http://pypi.python.org/pypi/multi-mechanize
+:Dev: http://github.com/cgoldberg/multi-mechanize
 :License: GNU LGPLv3
 :Author: Copyright (c) 2010-2012 Corey Goldberg
 
