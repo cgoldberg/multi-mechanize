@@ -10,6 +10,7 @@ Multi-Mechanize - Performance Test Framework
 ----
 
 :Web: `multimechanize.com <http://multimechanize.com>`_
+:PyPI: `multi-mechanize <http://pypi.python.org/pypi/multi-mechanize>`_
 :Dev: `git repo <http://github.com/cgoldberg/multi-mechanize>`_
 :Twitter: `multimechanize tweets <http://twitter.com/multimechanize>`_
 :IRC: #multimech (freenode)
@@ -26,16 +27,17 @@ install dependencies on Debian/Ubuntu::
 
 install from dev branch in a virtualenv::
 
-    $ virtualenv --system-site-packages multimech
-    $ cd multimech
+    $ virtualenv --system-site-packages ENV
+    $ cd ENV
     $ source bin/activate
-    (multimech)$ pip install -e git+http://github.com/cgoldberg/multi-mechanize.git#egg=multimechanize
+    (ENV)$ pip install -e git+http://github.com/cgoldberg/multi-mechanize.git#egg=multimechanize
 
 create a new project::
 
-    (multimech)$ multimech-newproject my_project
+    (ENV)$ multimech-newproject my_project
 
 run a project::
 
-    (multimech)$ multimech-run my_project
+    (ENV)$ multimech-run my_project
 
+----
