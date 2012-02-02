@@ -21,20 +21,19 @@ from multimechanize import __version__
 this_dir = os.path.abspath(os.path.dirname(__file__))
 
 
-NAME = 'multimechanize'
+NAME = 'multi-mechanize'
 VERSION = __version__
 PACKAGES = find_packages(exclude=['ez_setup'])
 DESCRIPTION = 'Multi-Mechanize - Performance Test Framework'
-URL = 'http://testutils.org/multimechanize'
+URL = 'http://multimechanize.com'
 LICENSE = 'GNU LGPLv3'
 LONG_DESCRIPTION = open(os.path.join(this_dir, 'README.rst')).read()
 REQUIREMENTS = filter(None, open(os.path.join(this_dir, 'requirements.txt')).read().splitlines())
 AUTHOR = 'Corey Goldberg'
 AUTHOR_EMAIL = 'corey@goldb.org'
-KEYWORDS = ('performance scalability load test testing benchmark').split(' ')
+KEYWORDS = ('performance', 'scalability', 'load', 'test', 'testing', 'benchmark')
 CLASSIFIERS = [
     'Development Status :: 4 - Beta',
-    'Environment :: Console',
     'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
     'Operating System :: OS Independent',
     'Programming Language :: Python',

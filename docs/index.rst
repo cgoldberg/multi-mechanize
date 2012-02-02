@@ -13,9 +13,9 @@
 
 ----
 
-:Home: http://testutils.org/multimechanize
+:Home: http://multimechanize.com
 :Dev: http://github.com/cgoldberg/multi-mechanize
-:PyPI: http://pypi.python.org/pypi/multimechanize
+:PyPI: http://pypi.python.org/pypi/multi-mechanize
 :License: GNU LGPLv3
 :Author: Copyright (c) 2010-2012 Corey Goldberg
 
@@ -36,11 +36,11 @@ for compatibility with CI systems.
     Install / Setup
 -------------------
 
-Multi-Mechanize can be installed from `PyPI <http://pypi.python.org/pypi/multimechanize>`_ using `pip <http://www.pip-installer.org>`_::
+Multi-Mechanize can be installed from `PyPI <http://pypi.python.org/pypi/multi-mechanize>`_ using `pip <http://www.pip-installer.org>`_::
     
-    pip install -U multimechanize
+    pip install -U multi-mechanize
 
-... or download the `source distribution from PyPI <http://pypi.python.org/pypi/multimechanize#downloads>`_, unarchive, and run::
+... or download the `source distribution from PyPI <http://pypi.python.org/pypi/multi-mechanize#downloads>`_, unarchive, and run::
 
     python setup.py install
     
