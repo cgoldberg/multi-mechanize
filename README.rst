@@ -24,7 +24,7 @@
 please visit: http://multimechanize.com
 
 *******************
-    Setup / Install
+    Install / Setup
 *******************
 
 These instructions are for Debian/Ubuntu Linux.  For other 
