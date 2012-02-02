@@ -21,7 +21,7 @@
     Docs / Instructions
 ***********************
 
-    please visit: http://multimechanize.com
+please visit: http://multimechanize.com
 
 *******************
     Setup / Install
