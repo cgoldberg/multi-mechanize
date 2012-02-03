@@ -54,9 +54,9 @@ for compatibility with CI systems.
 * Google Group: http://groups.google.com/group/multi-mechanize
 * Twitter: http://twitter.com/multimechanize
 
-*******************
-    Install / Setup
-*******************
+*************************
+    Quick Install / Setup
+*************************
 
 Multi-Mechanize can be installed from `PyPI <http://pypi.python.org/pypi/multi-mechanize>`_ using `pip <http://www.pip-installer.org>`_::
     
@@ -66,19 +66,52 @@ Multi-Mechanize can be installed from `PyPI <http://pypi.python.org/pypi/multi-m
 
     python setup.py install
 
+****************
+    Instructions
+****************
+
+------------------------
+    Create a New Project
+------------------------
+
 Once installed, you can create a new project::
 
     $ multimech-newproject my_project
 
-and run a project::
+Each project contains the following:
+
+ * ``config.cfg``: configuration file. set your test options
+ * ``test_scripts``: directory for virtual user scripts. add your test scripts here.
+ * ``results``: directory for results storage. a timestamped directory is created for each test run containing an html summary report, raw csv data, and png image files.
+
+``multimech-newproject`` will create a mock project, with a single script that generates random timer data.  Check it out for a basic example. 
+
+------------------------
+    Run a Project
+------------------------
 
     $ multimech-run my_project
-    
-----
+
+-------------------------
+    Project Configuration
+-------------------------
+
+
+------------------------
+    Virtual User Scripts
+------------------------
+
+    create your virtual user scripts
+
+****************************
+    Detailed Install / Setup
+****************************
 
 The following detailed instructions are for Debian/Ubuntu Linux. 
 For other platforms, the setup is generally the same, with the 
 exeption of installing system dependencies.  
+
+Required: Python 2.6 or 2.7
 
 -----------------------
     system-wide install
@@ -108,7 +141,7 @@ exeption of installing system dependencies.
     (ENV)$ pip install multi-mechanize
     
 ------------------------------------------------------
-    virtualenv + pip install (with --no-site-packages)
+    virtualenv + pip install (with no-site-packages)
 ------------------------------------------------------
 
 * install dependencies on Debian/Ubuntu::
