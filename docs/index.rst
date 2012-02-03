@@ -66,29 +66,31 @@ Multi-Mechanize can be installed from `PyPI <http://pypi.python.org/pypi/multi-m
 
     python setup.py install
 
-****************
-    Instructions
-****************
+**********************
+    Usage Instructions
+**********************
 
 ------------------------
     Create a New Project
 ------------------------
 
-Once installed, you can create a new project::
+Create a new test project with ``multimech-newproject``::
 
     $ multimech-newproject my_project
 
-Each project contains the following:
+Each test project contains the following:
 
  * ``config.cfg``: configuration file. set your test options
- * ``test_scripts``: directory for virtual user scripts. add your test scripts here.
- * ``results``: directory for results storage. a timestamped directory is created for each test run containing an html summary report, raw csv data, and png image files.
+ * ``test_scripts/``: directory for virtual user scripts. add your test scripts here.
+ * ``results/``: directory for results storage. a timestamped directory is created for each test run containing an html summary report, raw csv data, and png image files.
 
-``multimech-newproject`` will create a mock project, with a single script that generates random timer data.  Check it out for a basic example. 
+``multimech-newproject`` will create a mock project, using a single script that generates random timer data.  Check it out for a basic example. 
 
-------------------------
+-----------------
     Run a Project
-------------------------
+-----------------
+
+Run a test project with ``multimech-run``::
 
     $ multimech-run my_project
 
@@ -97,11 +99,38 @@ Each project contains the following:
 -------------------------
 
 
-------------------------
-    Virtual User Scripts
-------------------------
+**********************************************
+    Sample Scripts (Virtual User Transactions)
+**********************************************
 
-    create your virtual user scripts
+HTTP GETs using Requests::
+
+    import requests
+
+    class Transaction(object):
+        def run(self):
+            r = requests.get('https://github.com/timeline.json')
+            r.raw.read()
+
+HTTP GETs using Mechanize (with timer and assertions)::
+
+    import mechanize
+    import time
+
+    class Transaction(object):
+        def run(self):
+            br = mechanize.Browser()
+            br.set_handle_robots(False)
+            
+            start_timer = time.time()
+            resp = br.open('http://www.example.com/')
+            resp.read()
+            latency = time.time() - start_timer
+            
+            self.custom_timers['Example_Homepage'] = latency
+            
+            assert (resp.code == 200), 'Bad HTTP Response'
+            assert ('Example Web Page' in resp.get_data())
 
 ****************************
     Detailed Install / Setup
