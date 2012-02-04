@@ -7,6 +7,8 @@
  * :copyright: Copyright 2007-2011 by the Sphinx team, see AUTHORS.
  * :license: BSD, see LICENSE for details.
  *
+ *  Modified for Multi-Mechanize docs
+ *
  */
  
 @import url("basic.css");
@@ -14,7 +16,7 @@
 /* -- page layout ----------------------------------------------------------- */
  
 body {
-    font-family: Ubuntu, "Trebuchet MS", sans-serif;
+    font-family: Ubuntu, "DejaVu Sans", "Trebuchet MS", sans-serif;
     font-size: 100%;
     background-color: #111;
     color: #555;
@@ -81,7 +83,7 @@ div.sphinxsidebarwrapper {
  
 div.sphinxsidebar h3,
 div.sphinxsidebar h4 {
-    font-family: Ubuntu, "Trebuchet MS", sans-serif;
+    font-family: Ubuntu, "DejaVu Sans", "Trebuchet MS", sans-serif;
     color: #222;
     font-size: 1.2em;
     font-weight: normal;
@@ -120,7 +122,7 @@ div.sphinxsidebar a {
  
 div.sphinxsidebar input {
     border: 1px solid #ccc;
-    font-family: Ubuntu, "Trebuchet MS", sans-serif;
+    font-family: Ubuntu, "DejaVu Sans", "Trebuchet MS", sans-serif;
     font-size: 1em;
 }
 
@@ -146,7 +148,7 @@ div.body h3,
 div.body h4,
 div.body h5,
 div.body h6 {
-    font-family: Ubuntu, "Trebuchet MS", sans-serif;
+    font-family: Ubuntu, "DejaVu Sans", "Trebuchet MS", sans-serif;
     background-color: #BED4EB;
     font-weight: normal;
     color: #212224;
@@ -219,7 +221,7 @@ pre {
     line-height: 1.2em;
     border: 1px solid #C6C9CB;
     font-size: 1.2em;
-	font-family: "Ubuntu Mono", "Monaco", "Lucida Console", monospace;
+	font-family: "Ubuntu Mono", Monaco, Consolas, "DejaVu Sans Mono", "Lucida Console", monospace;
     margin: 1.5em 0 1.5em 0;
     -webkit-box-shadow: 1px 1px 1px #d8d8d8;
     -moz-box-shadow: 1px 1px 1px #d8d8d8;
@@ -230,11 +232,11 @@ tt {
     color: #222;
     /* padding: 1px 2px; */
     font-size: 1.2em;
-    font-family: "Ubuntu Mono", "Monaco", "Lucida Console", monospace;
+    font-family: "Ubuntu Mono", Monaco, Consolas, "DejaVu Sans Mono", "Lucida Console", monospace;
 }
 
 .viewcode-back {
-    font-family: Ubuntu, "Trebuchet MS", sans-serif;
+    font-family: Ubuntu, "DejaVu Sans", "Trebuchet MS", sans-serif;
 }
 
 div.viewcode-block:target {

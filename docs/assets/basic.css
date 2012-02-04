@@ -7,6 +7,8 @@
  * :copyright: Copyright 2007-2011 by the Sphinx team, see AUTHORS.
  * :license: BSD, see LICENSE for details.
  *
+ *  Modified for Multi-Mechanize docs
+ *
  */
 
 /* -- main layout ----------------------------------------------------------- */
@@ -75,7 +77,7 @@ div.sphinxsidebar form {
 
 div.sphinxsidebar input {
     border: 1px solid #98dbcc;
-    font-family: Ubuntu, Tahoma, sans-serif;
+    font-family: Ubuntu, "DejaVu Sans", "Trebuchet MS", sans-serif;
     font-size: 1em;
 }
 
