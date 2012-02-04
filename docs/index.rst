@@ -50,9 +50,9 @@ for compatibility with CI systems.
     Discussion / Help / Updates
 *******************************
 
-* IRC: #multimech (freenode)
-* Google Group: http://groups.google.com/group/multi-mechanize
-* Twitter: http://twitter.com/multimechanize
+* IRC: `Freenode <http://freenode.net/>`_ ``#multimech`` channel
+* Mailing List: `Google Group <http://groups.google.com/group/multi-mechanize>`_
+* Twitter: `twitter.com/multimechanize <http://twitter.com/multimechanize>`_
 
 *************************
     Quick Install / Setup
