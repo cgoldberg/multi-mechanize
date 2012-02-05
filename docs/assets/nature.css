@@ -218,7 +218,7 @@ pre {
     padding: 6px;
     background-color: White;
     color: #000000;
-    line-height: 1.2em;
+    line-height: 1.1em;
     border: 1px solid #C6C9CB;
     font-size: 1.2em;
 	font-family: "Ubuntu Mono", Monaco, Consolas, "DejaVu Sans Mono", "Lucida Console", monospace;
@@ -231,7 +231,7 @@ tt {
     background-color: #ecf0f3;
     color: #222;
     /* padding: 1px 2px; */
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-family: "Ubuntu Mono", Monaco, Consolas, "DejaVu Sans Mono", "Lucida Console", monospace;
 }
 
