@@ -18,21 +18,21 @@ SCRIPTS_DIR = 'test_scripts'
 
 CONFIG_CONTENT = """
 [global]
-run_time: 30
-rampup: 0
-results_ts_interval: 10
-progress_bar: on
-console_logging: off
-xml_report: off
+run_time = 30
+rampup = 0
+results_ts_interval = 10
+progress_bar = on
+console_logging = off
+xml_report = off
 
 
 [user_group-1]
-threads: 3
-script: %s
+threads = 3
+script = %s
 
 [user_group-2]
-threads: 3
-script: %s
+threads = 3
+script = %s
 
 """ % (SCRIPT_NAME, SCRIPT_NAME)
 
