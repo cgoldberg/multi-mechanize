@@ -25,12 +25,16 @@
     Performance & Load Tests in Python
 **************************************
 
-Multi-Mechanize is an open source framework for performance and load 
-testing. It runs simultaneous Python scripts to generate synthetic 
-transactions against a remote site or service.
-    
-Test output reports are saved as HTML (with PNG graphs), or JUnit-compatible XML 
-for compatibility with CI systems.
+Multi-Mechanize is an open source framework for performance and load testing. 
+It runs concurrent Python scripts to generate load (synthetic transactions) 
+against a remote site or service.
+
+Multi-Mechanize is most commonly used for web performance and scalability 
+testing, but can be used to generate workload against any remote API accessible 
+from Python.
+
+Test output reports are saved as HTML or JUnit-compatible XML for 
+compatibility with CI systems.
 
 *************
     Site Menu
