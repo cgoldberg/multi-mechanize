@@ -1,13 +1,10 @@
 Development
 ===========
 
-*********************
-    Dev Communication
-*********************
+Multi-Mechanize is Free Open Source Software.
 
-* IRC: `Freenode <http://freenode.net/>`_ ``#multimech`` channel
-* Mailing List: `Google Group <http://groups.google.com/group/multi-mechanize>`_
-* Issues: `GitHub <https://github.com/cgoldberg/multi-mechanize/issues>`_
+* `The Free Software Definition <http://www.gnu.org/philosophy/free-sw.html>`_
+* `The Open Source Definition <http://www.opensource.org/docs/osd>`_
 
 **********
     GitHub
@@ -16,7 +13,15 @@ Development
 Multi-Mechanize development is hosted at GitHub and uses 
 `Git <http://git-scm.com/>`_ version control system:
 
-* http://github.com/cgoldberg/multi-mechanize
+* https://github.com/cgoldberg/multi-mechanize
+
+*********************
+    Dev Communication
+*********************
+
+* IRC: `Freenode <http://freenode.net/>`_ ``#multimech`` channel
+* Mailing List: `Google Group <http://groups.google.com/group/multi-mechanize>`_
+* Issues: `GitHub <https://github.com/cgoldberg/multi-mechanize/issues>`_
 
 ***************************
     Patches / Pull Requests
