@@ -1,17 +1,17 @@
 Configuration
 =============
 
-***************
-    Config File
-***************
+****************************
+    Config File (config.cfg)
+****************************
 
 Each project contains a ``config.cfg`` file where test settings are defined.
 
 The config file contains a ``[global]`` section and ``[user_group-*]`` sections.
 
-***********************
-    Minimal Config File
-***********************
+*************************
+    Minimal Configuration
+*************************
 
 Here is a sample ``config.cfg`` file showing minimal options, defining 1 group of virtual users::
 
@@ -24,9 +24,9 @@ Here is a sample ``config.cfg`` file showing minimal options, defining 1 group o
     threads = 10
     script = vu_script.py
 
-********************
-    Full Config File
-********************
+**********************
+    Full Configuration
+**********************
 
 Here is a sample ``config.cfg`` file showing all possible options, defining 2 groups of virtual users::
 
@@ -52,6 +52,8 @@ Here is a sample ``config.cfg`` file showing all possible options, defining 2 gr
     Global Options
 ******************
 
+The following settings/options are available in the ``[global]`` config section:
+
 * ``run_time``: duration of test (seconds) [required]
 * ``rampup``: duration of user rampup (seconds) [required]
 * ``results_ts_interval``: time series interval for results analysis (seconds) [required]
@@ -61,9 +63,11 @@ Here is a sample ``config.cfg`` file showing all possible options, defining 2 gr
 * ``results_database``: database connection string [optional]
 * ``post_run_script``: hook to call a script at test completion [optional]
 
-***********
-User Groups
-***********
+***************
+    User Groups
+***************
+
+The following settings/options are available in each ``[user_group-*]`` config section:
 
 * ``threads``: number of threads/virtual users
 * ``script``: virtual user test script to run
