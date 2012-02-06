@@ -1,7 +1,7 @@
 Development
 ===========
 
-Multi-Mechanize is Free Open Source Software.
+Multi-Mechanize is Free Open Source Software.  Contributors are welcome!
 
 * `The Free Software Definition <http://www.gnu.org/philosophy/free-sw.html>`_
 * `The Open Source Definition <http://www.opensource.org/docs/osd>`_
@@ -21,15 +21,19 @@ Multi-Mechanize development is hosted at GitHub and uses
 
 * IRC: `Freenode <http://freenode.net/>`_ ``#multimech`` channel
 * Mailing List: `Google Group <http://groups.google.com/group/multi-mechanize>`_
-* Issues: `GitHub <https://github.com/cgoldberg/multi-mechanize/issues>`_
 
-***************************
-    Patches / Pull Requests
-***************************
+**********
+    Issues
+**********
 
-* fork the project
-* make your feature addition or bug fix
-* send a pull request
+If you have a feature request, suggestion, or bug report, please open a new
+`issue on GitHub <https://github.com/cgoldberg/multi-mechanize/issues>`_. 
+
+***********
+    Patches
+***********
+
+To submit patches, please send a Pull Request on `GitHub <https://github.com/cgoldberg/multi-mechanize>`_.
 
 ****************
     Contributors
