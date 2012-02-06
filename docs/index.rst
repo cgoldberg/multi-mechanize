@@ -103,9 +103,22 @@ Run a test project with ``multimech-run``::
 * for test configuration options, see :ref:`config-label`
 * a timestamped ``results`` directory is created for each test run, containing the results report.
 
-**********************************************
-    Sample Scripts (Virtual User Transactions)
-**********************************************
+************************
+    Test Scripts
+************************
+
+--------------------------
+    Virtual User Scripting
+--------------------------
+
+* written in Python
+* test scripts simulate virtual user activity against a site/service/api
+* scripts define user transactions
+* for help developing scripts, see :ref:`scripts-label`
+
+------------
+    Examples
+------------
 
 HTTP GETs using `Requests <http://docs.python-requests.org/>`_::
 
@@ -133,10 +146,8 @@ HTTP GETs using `Mechanize <http://wwwsearch.sourceforge.net/mechanize/>`_ (with
             
             self.custom_timers['Example_Homepage'] = latency
             
-            assert (resp.code == 200), 'Bad HTTP Response'
+            assert (resp.code == 200)
             assert ('Example Web Page' in resp.get_data())
-
-* for help developing scripts, see :ref:`scripts-label`
 
 ----
 
