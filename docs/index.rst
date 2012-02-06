@@ -44,6 +44,7 @@ compatibility with CI systems.
 .. toctree::
     :maxdepth: 1
     
+    setup
     configfile
     scripts
     graphs
@@ -60,7 +61,7 @@ compatibility with CI systems.
 * Twitter: `twitter.com/multimechanize <http://twitter.com/multimechanize>`_
 
 *************************
-    Quick Install / Setup
+    Install / Setup
 *************************
 
 Multi-Mechanize can be installed from `PyPI <http://pypi.python.org/pypi/multi-mechanize>`_ using `pip <http://www.pip-installer.org>`_::
@@ -70,6 +71,8 @@ Multi-Mechanize can be installed from `PyPI <http://pypi.python.org/pypi/multi-m
 ... or download the `source distribution from PyPI <http://pypi.python.org/pypi/multi-mechanize#downloads>`_, unarchive, and run::
 
     python setup.py install
+
+(for more setup and installation instructions, see :ref:`setup-label`)
 
 **********************
     Usage Instructions
@@ -136,60 +139,6 @@ HTTP GETs using `Mechanize <http://wwwsearch.sourceforge.net/mechanize/>`_ (with
             
             assert (resp.code == 200), 'Bad HTTP Response'
             assert ('Example Web Page' in resp.get_data())
-
-****************************
-    Detailed Install / Setup
-****************************
-
-The following detailed instructions are for Debian/Ubuntu Linux. 
-For other platforms, the setup is generally the same, with the 
-exeption of installing system dependencies.  
-
-Required: Python 2.6 or 2.7
-
------------------------
-    system-wide install
------------------------
-
-* install dependencies on Debian/Ubuntu::
-
-    $ sudo apt-get install python-pip python-matplotlib
-    
-* install multi-mechanize from PyPI using Pip::
-
-    $ sudo pip install -U multi-mechanize
-
--------------------------------------------------------------
-    virtualenv + pip install (with matplotlib system package)
--------------------------------------------------------------
-
-* install dependencies on Debian/Ubuntu::
-
-    $ sudo apt-get install python-virtualenv python-matplotlib
-
-* install multi-mechanize from PyPI in a virtualenv::
-
-    $ virtualenv --system-site-packages ENV
-    $ cd ENV
-    $ source bin/activate
-    (ENV)$ pip install multi-mechanize
-    
-------------------------------------------------------
-    virtualenv + pip install (with no-site-packages)
-------------------------------------------------------
-
-* install dependencies on Debian/Ubuntu::
-
-    $ sudo apt-get install build-essential libfreetype6-dev libpng-dev
-    $ sudo apt-get install python-dev python-virtualenv
-
-* install multi-mechanize and matplotlib from PyPI in a virtualenv::
-
-    $ virtualenv ENV
-    $ cd ENV
-    $ source bin/activate
-    (ENV)$ pip install multi-mechanize
-    (ENV)$ pip install matplotlib
 
 ----
 

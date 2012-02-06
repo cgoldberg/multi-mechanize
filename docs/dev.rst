@@ -33,7 +33,7 @@ If you have a feature request, suggestion, or bug report, please open a new
     Patches
 ***********
 
-To submit patches, please send a Pull Request on `GitHub <https://github.com/cgoldberg/multi-mechanize>`_.
+To submit a patch, please send a Pull Request on `GitHub <https://github.com/cgoldberg/multi-mechanize>`_.
 
 ****************
     Contributors
