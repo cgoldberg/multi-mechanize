@@ -59,9 +59,9 @@ compatibility with CI systems.
 * Mailing List: `Google Group <http://groups.google.com/group/multi-mechanize>`_
 * Twitter: `twitter.com/multimechanize <http://twitter.com/multimechanize>`_
 
-*************************
+*******************
     Install / Setup
-*************************
+*******************
 
 Multi-Mechanize can be installed from `PyPI <http://pypi.python.org/pypi/multi-mechanize>`_ using `pip <http://www.pip-installer.org>`_::
     
@@ -77,9 +77,9 @@ Multi-Mechanize can be installed from `PyPI <http://pypi.python.org/pypi/multi-m
     Usage Instructions
 **********************
 
-------------------------
-    Create a New Project
-------------------------
+--------------------
+    Create a Project
+--------------------
 
 Create a new test project with ``multimech-newproject``::
 
@@ -87,9 +87,9 @@ Create a new test project with ``multimech-newproject``::
 
 Each test project contains the following:
 
- * ``config.cfg``: configuration file. set your test options
+ * ``config.cfg``: configuration file. set your test options here.
  * ``test_scripts/``: directory for virtual user scripts. add your test scripts here.
- * ``results/``: directory for results storage. a timestamped directory is created for each test run containing an html summary report, raw csv data, and png image files.
+ * ``results/``: directory for results storage. a timestamped directory is created for each test run, containing the results report.
 
 ``multimech-newproject`` will create a mock project, using a single script that generates random timer data.  Check it out for a basic example. 
 
@@ -101,10 +101,8 @@ Run a test project with ``multimech-run``::
 
     $ multimech-run my_project
 
--------------------------
-    Project Configuration
--------------------------
-
+* for test configuration options, see :ref:`config-label`
+* a timestamped ``results`` directory is created for each test run, containing the results report.
 
 **********************************************
     Sample Scripts (Virtual User Transactions)
@@ -138,6 +136,8 @@ HTTP GETs using `Mechanize <http://wwwsearch.sourceforge.net/mechanize/>`_ (with
             
             assert (resp.code == 200), 'Bad HTTP Response'
             assert ('Example Web Page' in resp.get_data())
+
+* for help developing scripts, see :ref:`scripts-label`
 
 ----
 

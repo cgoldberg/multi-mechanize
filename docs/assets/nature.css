@@ -159,7 +159,7 @@ div.body h6 {
  
 div.body h1 { border-top: 20px solid white; margin-top: 0; font-size: 225%; color: #EEEEEE; background-color: #5E2750;}
 div.body h2 { font-size: 140%; color: #EEEEEE; background-color: #5E2750; }
-div.body h3 { font-size: 120%; color: #2C001E; background-color: #EFEFEF; }
+div.body h3 { font-size: 120%; color: #2C001E; background-color: #C0C0C0; }
 div.body h4 { font-size: 100%; color: #EEEEEE; background-color: #772953; }
 div.body h5 { font-size: 100%; color: #EEEEEE; background-color: #772953; }
 div.body h6 { font-size: 100%; color: #EEEEEE; background-color: #772953; }
@@ -216,7 +216,7 @@ p.admonition-title:after {
  
 pre {
     padding: 6px;
-    background-color: White;
+    background-color: #EFEFEF;
     color: #000000;
     line-height: 1.1em;
     border: 1px solid #C6C9CB;
@@ -228,7 +228,7 @@ pre {
 }
  
 tt {
-    background-color: #ecf0f3;
+    background-color: #EFEFEF;
     color: #222;
     /* padding: 1px 2px; */
     font-size: 1.1em;
