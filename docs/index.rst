@@ -34,8 +34,7 @@ Multi-Mechanize is most commonly used for web performance and scalability
 testing, but can be used to generate workload against any remote API accessible 
 from Python.
 
-Test output reports are saved as HTML or JUnit-compatible XML for 
-compatibility with CI systems.
+Test output reports are saved as HTML or JMeter-compatible XML.
 
 *************
     Site Menu
@@ -47,7 +46,7 @@ compatibility with CI systems.
     setup
     configfile
     scripts
-    graphs
+    reports
     dev
     changelog
     
