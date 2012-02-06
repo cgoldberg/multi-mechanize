@@ -47,7 +47,7 @@ Test output reports are saved as HTML or JMeter-compatible XML.
     configfile
     scripts
     reports
-    database
+    datastore
     dev
     changelog
     
