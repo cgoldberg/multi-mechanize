@@ -48,7 +48,6 @@ compatibility with CI systems.
     configfile
     scripts
     graphs
-    faq
     dev
     changelog
     
