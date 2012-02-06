@@ -1,3 +1,4 @@
+.. include:: <isonum.txt>
 
 ================================================
     Multi-Mechanize | Performance Test Framework
@@ -13,11 +14,11 @@
 
 ----
 
-:Web: http://multimechanize.com
-:PyPI: http://pypi.python.org/pypi/multi-mechanize
-:Dev: http://github.com/cgoldberg/multi-mechanize
-:License: GNU LGPLv3
-:Author: Copyright (c) 2010-2012 Corey Goldberg
+:Web: `multimechanize.com <http://multimechanize.com>`_
+:PyPI: `multi-mechanize package <http://pypi.python.org/pypi/multi-mechanize>`_
+:Dev: `GitHub <http://github.com/cgoldberg/multi-mechanize>`_
+:License: `GNU LGPLv3 <http://www.gnu.org/licenses/lgpl.html>`_
+:Author: `Corey Goldberg <http://goldb.org>`_ - copyright |copy| 2010-2012
 
 ----
 
