@@ -27,6 +27,20 @@ please visit: http://multimechanize.com
     Install / Setup
 *******************
 
+Multi-Mechanize can be installed from `PyPI <http://pypi.python.org/pypi/multi-mechanize>`_ using `pip <http://www.pip-installer.org>`_::
+    
+    pip install -U multi-mechanize
+
+... or download the `source distribution from PyPI <http://pypi.python.org/pypi/multi-mechanize#downloads>`_, unarchive, and run::
+
+    python setup.py install
+
+... then use ``multimech-newproject`` and ``multimech-run`` to create and run your performance test projects.
+
+****************************
+    Detailed Install / Setup
+****************************
+
 These instructions are for Debian/Ubuntu Linux.  For other 
 platforms, the setup is generally the same, with the exeption of 
 installing system dependencies.  

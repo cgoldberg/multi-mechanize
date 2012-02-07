@@ -1,15 +1,19 @@
 Changelog
 =========
 
-Version 1.2.0, 2012-??-??
+Version 1.2.0, 2012-02-07
 *************************
 
 * initial release on PyPI (http://pypi.python.org/pypi/multimechanize)
 * development moved to GitHub (http://github.com/cgoldberg/multi-mechanize)
-* using git for version control (pull requests welcome) 
+* using Git for version control (pull requests welcome)
+* new entry-point scripts (``multimech-run``, ``multimech-newproject``)
 * new version numbering format
 * new setup and packaging
-* new docs
+* new documentation (sphinx generated)
+* results re-processing (``-r``|``--results`` command line option)
+* specify bind address in rpc-server mode (``-b``|``--bind-addr`` command line option)
+* specify project directory location (``-d``|``--directory`` command line option)
 
 ----
 
