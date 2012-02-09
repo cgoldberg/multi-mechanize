@@ -4,7 +4,7 @@ Changelog
 Version 1.2.0, 2012-02-07
 *************************
 
-* initial release on PyPI (http://pypi.python.org/pypi/multimechanize)
+* initial release on PyPI (http://pypi.python.org/pypi/multi-mechanize)
 * development moved to GitHub (http://github.com/cgoldberg/multi-mechanize)
 * using Git for version control (pull requests welcome)
 * new entry-point scripts (``multimech-run``, ``multimech-newproject``)
