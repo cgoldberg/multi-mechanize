@@ -6,4 +6,5 @@
 #  This file is part of Multi-Mechanize | Performance Test Framework
 #
 
-__version__ = '1.2.1dev'
+# XXX-JE-ORIG: __version__ = '1.2.0'
+__version__ = '1.2.0.1'
