@@ -26,7 +26,7 @@ def init(projects_dir, project_name):
         sys.stderr.write('\nERROR: can not find project: %s\n\n' % project_name)
         sys.exit(1)
     # -- NORMAL-CASE: Ensure that all scripts can be loaded (at program start).
-    ScriptLoader.load_all(scripts_path)
+    ScriptLoader.load_all(scripts_path, validate=True)
 
 def load_script(script_file):
     """
