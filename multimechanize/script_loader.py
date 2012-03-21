@@ -89,7 +89,7 @@ class ScriptLoader(object):
         return module
 
     @classmethod
-    def load_all(cls, scripts_path):
+    def load_all(cls, scripts_path, validate=False):
         """
         Load all python scripts in a path.
         :returns: Loaded script modules as dictionary.
@@ -104,6 +104,7 @@ class ScriptLoader(object):
                 continue    #< SKIP: __init__.py, ...
             module = cls.load(os.path.normpath(script))
             modules[module.__name__] = module
-            ScriptValidator.ensure_module_valid(module)
+            if validate:
+                ScriptValidator.ensure_module_valid(module)
         return modules
 
