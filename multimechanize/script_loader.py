@@ -70,13 +70,12 @@ class ScriptLoader(object):
             module_dirname = os.curdir
         if not os.path.exists(path):
             raise ImportError("File not found: %s" % path)
-        if not sys.path or ("." not in sys.path[0]):
-            sys.path.insert(0, ".")
+        module_dirnamea = os.path.abspath(module_dirname)
+        if not sys.path or module_dirnamea != sys.path[0]:
+            sys.path.insert(0, module_dirnamea)
 
-        curdir = os.getcwd()
         module = None
         try:
-            os.chdir(module_dirname)
             module = __import__(module_name)
             # module.__name__ = module_name
             # module.__file__ = path
@@ -84,9 +83,9 @@ class ScriptLoader(object):
             print "IMPORT-ERROR: %s (file=%s, curdir=%s)" % \
                   (module_name, path, os.getcwd())
             sys.stderr.write("Cannot import: %s\n" % e)
+            for index, searchpath in enumerate(sys.path):
+                print "  %2s.  %s" % (index, searchpath)
             raise
-        finally:
-            os.chdir(curdir)
         return module
 
     @classmethod
