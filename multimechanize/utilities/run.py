@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 #
 #  Copyright (c) 2010-2012 Corey Goldberg (corey@goldb.org)
 #  License: GNU LGPLv3
@@ -12,7 +13,7 @@ import ConfigParser
 import multiprocessing
 import optparse
 import os
-import Queue
+# -- NOT-NEEDED: import Queue
 import shutil
 import subprocess
 import sys
@@ -31,47 +32,49 @@ import multimechanize.core as core
 import multimechanize.results as results
 import multimechanize.resultswriter as resultswriter
 import multimechanize.progressbar as progressbar
-    
-
-usage = 'Usage: %prog <project name> [options]'
-parser = optparse.OptionParser(usage=usage)
-parser.add_option('-p', '--port', dest='port', type='int', help='rpc listener port')
-parser.add_option('-r', '--results', dest='results_dir', help='results directory to reprocess')
-parser.add_option('-b', '--bind-addr', dest='bind_addr', help='rpc bind address', default='localhost')
-parser.add_option('-d', '--directory', dest='projects_dir', help='directory containing project folder', default='.')
-cmd_opts, args = parser.parse_args()
-
-try:
-    project_name = args[0]
-except IndexError:
-    sys.stderr.write('\nERROR: no project specified\n\n')
-    sys.stderr.write('%s\n' % usage)
-    sys.stderr.write('Example: multimech-run my_project\n\n')
-    sys.exit(1)
-
-core.init(cmd_opts.projects_dir, project_name)
-
-
-
+from multimechanize import __version__ as VERSION
 
 def main():
+    """
+    Main function to run multimechanize benchmark/performance test.
+    """
+
+    usage = 'Usage: %prog <project name> [options]'
+    parser = optparse.OptionParser(usage=usage, version=VERSION)
+    parser.add_option('-p', '--port', dest='port', type='int', help='rpc listener port')
+    parser.add_option('-r', '--results', dest='results_dir', help='results directory to reprocess')
+    parser.add_option('-b', '--bind-addr', dest='bind_addr', help='rpc bind address', default='localhost')
+    parser.add_option('-d', '--directory', dest='projects_dir', help='directory containing project folder', default='.')
+    cmd_opts, args = parser.parse_args()
+
+    try:
+        project_name = args[0]
+    except IndexError:
+        sys.stderr.write('\nERROR: no project specified\n\n')
+        sys.stderr.write('%s\n' % usage)
+        sys.stderr.write('Example: multimech-run my_project\n\n')
+        sys.exit(1)
+
+    core.init(cmd_opts.projects_dir, project_name)
+
+    # -- ORIGINAL-MAIN:
     if cmd_opts.results_dir:  # don't run a test, just re-process results
-        rerun_results(cmd_opts.results_dir)
+        rerun_results(project_name, cmd_opts, cmd_opts.results_dir)
     elif cmd_opts.port:
         import multimechanize.rpcserver
         multimechanize.rpcserver.launch_rpc_server(cmd_opts.bind_addr, cmd_opts.port, project_name, run_test)
     else:
-        run_test()
+        run_test(project_name, cmd_opts)
     return
 
 
 
-def run_test(remote_starter=None):
+def run_test(project_name, cmd_opts, remote_starter=None):
     if remote_starter is not None:
         remote_starter.test_running = True
         remote_starter.output_dir = None
 
-    run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs = configure(project_name)
+    run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs = configure(project_name, cmd_opts)
 
     run_localtime = time.localtime()
     output_dir = '%s/%s/results/results_%s' % (cmd_opts.projects_dir, project_name, time.strftime('%Y.%m.%d_%H.%M.%S/', run_localtime))
@@ -82,9 +85,14 @@ def run_test(remote_starter=None):
     rw.daemon = True
     rw.start()
 
+    script_prefix = os.path.join(cmd_opts.projects_dir, project_name, "test_scripts")
+    script_prefix = os.path.normpath(script_prefix)
+
     user_groups = []
     for i, ug_config in enumerate(user_group_configs):
-        ug = core.UserGroup(queue, i, ug_config.name, ug_config.num_threads, ug_config.script_file, run_time, rampup)
+        script_file = os.path.join(script_prefix, ug_config.script_file)
+        ug = core.UserGroup(queue, i, ug_config.name, ug_config.num_threads,
+                            script_file, run_time, rampup)
         user_groups.append(ug)
     for user_group in user_groups:
         user_group.start()
@@ -159,10 +167,10 @@ def run_test(remote_starter=None):
 
 
 
-def rerun_results(results_dir):
+def rerun_results(project_name, cmd_opts, results_dir):
     output_dir = '%s/%s/results/%s/' % (cmd_opts.projects_dir, project_name, results_dir)
     saved_config = '%s/config.cfg' % output_dir
-    run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs = configure(project_name, config_file=saved_config)
+    run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs = configure(project_name, cmd_opts, config_file=saved_config)
     print '\n\nanalyzing results...\n'
     results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs, xml_report)
     print 'created: %sresults.html\n' % output_dir
@@ -172,7 +180,7 @@ def rerun_results(results_dir):
 
 
 
-def configure(project_name, config_file=None):
+def configure(project_name, cmd_opts, config_file=None):
     user_group_configs = []
     config = ConfigParser.ConfigParser()
     if config_file is None:
