@@ -70,7 +70,7 @@ class ResultRow(Base):
     """class representing a multi-mechanize results.csv row"""
     __tablename__ = 'mechanize_results'
     __table_args__ = (
-        UniqueConstraint('run_id','trans_count', name='uix_1')
+        UniqueConstraint('run_id','trans_count', name='uix_1'),
         )
 
     id = Column(Integer, nullable=False, primary_key=True)
