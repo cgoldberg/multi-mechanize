@@ -1,11 +1,19 @@
 language: python
-python:
-    - "2.6"
-    - "2.7"
-    - "3.2"
+
 install:
     - pip install . --use-mirrors
     - pip install -r requirements.txt --use-mirrors
 
-script: nosetests
+python:
+    - "2.6"
+    - "2.7"
+    - "3.2"
 
+script:
+  - pip install cython
+  - pip install numpy
+  - pip install matplotlib
+  - python setup.py install
+  - rm -rf my_project
+  - multimech-newproject my_project
+  - multimech-run my_project
