@@ -3,3 +3,4 @@
 _build
 build
 dist
+.tox
