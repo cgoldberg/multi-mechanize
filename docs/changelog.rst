@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 1.?.?, 201?-??-??
+*************************
+
+* bug fixes
+* tox config
+* travis-ci config
+
+
 Version 1.2.0, 2012-02-07
 *************************
 

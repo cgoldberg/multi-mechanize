@@ -18,7 +18,7 @@
 :PyPI: `multi-mechanize package <http://pypi.python.org/pypi/multi-mechanize>`_
 :Dev: `GitHub <http://github.com/cgoldberg/multi-mechanize>`_
 :License: `GNU LGPLv3 <http://www.gnu.org/licenses/lgpl.html>`_
-:Author: `Corey Goldberg <http://goldb.org>`_ - copyright |copy| 2010-2012
+:Author: `Corey Goldberg <http://goldb.org>`_ - copyright |copy| 2010-2013
 
 ----
 

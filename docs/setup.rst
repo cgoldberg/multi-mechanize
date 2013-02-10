@@ -56,3 +56,12 @@ Multi-Mechanize requires `Python <http://python.org>`_ **2.6** or **2.7**
     $ source bin/activate
     (ENV)$ pip install multi-mechanize
     (ENV)$ pip install matplotlib
+
+-----------------------------------------------
+    pip install latest dev branch from git repo
+-----------------------------------------------
+
+::
+
+    pip install -e git+http://github.com/cgoldberg/multi-mechanize.git#egg=multimechanize
+
