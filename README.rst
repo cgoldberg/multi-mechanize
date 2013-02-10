@@ -3,7 +3,7 @@
     Multi-Mechanize - Performance Test Framework
 ================================================
 
-* Copyright: (c) 2010-2012 Corey Goldberg (corey@goldb.org)
+* Copyright: (c) 2010-2013 Corey Goldberg (cgoldberg _at_ gmail.com)
 * License: GNU LGPLv3
 * Requires: Python 2.6 or 2.7
 
