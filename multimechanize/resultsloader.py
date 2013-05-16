@@ -84,7 +84,7 @@ class ResultRow(Base):
     user_group_name = Column(String(50), nullable=False)
     scriptrun_time = Column(Float, nullable=False)
     error = Column(String(255))
-    custom_timers = Column(String(50))
+    custom_timers = Column(String(255))
 
     global_config = relation("GlobalConfig",
             primaryjoin="ResultRow.mechanize_global_configs_id==GlobalConfig.id")
@@ -122,7 +122,7 @@ class TimerRow(Base):
 
     def __init__(self, timer_name=None, elapsed=None):
         self.timer_name = str(timer_name)
-        self.elapsed = int(elapsed)
+        self.elapsed = float(elapsed)
 
     def __repr__(self):
         return "<TimerRow('%s', '%s')>" % (self.timer_name, self.elapsed)
