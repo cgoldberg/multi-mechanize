@@ -56,5 +56,7 @@ def write_jmeter_output(mm_data, output_path):
             timer_element.set('s', 'true')
 
     tree = ET.ElementTree(root)
-    tree.write(output_path + '/results.jtl')
-    tree.write('last_results.jtl')
+    tree.write(output_path + '/results.jtl', xml_declaration=True, encoding='utf-8',
+           method="xml")
+    tree.write('last_results.jtl', xml_declaration=True, encoding='utf-8',
+           method="xml")
