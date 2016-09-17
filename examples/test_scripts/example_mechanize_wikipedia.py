@@ -5,7 +5,6 @@
 #  This file is part of Multi-Mechanize
 #
 
-
 import mechanize
 import time
 
@@ -36,7 +35,7 @@ class Transaction(object):
 
         # verify responses are valid
         assert (resp.code == 200), 'Bad HTTP Response'
-        assert ('Wikipedia, the free encyclopedia' in resp.get_data()), 'Text Assertion Failed'
+        assert ('Wikipedia is a free online encyclopedia' in resp.get_data()), 'Text Assertion Failed'
 
         # think-time
         time.sleep(2)
