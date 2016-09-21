@@ -9,11 +9,8 @@
 
 ----
 
-:Web: `multimechanize.com <http://multimechanize.com>`_
 :PyPI: `multi-mechanize <http://pypi.python.org/pypi/multi-mechanize>`_
 :Dev: `git repo <http://github.com/cgoldberg/multi-mechanize>`_
-:Twitter: `multimechanize tweets <http://twitter.com/multimechanize>`_
-:IRC: #multimech (freenode)
 
 ----
 
@@ -21,7 +18,7 @@
     Docs / Instructions
 ***********************
 
-please visit: http://multimechanize.com
+* https://github.com/cgoldberg/multi-mechanize/blob/master/docs/README.rst
 
 *******************
     Install / Setup
@@ -29,7 +26,7 @@ please visit: http://multimechanize.com
 
 Multi-Mechanize can be installed from `PyPI <http://pypi.python.org/pypi/multi-mechanize>`_ using `pip <http://www.pip-installer.org>`_::
     
-    pip install -U multi-mechanize
+    pip install multi-mechanize
 
 ... or download the `source distribution from PyPI <http://pypi.python.org/pypi/multi-mechanize#downloads>`_, unarchive, and run::
 
