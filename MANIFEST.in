@@ -2,5 +2,6 @@ include setup.py
 include requirements.txt
 include README.rst
 include MANIFEST.in
+include LICENSE
 recursive-include multimechanize *.py
 recursive-include examples *.py *.cfg
